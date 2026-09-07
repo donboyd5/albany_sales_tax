@@ -173,3 +173,82 @@ if (sys.nframe() == 0L) {   # only when run via Rscript, not when sourced
   message("05_calibrate.R section A: ", nrow(route_b), " cities, FY",
           min(ROUTE_B_FYS), "-", max(ROUTE_B_FYS), ".")
 }
+
+
+## =========================================================================
+## Section B (Phase 3): calibration of the apportionment against the 17
+## cities whose base is observed.
+## =========================================================================
+## Requires R/04_allocate.R. Sourced from the qmd as:
+##   source("R/04_allocate.R"); calib <- build_calibration()
+
+## Run the identical apportionment on every calibration city and pair the
+## prediction with the observed base from the reduced form.
+build_calibration <- function(fys = ANALYSIS_FYS, ...) {
+  obs <- summarise_route_b(build_route_b(fys))
+  cw  <- read_crosswalk_cities() |> filter(include)
+
+  pred <- cw |>
+    transmute(city, county,
+              ec_name    = paste0(city, " city, New York"),
+              place_fips = substr(place_fips, 1, 7),
+              county5    = paste0("36", substr(county_fips, 3, 5)),
+              dtf_juris  = dtf_jurisdiction,
+              dmv_county = dtf_jurisdiction) |>
+    rowwise() |>
+    mutate(B_c_pred = predicted_base(ec_name, place_fips, county5, dtf_juris,
+                                     dmv_county, fys = fys, ...)) |>
+    ungroup()
+
+  obs |>
+    select(city, county, B_c_obs = B_c, B_k, P_c, P_k, s, pop_share, R) |>
+    left_join(pred |> select(city, B_c_pred), by = "city") |>
+    mutate(ratio     = B_c_obs / B_c_pred,
+           log_obs   = log(B_c_obs),
+           log_pred  = log(B_c_pred),
+           westchester = county == "Westchester")
+}
+
+## Fit log(B_obs) = alpha + beta * log(B_pred), with standard errors clustered
+## by county because Fulton, Cattaraugus, Oneida and Westchester each contribute
+## more than one city.
+fit_calibration <- function(calib, drop_westchester = FALSE) {
+  d <- if (drop_westchester) filter(calib, !westchester) else calib
+  m <- lm(log_obs ~ log_pred, data = d)
+  vc <- sandwich::vcovCL(m, cluster = d$county)
+  ct <- lmtest::coeftest(m, vcov. = vc)
+  list(model = m, data = d, coeftest = ct, vcov = vc,
+       alpha = unname(coef(m)[1]), beta = unname(coef(m)[2]),
+       se_alpha = unname(ct[1, 2]), se_beta = unname(ct[2, 2]),
+       resid_sd = sd(residuals(m)),
+       sigma = summary(m)$sigma,
+       r2 = summary(m)$r.squared, n = nrow(d),
+       n_clusters = dplyr::n_distinct(d$county))
+}
+
+## Apply a fitted calibration to Albany's predicted base and return the central
+## estimate with 68% and 90% bands from the residual spread.
+apply_calibration <- function(fit, B_pred_albany) {
+  ctr <- exp(fit$alpha + fit$beta * log(B_pred_albany))
+  s   <- fit$sigma
+  tibble(
+    B_c_pred_raw = B_pred_albany,
+    B_c_central  = ctr,
+    lo68 = ctr * exp(-s),           hi68 = ctr * exp(s),
+    lo90 = ctr * exp(-1.645 * s),   hi90 = ctr * exp(1.645 * s),
+    resid_sd_logs = s)
+}
+
+## Revenue = 0.005 * B_c * (1 - phi) * beta
+revenue_from_base <- function(B_c, phi = 0, beta = 1, rate = 0.005) {
+  rate * B_c * (1 - phi) * beta
+}
+
+## phi, observed as 1 - (county distributions / (0.04 * county taxable sales)).
+albany_phi <- function(fys = ANALYSIS_FYS) {
+  b <- read_county_base() |> filter(jurisdiction == "ALBANY", fy %in% fys) |>
+    group_by(fy) |> summarise(B = sum(B, na.rm = TRUE), .groups = "drop")
+  d <- read_distributions() |>
+    filter(taxing_jurisdiction == "Albany County Sales and Use Tax") |> select(fy, C = amt)
+  inner_join(b, d, by = "fy") |> mutate(phi = 1 - C / (0.04 * B))
+}

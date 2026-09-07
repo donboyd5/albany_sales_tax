@@ -57,3 +57,163 @@ acs_county <- acs_num(acs_county)
 message("03_pull_acs_lodes_dmv.R: ", nrow(pop_place_pl), " places / ",
         nrow(pop_county_pl), " counties (PL 2020); ",
         nrow(acs_place), " places / ", nrow(acs_county), " counties (ACS ", ACS_YEAR, ").")
+
+## --- LEHD LODES WAC (§4d business-purchase allocator) ---------------------
+## Workplace employment by block, aggregated to place through the LODES
+## crosswalk's `stplc` field. lehdr 1.2.0 cannot aggregate to place (agg_geo
+## accepts only block/bg/tract/county/state), so the join is done by hand.
+## LODES8 latest vintage is 2023.
+
+LODES_YEAR <- 2023L
+LODES_WAC_URL <- sprintf(
+  "https://lehd.ces.census.gov/data/lodes/LODES8/ny/wac/ny_wac_S000_JT00_%d.csv.gz", LODES_YEAR)
+LODES_XWALK_URL <- "https://lehd.ces.census.gov/data/lodes/LODES8/ny/ny_xwalk.csv.gz"
+
+## C000 = total jobs. CNS* are the NAICS-sector job counts, kept so the
+## business allocator can be checked sector by sector. Public administration
+## (CNS20) is retained in numerator and denominator per the project plan and is
+## reported separately because state government is a large taxable purchaser
+## concentrated in the city and absent from the Economic Census.
+lodes_place <- cache_pull(
+  sprintf("lodes_wac_%d_ny_by_place.csv", LODES_YEAR), LODES_WAC_URL,
+  function() {
+    tmp_w <- tempfile(fileext = ".csv.gz"); tmp_x <- tempfile(fileext = ".csv.gz")
+    utils::download.file(LODES_WAC_URL,   tmp_w, mode = "wb", quiet = TRUE)
+    utils::download.file(LODES_XWALK_URL, tmp_x, mode = "wb", quiet = TRUE)
+    wac <- read_csv(tmp_w, col_types = cols(.default = col_double(),
+                                            w_geocode = col_character()))
+    xw  <- read_csv(tmp_x, col_types = cols(.default = col_character())) |>
+      select(tabblk2020, cty, stplc)
+    unlink(c(tmp_w, tmp_x))
+    wac |>
+      left_join(xw, by = c("w_geocode" = "tabblk2020")) |>
+      group_by(cty, stplc) |>
+      summarise(across(c(C000, CNS20), \(x) sum(x, na.rm = TRUE)),
+                n_blocks = n(), .groups = "drop")
+  }) |>
+  mutate(across(c(C000, CNS20, n_blocks), as.numeric))
+
+## --- ZCTA to place relationship file (2020) -------------------------------
+## Albany's ZIPs straddle Colonie, Guilderland and Menands, so ZIP-based
+## allocators must be split across places by the overlap, never assigned whole.
+ZCTA_PLACE_URL <- paste0("https://www2.census.gov/geo/docs/maps-data/data/",
+                         "rel2020/zcta520/tab20_zcta520_place20_natl.txt")
+
+zcta_place <- cache_pull(
+  "zcta_place_rel2020.csv", ZCTA_PLACE_URL,
+  function() {
+    read_delim(ZCTA_PLACE_URL, delim = "|", col_types = cols(.default = col_character()),
+               progress = FALSE) |>
+      filter(substr(GEOID_PLACE_20, 1, 2) == "36" | substr(GEOID_ZCTA5_20, 1, 3) %in%
+               c("120", "121", "122", "123", "124", "125", "126", "127", "128",
+                 "129", "130", "131", "132", "133", "134", "135", "136", "137",
+                 "138", "139", "140", "141", "142", "143", "144", "145", "146",
+                 "147", "148", "149"))
+  })
+
+## --- DMV registrations (§4b motor vehicle allocator) ----------------------
+## Aggregated on the server. `county` is UPPER CASE; `city` is the postal city
+## and must not be used as a municipality. Restricted to VEH and to recent
+## model years as a purchase-flow proxy.
+
+DMV_URL <- "https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt"
+DMV_MIN_MODEL_YEAR <- 2024L   # ~2 model years of flow
+
+dmv_by_zip <- cache_pull(
+  sprintf("dmv_veh_my%d_plus_by_county_zip.csv", DMV_MIN_MODEL_YEAR), DMV_URL,
+  function() {
+    counties <- read_csv(file.path(PATHS$crosswalk, "preempt_cities.csv"),
+                         col_types = cols(.default = col_character()))$dtf_jurisdiction |>
+      unique() |> c("ALBANY") |> unique()
+    socrata_get("w4pv-hbkt", list(
+      select = "county, zip, state, count(*) as n",
+      where  = sprintf('record_type = "VEH" and model_year >= %d and county in (%s)',
+                       DMV_MIN_MODEL_YEAR,
+                       paste0('"', counties, '"', collapse = ",")),
+      group  = "county, zip, state",
+      order  = "county, zip",
+      limit  = 100000L))
+  }) |>
+  mutate(n = as.numeric(n))
+
+message("03: LODES ", nrow(lodes_place), " county-place cells; ",
+        "ZCTA-place ", nrow(zcta_place), " rows; DMV ", nrow(dmv_by_zip), " county-zip cells.")
+
+## --- exact ZIP -> place population weights --------------------------------
+## The ZCTA-to-place relationship file carries land area only, and weighting by
+## area badly understates a dense central city inside a split ZCTA (ZCTA 12203
+## is 40% of Albany city by area but far more than that by population). Exact
+## population weights are built instead from three block-level sources:
+##   1. 2020 Census block populations (decennial PL, P1_001N)
+##   2. block -> place, from the 2020 Census Block Assignment Files
+##   3. block -> ZCTA, from the 2020 ZCTA-to-block relationship file
+## The relationship file is ~1 GB nationally and is stream-filtered to the 13
+## counties in the analysis rather than downloaded whole.
+
+ANALYSIS_COUNTIES <- c("001","009","011","017","035","053","065","075",
+                       "089","091","109","113","119")
+
+BAF_URL  <- "https://www2.census.gov/geo/docs/maps-data/data/baf2020/BlockAssign_ST36_NY.zip"
+ZCTABLK_URL <- paste0("https://www2.census.gov/geo/docs/maps-data/data/rel2020/",
+                      "zcta520/tab20_zcta520_tabblock20_natl.txt")
+
+block_pop <- cache_pull(
+  "census_pl2020_block_13counties.csv", PL_URL,
+  function() {
+    map_dfr(ANALYSIS_COUNTIES, function(cty) {
+      census_get("2020/dec/pl", list(get = "P1_001N", "for" = "block:*",
+                                     "in" = paste0("state:36 county:", cty)))
+    })
+  }) |>
+  transmute(block = paste0(state, county, tract, block), pop = as.numeric(P1_001N))
+
+block_place <- cache_pull(
+  "census_baf2020_block_place_ny.csv", BAF_URL,
+  function() {
+    tmp <- tempfile(fileext = ".zip"); td <- tempfile(); dir.create(td)
+    utils::download.file(BAF_URL, tmp, mode = "wb", quiet = TRUE)
+    f <- utils::unzip(tmp, files = "BlockAssign_ST36_NY_INCPLACE_CDP.txt", exdir = td)
+    out <- read_delim(f, delim = "|", col_types = cols(.default = col_character()),
+                      progress = FALSE) |>
+      filter(substr(BLOCKID, 3, 5) %in% ANALYSIS_COUNTIES) |>
+      transmute(block = BLOCKID, place_fips = ifelse(is.na(PLACEFP), NA_character_,
+                                                     paste0("36", PLACEFP)))
+    unlink(c(tmp, td), recursive = TRUE)
+    out
+  })
+
+## Stream-filter the national ZCTA-to-block file; only fields 2 (ZCTA) and
+## 10 (block) are kept, for the 13 analysis counties.
+block_zcta <- cache_pull(
+  "census_zcta_block_rel2020_13counties.csv", ZCTABLK_URL,
+  function() {
+    pat <- paste0("^(", paste0("36", ANALYSIS_COUNTIES, collapse = "|"), ")")
+    con <- url(ZCTABLK_URL, open = "r")
+    on.exit(close(con), add = TRUE)
+    keep <- list(); i <- 0L
+    repeat {
+      ln <- readLines(con, n = 200000L, warn = FALSE)
+      if (length(ln) == 0) break
+      f <- strsplit(ln, "|", fixed = TRUE)
+      blk <- vapply(f, function(x) if (length(x) >= 10) x[10] else "", "")
+      zc  <- vapply(f, function(x) if (length(x) >= 2)  x[2]  else "", "")
+      sel <- grepl(pat, blk) & nzchar(zc)
+      if (any(sel)) { i <- i + 1L; keep[[i]] <- tibble(zcta = zc[sel], block = blk[sel]) }
+    }
+    bind_rows(keep)
+  })
+
+## ZCTA x place population weights: for each ZCTA, the share of its population
+## that falls inside each place. Blocks not in any place get place_fips NA.
+zip_place_weights <- block_zcta |>
+  left_join(block_pop,   by = "block") |>
+  left_join(block_place, by = "block") |>
+  mutate(pop = ifelse(is.na(pop), 0, pop)) |>
+  group_by(zcta, place_fips) |>
+  summarise(pop = sum(pop), .groups = "drop") |>
+  group_by(zcta) |>
+  mutate(w = ifelse(sum(pop) > 0, pop / sum(pop), 0)) |>
+  ungroup()
+
+message("03: block_pop ", nrow(block_pop), "; block_place ", nrow(block_place),
+        "; block_zcta ", nrow(block_zcta), "; zip-place weights ", nrow(zip_place_weights))

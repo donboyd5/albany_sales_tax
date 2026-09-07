@@ -32,7 +32,8 @@ distributions.
 | `R/02_pull_census_ec.R` | 2022 Economic Census `ecnbasic` (RCPTOT/ESTAB/EMP/PAYANN) for economic places + counties; CBP/ZBP fallback |
 | `R/03_pull_acs_lodes_dmv.R` | ACS B19025/B11001, decennial PL population, LODES WAC + crosswalk, DMV registrations (aggregated) |
 | `R/04_allocate.R`       | NAICS -> sourcing class mapping, allocator shares `a_g`, assemble `B_c` |
-| `R/05_calibrate.R`      | 18-city observed vs predicted base, log-log fit, residual SD, band |
+| `R/05_calibrate.R`      | section A: Route B reduced form; section B: observed vs predicted base, log-log fit, residual SD, band |
+| `R/99_check_urls.R`     | verifies every cited URL still resolves |
 
 ## Standing rules (do not relax without asking)
 
@@ -69,7 +70,12 @@ Commit at the end of each phase.
 - **Phase 0** Bootstrap: scaffolding, renv, git init. Report tree, `renv::status()`, key presence.
 - **Phase 1** Data access and schema checks. Report source x reachable x key fields x issues. **STOP.**
 - **Phase 2** Route B benchmark: `R_c = (B_c/B_k)/(P_c/P_k)` for the 18 preempting cities -> `analysis/route-b.qmd`.
-- **Phase 3** Apportionment, calibration, revenue estimate -> `analysis/city-halfpct-revenue.qmd`.
+- **Phase 3** Apportionment, calibration, revenue estimate -> `analysis/city-halfpct-revenue.qmd`. **DONE.**
+
+Run `Rscript R/99_check_urls.R` before publishing: it re-checks every URL cited
+in the qmd files and crosswalks. Statutes are cited by section, not URL, because
+the legal aggregators (doi.org, findlaw, justia, nysenate) return 403 to
+non-browser clients and so cannot be verified programmatically.
 
 ## Sourcing classes (Phase 3)
 
@@ -89,8 +95,20 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 - **4d business purchases and use tax** — allocator: LODES WAC 2022 workplace
   employment share, block->place via `stplc`; ZBP payroll share as alternative.
   Keep public administration in numerator and denominator and flag it.
-- **4e utilities (22, and 517 if in scope)** — **measured, not allocated**: city
-  utility base = Albany City School District 3% utility-tax collections / 0.03.
+- **4e utilities (22 **and** 517 — TSB-M-90(6)S confirms the school district tax
+  covers telecom)** — allocated by workplace employment in the generic
+  apportionment so the calibration can run on every city; the ACSD measurement
+  (city base = collections / 0.03) is used as validation 3, and the two agree to
+  within about 8%.
+
+## Phase 3 headline
+
+Revenue approximately **$13.5 M/year**, 68% band $9.4-19.3 M, 90% band
+$7.5-24.3 M. B_c calibrated = $2.68 B, implied R = 0.94. Calibration slope
+1.023 (se 0.114) but sigma = 0.358 in logs, above the 0.25 tripwire, so the band
+is deliberately wide. Largest real uncertainty is state-government purchasing:
+87.6% of county public-administration jobs are in the city and dropping public
+administration from the business allocator moves revenue by about 9%.
 
 ## Conventions
 

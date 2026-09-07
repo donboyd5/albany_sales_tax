@@ -14,7 +14,12 @@ source(here::here("R", "00_setup.R"))
 
 EC_URL  <- "https://api.census.gov/data/2022/ecnbasic.html"
 EC_PATH <- "2022/ecnbasic"
-EC_VARS <- "NAICS2022,NAICS2022_LABEL,NAME,GEO_ID,ESTAB,RCPTOT,EMP,PAYANN"
+## Suppressed cells come back as 0 with a companion flag (RCPTOT_F etc.), NOT as
+## missing. Pulling the flags is mandatory: without them a withheld Gasoline
+## Stations cell is indistinguishable from a genuine zero. See ec_num() below.
+EC_VARS <- paste("NAICS2022,NAICS2022_LABEL,NAME,GEO_ID",
+                 "ESTAB,RCPTOT,EMP,PAYANN",
+                 "ESTAB_F,RCPTOT_F,EMP_F,PAYANN_F", sep = ",")
 
 ## Sector-level (2-digit) receipts for every New York economic place and every
 ## New York county. Used for the county-vs-places coverage check and for the
@@ -33,11 +38,17 @@ ec_county_sector <- cache_pull(
                              "for" = "county:*", "in" = "state:36"))
   })
 
-## RCPTOT, PAYANN are $1,000; ESTAB, EMP are counts. Withheld cells come back
-## as NA or as a value with a companion flag; both are treated as missing here
-## and the fallback used for each group is recorded downstream in Phase 3.
+## RCPTOT, PAYANN are $1,000; ESTAB, EMP are counts. A non-empty flag means the
+## published 0 is not a real zero -- the cell is withheld for disclosure or not
+## available -- so the value is converted to NA and the group falls through to
+## the next allocator, which is recorded per group in Phase 3.
 ec_num <- function(d) {
-  d |> mutate(across(c(ESTAB, RCPTOT, EMP, PAYANN), ~suppressWarnings(as.numeric(.x))))
+  d |>
+    mutate(across(c(ESTAB, RCPTOT, EMP, PAYANN), ~suppressWarnings(as.numeric(.x)))) |>
+    mutate(RCPTOT = ifelse(!is.na(RCPTOT_F) & nzchar(RCPTOT_F), NA_real_, RCPTOT),
+           PAYANN = ifelse(!is.na(PAYANN_F) & nzchar(PAYANN_F), NA_real_, PAYANN),
+           EMP    = ifelse(!is.na(EMP_F)    & nzchar(EMP_F),    NA_real_, EMP),
+           ESTAB  = ifelse(!is.na(ESTAB_F)  & nzchar(ESTAB_F),  NA_real_, ESTAB))
 }
 ec_place_sector  <- ec_num(ec_place_sector)
 ec_county_sector <- ec_num(ec_county_sector)

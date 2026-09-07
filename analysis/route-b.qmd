@@ -451,7 +451,7 @@ New York State Department of Taxation and Finance. (2025). *Publication 718-C: S
 
 New York State Department of Taxation and Finance. (1990). *TSB-M-90(6)S: The Albany City School District imposes a 3% sales and use tax on utilities and utility services*. <https://tax.ny.gov/pdf/memos/sales/m90_6s.pdf>
 
-U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171) summary file* [API dataset `dec/pl`]. <https://api.census.gov/data/2020/dec/pl>
+U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171) summary file* [API dataset `dec/pl`]. <https://api.census.gov/data/2020/dec/pl.html>
 
 U.S. Census Bureau. (2025). *Economic Census: Summary statistics for the U.S., states, and selected geographies: 2022* [API dataset `ecnbasic`]. <https://api.census.gov/data/2022/ecnbasic.html>
 
