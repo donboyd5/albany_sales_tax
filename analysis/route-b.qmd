@@ -44,6 +44,17 @@ ec_col <- ec_p$RCPTOT[grepl("^Colonie town", ec_p$NAME)]
 ec_share_city <- ec_alb / ec_k$RCPTOT
 ec_resid <- 1 - sum(ec_p$RCPTOT, na.rm = TRUE) / ec_k$RCPTOT
 
+## Albany's retail-only implied R, for reference on the plot
+R_retail <- ec_share_city / alb_pop_share
+
+## ACS aggregate household income share (the §4c delivered-goods allocator)
+acs_p <- read_csv(here("data","raw","census_acs5_2023_place_ny.csv"),
+                  col_types = cols(.default = col_character()))
+acs_k <- read_csv(here("data","raw","census_acs5_2023_county_ny.csv"),
+                  col_types = cols(.default = col_character()))
+inc_share <- as.numeric(acs_p$B19025_001E[acs_p$place == "01000"]) /
+             as.numeric(acs_k$B19025_001E[acs_k$county == "001"])
+
 breakeven <- albany_breakeven()
 fmt_pct <- function(x, d = 1) sprintf(paste0("%.", d, "f%%"), 100 * x)
 ```
@@ -107,17 +118,47 @@ cw_all |>
   tab_options(table.font.size = pct(90))
 ```
 
-Seven of these rates differ from the seed table in the project plan
-(Gloversville, Johnstown, New Rochelle, Norwich, Ogdensburg, Saratoga Springs,
-Yonkers). Ogdensburg is a live case: it repealed its tax in 2000 and re-imposed
-it at 3% effective 1 March 2022, the first day of the analysis window.
+::: {.callout-warning}
+## Publication 718-A's percentage column is not the city's imposed rate
 
-**Yonkers is the exception that matters most here.** Its combined rate is
-8⅞% inside the city against 8⅜% in the rest of Westchester. It preempts the
-county's full 4% and imposes 4.5% — a **0.5-point add-on above full
-preemption**. It is the only published New York example of a city rate that
-sits above its county's, and therefore the closest existing analogue to the
-policy this project is costing.
+This needs stating because it nearly derailed the numbers. Publication 718-A
+lists, for six of these cities, a percentage that is **not** the rate the city
+actually imposes: Gloversville and Johnstown 3 (actual 2.0), New Rochelle 3
+(2.5), Norwich 3 (1.5), Saratoga Springs 3 (1.5). Taking that column at face
+value doubles those cities' estimated base.
+
+Three independent checks agree against it. Publication 718 gives the combined
+rate inside each city, which fixes `county-in-city + r_c` exactly. Publication
+718-A's own lettered footnotes give the county's rate inside the city
+(footnote a "within city, county rate is 1½% (not counting any additional
+rate)", c "1½%", t "2%", m "additional 1% not subject to preemption"), and
+subtracting each from the combined rate reproduces the OSC value every time.
+And the Office of the State Comptroller publishes the city rates directly,
+sourced to DTF. Publication 718-A itself warns in its header that "the rates
+indicated cannot be added to determine the combined state, county, and city tax
+rate."
+
+The rates above are therefore the OSC / footnote / Pub 718 set. The 718-A
+column is retained in `data/crosswalk/preempt_cities.csv` as `r_c_pub718a_col`
+so the alternative can be recomputed.
+
+**Ogdensburg is the one weak row.** It repealed its tax in 2000 and re-imposed
+it effective 1 March 2022, so it is absent from OSC's January 2020 table and its
+rate rests on the footnote reasoning alone. If it is 3.0 rather than 1.5, its
+$R$ falls from `r sprintf("%.2f", route_b$R[route_b$city=="Ogdensburg"])` to
+about half that. It is one small observation and changes no conclusion here, but
+it is the row to confirm with DTF.
+:::
+
+**Yonkers is the case that matters most.** Its combined rate is 8⅞% inside the
+city against 8⅜% in the rest of Westchester. The city takes the county's full
+4% and imposes 4.5% — a **0.5-point add-on above full preemption**. It is the
+only published New York example of a city rate sitting above its county's, and
+therefore the closest existing analogue to the policy this project is costing.
+Its two distribution rows stand in an exact 2.000 ratio (3.0% regular plus 1.5%
+special), so its base is the same whether computed from the total at 4.5% or the
+regular row at 3.0% — the one city whose base is immune to the rate question
+above.
 
 ## Validation: does the preemption identity hold?
 
@@ -210,7 +251,7 @@ route_b |>
 
 ```{r}
 #| label: fig-routeb
-#| fig-cap: "Ratio of the city's share of its county's taxable sales base to its share of county population, three-year mean FY2023–FY2025. Oswego excluded. The dashed line is Albany's break-even; the dotted line is Albany's one directly observed base share, from the school district utility tax."
+#| fig-cap: "Ratio of the city's share of its county's taxable sales base to its share of county population, three-year mean FY2023–FY2025. Oswego excluded. The dashed red line is Albany's break-even for preemption. The two dotted lines are Albany's only observable base shares: retail receipts from the 2022 Economic Census (orange) and utilities from the school district tax (blue). Albany's overall R is a base-weighted mix of those and the components Phase 3 has yet to allocate."
 #| fig-height: 6.5
 #| fig-width: 8
 pd <- route_b |>
@@ -221,12 +262,15 @@ ggplot(pd, aes(R, city, colour = grp)) +
   geom_vline(xintercept = 1, colour = "grey75", linewidth = 0.4) +
   geom_vline(xintercept = breakeven, linetype = "dashed", colour = "#b2182b", linewidth = 0.55) +
   geom_vline(xintercept = R_util, linetype = "dotted", colour = "#2166ac", linewidth = 0.7) +
+  geom_vline(xintercept = R_retail, linetype = "dotted", colour = "#e08214", linewidth = 0.7) +
   geom_segment(aes(x = 0, xend = R, yend = city), colour = "grey85", linewidth = 0.4) +
   geom_point(size = 3.1) +
   annotate("text", x = breakeven, y = 0.6, label = sprintf("Albany break-even %.3f", breakeven),
            hjust = -0.05, size = 3.1, colour = "#b2182b") +
-  annotate("text", x = R_util, y = 17.4, label = sprintf("Albany utilities %.2f", R_util),
+  annotate("text", x = R_util, y = 17.5, label = sprintf("Albany utilities %.2f", R_util),
            hjust = 1.05, size = 3.1, colour = "#2166ac") +
+  annotate("text", x = R_retail, y = 17.5, label = sprintf("Albany retail %.2f", R_retail),
+           hjust = -0.05, size = 3.1, colour = "#e08214") +
   scale_colour_manual(values = c("Westchester" = "#762a83", "Rest of state" = "#1b7837"), name = NULL) +
   scale_x_continuous(breaks = seq(0, 2, 0.25), limits = c(0, 2.05), expand = c(0, 0)) +
   labs(x = expression(R[c]~"= (city base share) ÷ (city population share)"), y = NULL) +
@@ -251,29 +295,42 @@ tibble(Statistic = c("n cities", "Median", "Mean", "SD", "Minimum", "Maximum",
   gt() |> tab_options(table.font.size = pct(90), column_labels.hidden = TRUE)
 ```
 
-The central result is that **most preempting cities are not retail
-concentrators**. The median $R_c$ is `r sprintf("%.2f", median(route_b$R))` and
-only `r sum(route_b$R > 1)` of `r nrow(route_b)` cities hold more than their
-per-capita share of the county base. The intuition that a county's central city
-must capture a disproportionate share of its taxable sales is, for this sample,
-simply false more often than not.
+The distribution **straddles 1.0 and is enormously wide**. The median is
+`r sprintf("%.2f", median(route_b$R))` and
+`r sum(route_b$R > 1)` of `r nrow(route_b)` cities hold more than their
+per-capita share of the county base — but the range runs from
+`r sprintf("%.2f", min(route_b$R))` to `r sprintf("%.2f", max(route_b$R))`, a
+factor of four, with a standard deviation of
+`r sprintf("%.2f", sd(route_b$R))` around a mean of
+`r sprintf("%.2f", mean(route_b$R))`. Knowing that a New York city imposes a
+sales tax tells you almost nothing about how concentrated its county's base is
+inside it.
 
-The reason is visible in the ranking. The cities above 1.0 are small cities that
-function as the retail hub of a rural county — Oneida in Madison, Ithaca in
-Tompkins, Olean in Cattaraugus — plus White Plains, a genuine regional
-commercial centre. The cities below 1.0 are dense residential cities inside
-counties whose retail has moved to suburban corridors: Yonkers and Mount Vernon
-in Westchester, Utica in Oneida, Gloversville in Fulton, Glens Falls in Warren.
-Suburbanised retail pulls $R_c$ down, and it pulls it well below 1.
+That spread is the single most important result for Phase 3. It means the
+reduced form cannot pin Albany down on its own: an estimate of Albany's base
+built by apportionment has to be defended on its construction, not by appeal to
+where comparable cities sit, because "comparable cities" span a fourfold range.
+It also sets a floor on how narrow any honest error band can be.
 
-**Albany is structurally in the second group, not the first.** Albany County's
-retail is concentrated along the Wolf Road / Route 5 corridor in Colonie and at
-Crossgates in Guilderland, both outside the city. The 2022 Economic Census makes
-this concrete: Albany city recorded
-\$`r sprintf("%.2f", ec_alb/1e6)` B of retail receipts against
-\$`r sprintf("%.2f", ec_col/1e6)` B in the balance of the town of Colonie
+The spread is not random, though, and the pattern is legible. The cities at the
+top are small cities that serve as the retail hub of a rural or small
+metropolitan county — Oneida in Madison, Johnstown in Fulton, Saratoga Springs
+in Saratoga, Ithaca in Tompkins, Olean in Cattaraugus — joined by White Plains,
+a genuine regional commercial centre. The cities at the bottom are dense
+residential cities inside counties whose retail has moved to suburban
+corridors: Yonkers and Mount Vernon in Westchester, Salamanca in Cattaraugus,
+Glens Falls in Warren, Utica in Oneida. Suburbanised retail pulls $R_c$ well
+below 1; being the only town for thirty miles pushes it well above.
+
+**Albany sits with the second group on the evidence available.** Albany County's
+retail is concentrated along the Wolf Road corridor in Colonie and at Crossgates
+in Guilderland, both outside the city. The 2022 Economic Census makes this
+concrete: Albany city recorded
+\\$`r sprintf("%.2f", ec_alb/1e6)` B of retail receipts against
+\\$`r sprintf("%.2f", ec_col/1e6)` B in the balance of the town of Colonie
 alone, and the city's `r fmt_pct(ec_share_city)` share of county retail
-receipts is *below* its `r fmt_pct(alb_pop_share)` population share.
+receipts is *below* its `r fmt_pct(alb_pop_share)` population share — a
+retail-only $R$ of `r sprintf("%.2f", R_retail)`.
 
 ```{r}
 #| label: tbl-eccov
@@ -331,13 +388,25 @@ different mixes.
 
 ### Where Albany's estimate will have to land
 
-Taken together the benchmark says Albany's overall $R$ should be expected
-**below the utilities figure and plausibly below 1.0**, in the company of Utica,
-Yonkers and Glens Falls rather than Ithaca and Oneida. Phase 3 builds Albany's
-base from the ground up by NAICS-group apportionment; if that construction
-returns an $R$ far outside
-`r sprintf("%.2f–%.2f", min(route_b$R), max(route_b$R))`, or lands near the top
-of the range, the construction is what should be doubted first.
+The two Albany data points available bracket the answer rather than pin it. The
+store-based part of Albany's base looks like
+$R \approx `r sprintf("%.2f", R_retail)`$; the utility part is measured at
+$R \approx `r sprintf("%.2f", R_util)`$. Albany's overall $R$ is a
+base-weighted mix of those and of the business-purchase and delivered-goods
+components that Phase 3 has yet to allocate — the first of which, driven by
+state government and downtown office employment, should be strongly
+city-concentrated, and the second of which, driven by residence, should not be
+(the city's aggregate household income share is only
+`r fmt_pct(inc_share)`).
+
+So the reduced form does not deliver Albany's answer. What it delivers is a
+range to be judged against: an apportionment result landing anywhere in
+`r sprintf("%.2f–%.2f", min(route_b$R), max(route_b$R))` is unremarkable, and
+one landing outside it needs a specific defence. If Phase 3 returns an $R$ near
+the top of that range it should be doubted, because Albany's largest observable
+component — retail — is *below* parity, and no city in this sample reaches the
+top of the range while ceding its county's retail to a suburban corridor the way
+Albany does.
 
 ## Data quality note: cell suppression
 

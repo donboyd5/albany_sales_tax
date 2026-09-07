@@ -180,38 +180,75 @@ layer; they conflict with Pub 718's combined rates in several places. **Pub 718'
 combined rates are used as the authority**, and the result is confirmed
 empirically in §6 below.
 
-### SURPRISE 3b — several city rates differ from the prompt's seed table
+### SURPRISE 3b — Pub 718-A's percentage column is NOT the imposed city rate
 
-Current rates read from Pub 718-A (last non-repealed entry), cross-checked against
-Pub 718 combined rates:
+**This was initially misread and the correction matters: taking the 718-A
+percentage column at face value doubles the estimated base for five cities and
+moves the Route B median from 0.74 to 1.06.**
 
-| city | prompt seed r_c | verified r_c | verified p_c |
-|---|---:|---:|---:|
-| Auburn | 2.0 | 2.0 | 2.0 |
-| Glens Falls | 1.5 | 1.5 | 1.5 |
-| **Gloversville** | 2.0 | **3.0** | 3.0 |
-| Ithaca | 1.5 | 1.5 | 1.5 |
-| **Johnstown** | 2.0 | **3.0** | 3.0 |
-| Mount Vernon | 2.5 | 2.5 | 2.5 |
-| **New Rochelle** | 2.5 | **3.0** | 3.0 |
-| **Norwich** | 1.5 | **3.0** | 3.0 |
-| **Ogdensburg** | 1.5 | **3.0** (re-imposed eff. 1 Mar 2022) | 3.0 |
-| Olean | 1.5 | 1.5 | 1.5 |
-| **Oneida** | 2.0 | 2.0 | 2.0 |
-| **Oswego** | 4.0 | **4.0, p_c unresolved** | see §6 |
-| Rome | 1.5 | 1.5 | 1.5 |
-| Salamanca | 1.5 | 1.5 | 1.5 |
-| **Saratoga Springs** | 1.5 | **3.0** | 3.0 |
-| Utica | 1.5 | 1.5 | 1.5 |
-| White Plains | 2.5 | 2.5 | 2.5 |
-| **Yonkers** | 3.0 | **4.5** | **4.0** |
+Publication 718-A lists, in its city table, a percentage that for six cities is
+not the rate the city actually imposes. Its own header warns: "The rates
+indicated cannot be added to determine the combined state, county, and city tax
+rate. Refer to Publication 718 … for the combined rates."
+
+Three independent sources agree against that column:
+
+1. **Pub 718** gives the combined rate *inside* each city, which fixes
+   `county-in-city + r_c` exactly.
+2. **Pub 718-A's own lettered footnotes** give the county's rate inside the
+   city — `a` "City preempts county tax rate. Within city, county rate is 1½%
+   (not counting any additional rate)", `c` "Within city, county tax rate is
+   1½%", `t` "…county rate is 2%", `m` "Additional 1% not subject to
+   preemption". Subtracting each from the Pub 718 combined rate reproduces the
+   OSC value in every case.
+3. **OSC (2020), Figure 2**, "City Portion of the Local Rate", sourced to DTF.
+
+| city | 718-A % column | **rate used** | p_c | agreement |
+|---|---:|---:|---:|---|
+| Auburn | 2.0 | **2.0** | 2.0 | all sources |
+| Glens Falls | 1.5 | **1.5** | 1.5 | all sources |
+| Gloversville | 3.0 | **2.0** | 2.0 | OSC + footnote t + Pub 718 |
+| Ithaca | 1.5 | **1.5** | 1.5 | all sources |
+| Johnstown | 3.0 | **2.0** | 2.0 | OSC + footnote t + Pub 718 |
+| Mount Vernon | 2.5 | **2.5** | 2.5 | all sources |
+| New Rochelle | 3.0 | **2.5** | 2.5 | OSC + footnote m + Pub 718 |
+| Norwich | 3.0 | **1.5** | 1.5 | OSC + footnote a + Pub 718 |
+| Ogdensburg | 3.0 | **1.5** | 1.5 | footnote a + Pub 718 only — **weakest row** |
+| Olean | 1.5 | **1.5** | 1.5 | all sources |
+| Oneida | 2.0 | **2.0** | 2.0 | all sources |
+| Oswego | 4.0 | **4.0** | — | excluded, see §6 |
+| Rome | 1.5 | **1.5** | 1.5 | all sources |
+| Salamanca | 1.5 | **1.5** | 1.5 | all sources |
+| Saratoga Springs | 3.0 | **1.5** | 1.5 | OSC + footnote c + Pub 718 |
+| Utica | 1.5 | **1.5** | 1.5 | all sources |
+| White Plains | 2.5 | **2.5** | 2.5 | all sources |
+| Yonkers | 4.5 | **4.5 total** | **4.0** | see below |
+
+The rates used match the OSC seed table in the project prompt exactly, except
+Yonkers. The prompt's `p_c default 1.5` is still wrong: **`p_c = r_c` for every
+city but Yonkers**, forced by Pub 718 publishing the same combined rate inside
+and outside each city.
+
+**Ogdensburg is the one weakly supported row.** It repealed in 2000 and
+re-imposed effective 1 March 2022, so it is absent from OSC's January 2020
+table; its 1.5% rests on footnote `a` plus Pub 718 alone. If it is really 3.0,
+its base halves and its R falls from 0.71 to 0.35. Worth confirming with DTF.
+
+**Yonkers.** Pub 718 gives 8⅞% inside the city against 8⅜% outside — a
+**+0.5 point differential**, the only one in the state, and the only published
+New York instance of the exact policy being estimated for Albany. The city
+takes the county's full 4% and imposes 4.5%. Its two distribution rows stand in
+an exact 2.000 ratio (3.0% regular + 1.5% special), so its base is identical
+whether computed as total ÷ 4.5% or regular ÷ 3.0% — Yonkers is immune to the
+rate ambiguity above. OSC's Figure 2 lists 3.0 for Yonkers, the regular portion
+only.
 
 County rates (Pub 718 combined − 4% state − ⅜% MCTD where starred): Cayuga 4,
 Cattaraugus 4, Chenango 4, Fulton 4, Madison 4, Oneida 4.75, Oswego 4,
 St. Lawrence 4, Saratoga 3, Tompkins 4, Warren 3, Westchester 4.
 
 Ogdensburg's re-imposition effective 1 Mar 2022 falls at the very start of the
-analysis window, so the 3% applies throughout FY2023–FY2025.
+analysis window, so its rate applies throughout FY2023–FY2025.
 
 ---
 
@@ -303,7 +340,7 @@ Test: if `p_c = r_c`, then `C_k + Σ_i C_i = r_k × B_k` (the rates cancel, so t
 tests the identity jointly and is *insensitive* to the individual `r_c` values).
 Sales tax year 2024-25 base vs FY2025 distributions (one month offset).
 
-| county | predicted ÷ actual county collections |
+| county | (C_k + Σ p_i B_i) ÷ (r_k B_k) |
 |---|---:|
 | Cattaraugus | 0.999 |
 | Cayuga | 1.002 |
@@ -318,9 +355,12 @@ Sales tax year 2024-25 base vs FY2025 distributions (one month offset).
 | Warren | 0.989 |
 | Westchester | 0.976 |
 
-Eleven of twelve reconcile within 1–6%, which simultaneously confirms that (a)
-the `ny73-2j3u` county base covers the **whole county including preempting
-cities**, and (b) `p_c = r_c`.
+Eleven of twelve reconcile within 1–6% on single-year figures, and within
+0.995–1.027 on the three-year mean once the verified rates of §3b are used. This
+simultaneously confirms that (a) the `ny73-2j3u` county base covers the **whole
+county including preempting cities**, and (b) the preemption structure. Note the
+test is insensitive to the rate *level* wherever `p_c = r_c`, so it validates the
+structure but cannot by itself settle §3b.
 
 ### SURPRISE 6a — Oswego cannot be reconciled
 
@@ -445,3 +485,17 @@ Two problems:
    Albany-County registrations — leasing and fleet registrants. These have no
    in-county residence to allocate and must be handled explicitly, not silently
    dropped into a ZIP match that fails.
+
+
+---
+
+## 11. OSC, *Understanding local government sales tax in New York State: 2020 update*
+
+<https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
+— HTTP 200, 1.98 MB.
+
+Figure 2, "City Sales Tax Rates, as of January 1, 2020", gives for each
+preempting city the combined rate and the **City Portion of the Local Rate**,
+sourced to DTF. This is exactly `r_c`, and it is the authority used for §3b
+above. The report also documents each county's distribution formula, which
+Phase 3 needs to verify the 0.40 factor in Albany's break-even calculation.

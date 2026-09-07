@@ -109,18 +109,20 @@ summarise_route_b <- function(panel) {
     arrange(desc(R))
 }
 
-## Validation 1 for the reduced form: with p_i = r_i the rates cancel, so
-##   (C_k + sum_i C_i) / (r_k * B_k)  should be 1.
-## This tests the preemption identity and the "county base is the whole county"
-## reading jointly, and is insensitive to the individual city rates.
+## Validation 1 for the reduced form:
+##   (C_k + sum_i p_i * B_i) / (r_k * B_k)  should be 1,
+## where p_i * B_i = C_i * (p_i / r_i). This tests the preemption identity and
+## the "county base is the whole county" reading jointly. Where p_i = r_i (every
+## city but Yonkers) the term collapses to C_i and the check is insensitive to
+## the rate *level* -- it validates the structure, not the individual rates.
 check_identity <- function(panel) {
   panel |>
     group_by(county, dtf_jurisdiction, fy, r_k, B_k, C_k) |>
-    summarise(C_cities = sum(C_c), .groups = "drop") |>
-    mutate(implied = (C_k + C_cities) / (r_k / 100 * B_k)) |>
+    summarise(C_cities = sum(C_c), preempted = sum(C_c * p_c / r_c), .groups = "drop") |>
+    mutate(implied = (C_k + preempted) / (r_k / 100 * B_k)) |>
     group_by(county) |>
     summarise(B_k = mean(B_k), C_k = mean(C_k), C_cities = mean(C_cities),
-              implied = mean(implied), .groups = "drop") |>
+              preempted = mean(preempted), implied = mean(implied), .groups = "drop") |>
     arrange(implied)
 }
 
