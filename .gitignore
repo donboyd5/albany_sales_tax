@@ -1,0 +1,31 @@
+# --- secrets ---
+.Renviron
+
+# --- R session cruft ---
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user
+*.Rproj
+
+# --- quarto ---
+_output/
+/.quarto/
+**/_freeze/
+
+# --- renv ---
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
+
+# --- cached raw pulls ---
+# Small cached JSON/CSV pulls ARE tracked so the build is reproducible offline.
+# Large binary source files are not; MANIFEST.csv records their provenance.
+data/raw/*.xlsx
+data/raw/*.zip
+data/raw/*.pdf
+data/raw/large/

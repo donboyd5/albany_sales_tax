@@ -1,0 +1,19 @@
+---
+title: "Revenue from a 0.5% City of Albany add-on sales tax"
+subtitle: "Apportionment of the county base, calibrated against New York's 18 preempting cities"
+date: today
+---
+
+::: {.callout-warning}
+## Phase 0 placeholder
+
+This document is scaffolding. It is filled in at **Phase 3**.
+
+The estimate is
+
+$$\text{Revenue} = 0.005 \times B_c \times (1 - \varphi) \times \beta$$
+
+where $B_c$ is the City of Albany taxable sales and purchases base, $\varphi$ the
+administrative deduction observed from county distributions, and $\beta$ a
+behavioral factor for the 0.5-point rate differential at the city line.
+:::

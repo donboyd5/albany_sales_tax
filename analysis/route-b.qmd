@@ -1,0 +1,21 @@
+---
+title: "Route B: how concentrated is the sales tax base in New York's preempting cities?"
+subtitle: "Reduced-form benchmark for an Albany city sales tax"
+date: today
+---
+
+::: {.callout-warning}
+## Phase 0 placeholder
+
+This document is scaffolding. It is filled in at **Phase 2**, after the Phase 1
+schema checks confirm what the DTF distribution and rate tables actually contain.
+
+Phase 2 will compute, for each of the 18 cities outside New York City that impose
+their own sales tax,
+
+$$R_c = \frac{B_c / B_k}{P_c / P_k}$$
+
+— the city's share of its county's taxable sales base relative to its share of
+county population — as a three-year mean, and plot the distribution against
+Albany's status-quo break-even line of $1.6/1.5 = 1.0667$.
+:::

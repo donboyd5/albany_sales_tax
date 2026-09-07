@@ -1,0 +1,4 @@
+# Copy this file to .Renviron (which is git-ignored) and fill in your key.
+# Get a key at https://api.census.gov/data/key_signup.html
+# Do not commit .Renviron.
+CENSUS_API_KEY=your_key_here
