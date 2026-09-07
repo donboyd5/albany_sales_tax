@@ -1,0 +1,508 @@
+---
+title: "A 0.5% City of Albany add-on sales tax: policy option, method, data, and findings"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+  gfm:
+    toc: true
+    toc-depth: 2
+    wrap: none
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+library(here)
+source(here("R", "04_allocate.R"))
+library(knitr)
+options(knitr.kable.NA = "")
+
+ALB <- list("Albany city, New York", "3601000", "36001", "ALBANY", "ALBANY")
+P_c <- 99224; P_k <- 314848            # 2020 Census, read below from cache
+pp  <- read_pop()
+P_c <- pp$place$P_c[pp$place$place_fips == "3601000"]
+P_k <- pp$county$P_k[pp$county$county_fips == "36001"]
+pop <- P_c / P_k
+
+appo   <- do.call(apportion_city, ALB)
+B_k    <- sum(appo$B_kg)
+B_pred <- sum(appo$B_cg, na.rm = TRUE)
+calib  <- build_calibration()
+fit    <- fit_calibration(calib)
+est    <- apply_calibration(fit, B_pred)
+phi    <- mean(albany_phi()$phi)
+phi_tab <- albany_phi()
+rev    <- function(b, beta = 1, ph = phi) 0.005 * b * (1 - ph) * beta
+REV    <- rev(est$B_c_central)
+s_cal  <- est$B_c_central / B_k
+R_cal  <- s_cal / pop
+route_b <- summarise_route_b(build_route_b())
+
+## county base by year
+by_year <- read_county_base() |> filter(jurisdiction == "ALBANY", fy <= 2026) |>
+  group_by(sales_tax_year, fy) |> summarise(B = sum(B, na.rm = TRUE), .groups = "drop") |>
+  mutate(growth = B / lag(B) - 1)
+B_latest <- by_year$B[by_year$fy == 2026]
+cagr <- (by_year$B[by_year$fy == 2026] / by_year$B[by_year$fy == 2023])^(1/3) - 1
+
+## allocator shares
+a_work <- work_share("3601000", "36001")
+a_pub  <- pubadmin_share("3601000", "36001")
+a_wxp  <- work_share_ex_pubadmin("3601000", "36001")
+a_pay  <- ec_payroll_share("Albany city, New York", "001")
+a_inc  <- resid_share("01000", "001", "agginc")
+a_hh   <- resid_share("01000", "001", "hh")
+a_mv   <- mv_share("3601000", "ALBANY")
+a_util <- albany_measured_utility_share()
+is_sector <- function(x) grepl("^[0-9]{2}$|^[0-9]{2}-[0-9]{2}$", x)
+ec_p <- ec_place_sector |> filter(NAME == "Albany city, New York", is_sector(NAICS2022), !is.na(RCPTOT)) |> select(NAICS2022, p = RCPTOT)
+ec_k <- ec_county_sector |> filter(county == "001", is_sector(NAICS2022), !is.na(RCPTOT)) |> select(NAICS2022, k = RCPTOT)
+ec_j <- inner_join(ec_p, ec_k, by = "NAICS2022")
+a_ecall <- sum(ec_j$p) / sum(ec_j$k)
+a_ecret <- ec_j$p[ec_j$NAICS2022 == "44-45"] / ec_j$k[ec_j$NAICS2022 == "44-45"]
+a_store <- with(appo[appo$sourcing_class %in% c("store", "delivered_split"), ], sum(a_store_used * B_kg) / sum(B_kg))
+pub_pct <- with(lodes_place |> filter(cty == "36001"), sum(CNS20) / sum(C000))
+store_share_of_base <- sum(appo$B_kg[appo$sourcing_class %in% c("store", "delivered_split")]) / B_k
+oos_share <- with(dmv_by_zip |> filter(county == "ALBANY"), sum(n[state != "NY"]) / sum(n))
+
+## calibration variants
+cal_variant <- function(d, lbl) {
+  m <- lm(log_obs ~ log_pred, d); s <- summary(m)$sigma
+  ct <- lmtest::coeftest(m, vcov. = sandwich::vcovCL(m, cluster = d$county))
+  c0 <- exp(coef(m)[1] + coef(m)[2] * log(B_pred))
+  tibble(Specification = lbl, n = nrow(d), beta = coef(m)[2], se = ct[2, 2], sigma = s,
+         R2 = summary(m)$r.squared, B_c = c0, rev = rev(c0),
+         lo68 = rev(c0 * exp(-s)), hi68 = rev(c0 * exp(s)),
+         lo90 = rev(c0 * exp(-1.645 * s)), hi90 = rev(c0 * exp(1.645 * s)))
+}
+cv <- bind_rows(
+  cal_variant(calib, "All 17 cities (used)"),
+  cal_variant(filter(calib, !westchester), "Excluding Westchester (4 cities)"),
+  cal_variant(filter(calib, city != "Yonkers"), "Excluding Yonkers"),
+  cal_variant(filter(calib, city != "Salamanca"), "Excluding Salamanca"),
+  cal_variant(filter(calib, !city %in% c("Salamanca", "Ogdensburg")), "Excluding Salamanca and Ogdensburg"))
+gm_ratio <- exp(mean(calib$log_obs - calib$log_pred))
+med_ratio <- median(calib$ratio)
+f_ns <- cv[cv$Specification == "Excluding Salamanca", ]
+
+## allocator sensitivity (apportionment re-run)
+variants <- tribble(
+  ~Variant, ~args,
+  "Central", list(),
+  "Business allocator: employment excluding public administration", list(business_allocator = "lodes_ex_pubadmin"),
+  "Business allocator: Economic Census payroll", list(business_allocator = "ec_payroll"),
+  "Delivered goods: 0% to residence", list(delivered_to_residence = 0),
+  "Delivered goods: 100% to residence", list(delivered_to_residence = 1),
+  "Residence allocator: households instead of income", list(resid_var = "hh"),
+  "E-commerce: 15% of prone groups to residence", list(ecommerce_frac = 0.15),
+  "E-commerce: 30% of prone groups to residence", list(ecommerce_frac = 0.30),
+  "NAICS 4413 (parts, tires) sourced to residence", list(mv_include_4413 = TRUE))
+sens <- variants |> rowwise() |>
+  mutate(B_pred_v = do.call(apportion_variant, c(ALB, args)),
+         B_cal_v = apply_calibration(fit, B_pred_v)$B_c_central,
+         Rev = rev(B_cal_v)) |> ungroup()
+
+## alternatives
+pc_cities <- route_b$B_c / route_b$P_c
+d3 <- read_distributions() |> filter(fy %in% ANALYSIS_FYS)
+yonk_special <- mean(d3$amt[d3$taxing_jurisdiction == "City of Yonkers Special Sales and Use Tax"])
+yonk_half    <- yonk_special / 3                       # the 0.5 of the 1.5 special rate
+yonk_pop     <- pp$place$P_c[pp$place$place_fips == "3684000"]
+R_yonk       <- route_b$R[route_b$city == "Yonkers"]
+C_k <- mean(d3$amt[d3$taxing_jurisdiction == "Albany County Sales and Use Tax"])
+
+fm <- function(x, d = 1) formatC(x / 1e6, format = "f", digits = d, big.mark = ",")
+fb <- function(x, d = 2) formatC(x / 1e9, format = "f", digits = d)
+fp <- function(x, d = 1) paste0(formatC(100 * x, format = "f", digits = d), "%")
+f3 <- function(x) formatC(x, format = "f", digits = 3)
+```
+
+*Generated `r format(Sys.Date(), "%d %B %Y")` from `analysis/memo.qmd`. Every number below is computed at render time from the cached source pulls in `data/raw/` (provenance in `data/raw/MANIFEST.csv`); the two crosswalk tables in `data/crosswalk/` are the only hand-entered inputs and each row cites its source. The full technical reports with figures are `_output/analysis/city-halfpct-revenue.html` and `_output/analysis/route-b.html`.*
+
+## Summary
+
+| | |
+|---|---|
+| **Policy option** | A 0.5 percentage-point City of Albany sales and use tax, added on top of the existing 8% (4% state, 4% county), on the same base the county taxes, destination-sourced, with no preemption of the county tax and no change to county distributions. |
+| **Central estimate** | **\$`r fm(REV)` million a year** at `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` activity levels; about **\$`r fm(rev(s_cal * B_latest))` million** at the latest full year (`r by_year$sales_tax_year[by_year$fy == 2026]`) |
+| **City taxable base** | **\$`r fb(est$B_c_central)` billion**, `r fp(s_cal)` of the county's \$`r fb(B_k)` billion, against a `r fp(pop)` population share |
+| **Reasonable planning range** | **\$11–17 million** (base \$2.2–3.3 billion) — see §7 for how this differs from the statistical band |
+| **Statistical band** | 68%: \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M; 90%: \$`r fm(rev(est$lo90))`–`r fm(rev(est$hi90))` M |
+| **Largest uncertainty** | State-government purchasing inside the city; the estimate moves `r fp(abs(sens$Rev[2]/REV - 1), 0)` if public administration is dropped from the business allocator |
+| **Preemption comparison** | Preempting 1.5 points instead would yield \$`r fm(0.015 * est$B_c_central)` M against \$`r fm(0.40 * pop * C_k)` M from the existing county distribution — it loses about \$`r fm(0.40 * pop * C_k - 0.015 * est$B_c_central)` M a year |
+
+## 1. The policy option
+
+The City of Albany levies no general sales tax. Albany County levies 4%, which with the 4% state rate gives an 8% combined rate throughout the county. The county retains 60% of its collections and distributes 40% to its cities and towns in proportion to decennial census population (OSC 2020, Appendix C); the city's share of that distribution is therefore fixed by its population, not by the sales that occur inside it.
+
+The option costed here is an **add-on**: a 0.5-point city tax layered on the existing 8%, so that the combined rate becomes 8.5% inside the city and stays 8% elsewhere in the county. The county's rate and its distributions are untouched. The tax would apply to the same base as the county tax — the county does not locally exempt clothing under \$110 (Publication 718-C), so no base adjustment is needed — and would be destination-sourced under the ordinary rules, so that motor-vehicle sales, for example, would be taxed by the purchaser's residence rather than the dealer's location.
+
+The alternative structure — **preemption**, where a city imposes a rate and the county's rate falls by the same amount inside the city — is what seventeen New York cities outside New York City do today. It is costed alongside the add-on in §8, because the comparison is what makes the add-on attractive: a preempting city forfeits its share of the county distribution, and for a city whose taxable sales are not disproportionately concentrated inside its borders that forfeiture exceeds what it collects.
+
+One New York city already has exactly the add-on structure. Yonkers takes the full 4% Westchester rate and imposes 4.5%, so its combined rate is 8⅞% against 8⅜% in the rest of the county (Publication 718). It is the only published instance of a 0.5-point intra-county differential in the state and appears below both as a calibration city and as a direct analogy.
+
+Two things this memo does not do. It does not address the legal route to authorization: every city rate in Publication 718-A that sits above the standard preemption structure carries a footnote referring to an "additional" or "special" rate enacted by specific state legislation, and an Albany add-on would presumably need the same. And it does not model incidence or economic effects beyond a simple behavioral factor.
+
+## 2. Goals
+
+1. Estimate the annual revenue from the add-on, with an honest error band.
+2. Estimate the city's taxable sales base — the quantity that drives everything — with a range, since it is published by no one.
+3. Establish where Albany sits relative to New York cities that already tax, so the estimate can be judged against observed cases rather than only against its own internal logic.
+4. Document the preemption comparison with the same numbers.
+5. Make every figure reproducible from public data.
+
+## 3. Why the estimate is hard
+
+The revenue identity is trivial:
+
+    Revenue = 0.005 × B_c × (1 − φ) × β
+
+where B_c is the city's taxable sales and purchases, φ the administrative deduction observed in the county's own distributions, and β a behavioral factor for the rate differential at the city line. φ and β are minor. **B_c is the whole problem.**
+
+The Department of Taxation and Finance publishes taxable sales by *taxing jurisdiction*. Albany County is one; the City of Albany, having no tax, is not. There is no city row in the data, and no vendor-location or ZIP-level tabulation is published. The base has to be estimated.
+
+The one directly observable piece of the city's base is a fragment: the Albany City School District has imposed a 3% tax on utilities and telecommunications within the city since 1990 (TSB-M-90(6)S), and its collections are published. Dividing by 0.03 gives the city's utility-and-telecom base, which turns out to be `r fp(a_util)` of the county's — the first and only measured city/county share of any part of the base, and a check on the method used for the rest.
+
+## 4. Data
+
+| Source | Used for | What was verified, and what surprised |
+|---|---|---|
+| DTF *Taxable Sales and Purchases* (Socrata `ny73-2j3u`) | County base by 4-digit NAICS group, sales tax years 2022-23 to 2025-26 | 60 jurisdictions — state, MCTD, NYC, 57 counties — and **no city rows**. NAICS vintage switches from 2017 to 2022 at 2022-23 without restatement, so **NAICS 454 (nonstore retail / e-commerce) does not exist in the analysis window**. About 3.6% of Albany's county × NAICS cells are withheld; the reconciliation below bounds their effect. |
+| DTF *State and Local Sales Tax Distributions* (`5g2s-tnb7`) | County collections (for φ and reconciliation); school-district utility tax; collections of the 17 preempting cities and their counties | 23 city rows, not 18 — five are trace residuals from repealed taxes and are dropped. Yonkers has two rows (regular 3% and special 1.5%) that must be summed. |
+| DTF Publications 718, 718-A, 718-C; OSC 2020 report | Rates; preemption structure; clothing exemption; county distribution formulas | **Publication 718-A's percentage column is not the imposed city rate** for six cities; its own footnotes, Publication 718's combined rates and OSC's Figure 2 agree with each other against it. Albany County does not exempt clothing. Albany County's 40% distribution on census population verified. |
+| 2022 Economic Census (`ecnbasic`) | Store-based allocator: receipts by NAICS at *economic place* level for Albany city and all other places, and for counties | Economic-place codes are 8 digits (Albany = `00101000`); the bare place FIPS returns an empty response. **Suppression is encoded as 0 plus a flag**, not as missing — the flag variables must be pulled or withheld cells read as genuine zeros. Places cover 99.2% of county retail receipts. |
+| LEHD LODES WAC 2023 + crosswalk | Business-purchase allocator: workplace employment by place, with public administration retained | `lehdr` cannot aggregate to place; block-to-place done by hand through the crosswalk's `stplc`. 2023 available, not just 2022. |
+| ACS 5-year 2023 (B19025, B11001, B01003) | Residence allocator: aggregate household income (central), households (sensitivity); population check | Income share `r fp(a_inc)` vs household share `r fp(a_hh)` vs population `r fp(pop)`. |
+| NYS DMV registrations (`w4pv-hbkt`), aggregated server-side | Motor-vehicle allocator: resident registrations, model year ≥ 2024, by county and ZIP | 12.5 million rows; never downloaded whole. `county` is upper case. `city` is the **postal** city — ZIP 12205 is labelled "ALBANY" but is largely Colonie. `r fp(oos_share)` of Albany County registrations carry out-of-state ZIPs (Fort Lauderdale, Port Newark): leasing and fleet registrants. |
+| 2020 Census: PL block populations, Block Assignment Files, ZCTA-to-block relationship file | Exact ZIP → place population weights | The ZCTA-to-place file has land area only; ZCTA 12203 is 40% of Albany city by area but **62% by population**. Weights built from `r formatC(nrow(block_pop), big.mark=",")` blocks in 13 counties; the 1 GB national ZCTA-block file was stream-filtered, not downloaded. |
+| 2020 Census PL (place, county) | Population shares for the R ratio and the distribution formula | Albany city `r formatC(P_c, big.mark=",")`, county `r formatC(P_k, big.mark=",")`. |
+| Agrawal (2015); Baker, Johnson & Kueng (2021) | Behavioral factor β | The plan's Agrawal DOI and title were both wrong; corrected record is 10.1257/pol.20120360. Both resolve. |
+
+Every dataset's column list and the surprises above are recorded in `docs/data-layouts.md`. The DMV file in particular was accessed only through aggregating queries.
+
+## 5. Methods
+
+### 5.1 The identity, and φ
+
+The county's own data give φ directly: 4% of the published county base against what the county actually received.
+
+```{r}
+phi_tab |>
+  transmute(`Fiscal year` = fy, `County base, $bn` = B / 1e9, `4% of base, $m` = 0.04 * B / 1e6,
+            `Distributions, $m` = C / 1e6, `Gap` = fp(-phi, 2)) |>
+  kable(format = "pipe", digits = c(0, 3, 1, 1, 1), align = "lrrrr")
+```
+
+The gap is under 2.5% in every year (the plan's tripwire was 10%) and is slightly *negative* on average: the county received a little more than 4% of the published base, reflecting the one-month offset between the sales tax year (March–February) and the state fiscal year (April–March), late and amended returns, and use tax not captured in "taxable sales". φ is carried at its observed mean of `r fp(phi, 2)` — effectively zero.
+
+### 5.2 Apportionment of the county base
+
+Each of the `r nrow(appo)` NAICS groups in the county table is assigned to one of five sourcing classes, and the city's share of each class is estimated with an allocator matched to how that class of sale is sourced under the tax law.
+
+```{r}
+appo |>
+  group_by(Class = sourcing_class) |>
+  summarise(Groups = n(), `County base, $m` = sum(B_kg) / 1e6, `Share of base` = sum(B_kg) / B_k,
+            `City share a_g` = sum(B_cg, na.rm = TRUE) / sum(B_kg),
+            `City base, $m` = sum(B_cg, na.rm = TRUE) / 1e6, .groups = "drop") |>
+  mutate(Allocator = c(business = "Workplace employment (LODES)", delivered_split = "50% EC receipts / 50% ACS income",
+                       motor_vehicle = "Resident registrations (DMV)", store = "Establishment receipts (EC)",
+                       utilities = "Workplace employment (LODES)")[Class],
+         `Share of base` = fp(`Share of base`)) |>
+  select(Class, Allocator, Groups, `County base, $m`, `Share of base`, `City share a_g`, `City base, $m`) |>
+  arrange(desc(`County base, $m`)) |>
+  kable(format = "pipe", digits = c(0, 0, 0, 1, 0, 3, 1), align = "llrrrrr")
+```
+
+- **Store-based** (retail other than vehicles, restaurants, hotels, recreation, personal services, repair, rental): the city's share of Economic Census receipts, group by group, at the finest NAICS level at which both the city and the county publish an unsuppressed value. `r sum(grepl("4-digit", appo$store_method))` groups resolved at 4 digits and `r sum(grepl("3-digit", appo$store_method))` fell back to 3 digits; none needed the sector level. Sales over the counter are sourced where they occur, so establishment receipts are the right allocator, with the caveat that receipts are gross rather than taxable.
+- **Business purchases and use tax** (wholesale, manufacturing, construction, information, finance, professional and administrative services, health, education, public administration, and everything else): the city's share of county workplace employment. State government is the largest concentrated taxable purchaser in the county and is invisible to the Economic Census, which is why employment rather than payroll or receipts is the central allocator, and why public administration is kept in.
+- **Motor vehicles** (NAICS 4411, 4412): Tax Law §1214 sources vehicles requiring registration to the purchaser's residence, so the allocator is the city's share of the county's resident registrations, model year 2024 and later, assigned from ZIP to place by exact block-population weights. Parts and tires (4413) are ordinary counter sales and stay store-based.
+- **Delivered goods** (building materials, lawn and garden, furniture, electronics and appliances): split 50/50 between the store allocator and the residence allocator (ACS aggregate household income share), because delivery is destination-sourced.
+- **Utilities and telecommunications**: allocated by workplace employment in the generic method so the same procedure can run on every calibration city; the directly measured school-district base is used as a check (§10).
+
+The allocators span a wide range, and which one applies to which part of the base is what the estimate turns on:
+
+```{r}
+tibble(Allocator = c("Workplace employment (LODES)", "  of which: public administration", "  employment excluding public administration",
+                     "Economic Census payroll, matched sectors", "Economic Census receipts, all matched sectors",
+                     "Economic Census receipts, retail (44-45)", "Economic Census receipts, store classes as used",
+                     "DMV resident registrations, MY ≥ 2024", "ACS aggregate household income", "ACS households",
+                     "Measured: school-district utility tax ÷ 0.03", "Population, 2020 Census"),
+       `City share of county` = fp(c(a_work, a_pub, a_wxp, a_pay, a_ecall, a_ecret, a_store, a_mv, a_inc, a_hh, a_util, pop))) |>
+  kable(format = "pipe", align = "lr")
+```
+
+The city holds `r fp(a_work)` of the county's jobs and `r fp(a_pub)` of its public-administration jobs, but only `r fp(a_mv)` of its vehicle registrations and `r fp(a_ecret)` of its retail receipts — the county's retail has moved to the Wolf Road corridor in Colonie and to Crossgates in Guilderland. The apportionment is a base-weighted average of these, and lands at `r fp(B_pred / B_k)` of the county base before calibration.
+
+### 5.3 Calibration against cities whose base is observed
+
+The apportionment is a construction. The seventeen cities outside New York City that impose their own sales tax are the places where the identical construction can be run and then checked, because a preempting city's base is recoverable from its published collections: B_c = C_c / r_c, with the rates verified from Publications 718 and 718-A and the preemption structure confirmed by an identity test that holds to within 0.5–2.7% in every county. (The eighteenth such city, Oswego, is excluded: its county's collections behave as though no preemption occurs while the published combined rate says it does, and the two cannot be reconciled.)
+
+Running the same apportionment on those cities and regressing the log of the observed base on the log of the predicted base, with standard errors clustered by county:
+
+```{r}
+cv |> transmute(Specification, n, `Slope β` = beta, `se(β)` = se, `σ (logs)` = sigma, `R²` = R2,
+                `Albany base, $bn` = B_c / 1e9, `Revenue, $m` = rev / 1e6) |>
+  kable(format = "pipe", digits = c(0, 0, 3, 3, 3, 3, 2, 1), align = "lrrrrrrr")
+```
+
+The slope is indistinguishable from 1 — the method scales correctly across cities of very different size. But the residual spread, σ = `r f3(fit$sigma)` in logs, exceeds the 0.25 threshold set in the plan: **on the cities where the answer is known, the method is routinely off by a third**. The band is widened to match rather than narrowed by dropping observations.
+
+The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation's Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to `r f3(f_ns$sigma)`. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
+
+The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` B down to \$`r fb(est$B_c_central)` B (a `r fp(1 - est$B_c_central / B_pred, 0)` reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is `r f3(gm_ratio)`. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
+
+### 5.4 β
+
+The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% change in the tax-inclusive price at the city line. Vehicles are unaffected (residence sourcing). Business purchases, utilities and most services do not move. Only the store classes, `r fp(store_share_of_base, 0)` of the base, are mobile at all, and only near the boundary. β = 1.0 is carried as central; the literature on cross-border shopping (Agrawal 2015; Baker, Johnson and Kueng 2021) establishes that responses exist and are concentrated near rate discontinuities, but neither paper estimates a 0.5-point intra-county differential, so the low cases in §9 are illustrative rather than transported.
+
+## 6. Results
+
+### 6.1 The city's taxable base
+
+| Measure | Value |
+|---|---|
+| County base B_k, mean of sales tax years 2022-23 to 2024-25 | \$`r fb(B_k)` B |
+| Raw apportionment | \$`r fb(B_pred)` B (`r fp(B_pred / B_k)` of county) |
+| **Calibrated central estimate** | **\$`r fb(est$B_c_central)` B (`r fp(s_cal)` of county)** |
+| 68% band | \$`r fb(est$lo68)`–`r fb(est$hi68)` B |
+| 90% band | \$`r fb(est$lo90)`–`r fb(est$hi90)` B |
+| Same share applied to the latest year (`r by_year$sales_tax_year[by_year$fy == 2026]`, \$`r fb(B_latest)` B) | \$`r fb(s_cal * B_latest)` B |
+| Implied R = (city share) ÷ (population share) | `r formatC(R_cal, format = "f", digits = 2)` |
+
+### 6.2 Revenue
+
+| Measure | \$ million / year |
+|---|---|
+| **Central estimate, `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` levels** | **`r fm(REV)`** |
+| Central estimate at `r by_year$sales_tax_year[by_year$fy == 2026]` levels | `r fm(rev(s_cal * B_latest))` |
+| 68% band | `r fm(rev(est$lo68))` – `r fm(rev(est$hi68))` |
+| 90% band | `r fm(rev(est$lo90))` – `r fm(rev(est$hi90))` |
+| With β = 0.97 | `r fm(rev(est$B_c_central, 0.97))` |
+
+The county base grew `r fp(cagr, 1)` a year over 2022-23 to 2025-26 (`r fp(by_year$growth[by_year$fy == 2026], 1)` in the latest year alone). For a tax starting in 2027 or later the estimate should be read as a share — `r fp(s_cal)` of whatever the county base then is — rather than as a fixed dollar figure.
+
+### 6.3 Where Albany sits among cities that tax
+
+Seventeen preempting cities have an observed R — city share of the county base relative to population share — ranging from `r formatC(min(route_b$R), format="f", digits=2)` (Yonkers) to `r formatC(max(route_b$R), format="f", digits=2)` (Oneida), median `r formatC(median(route_b$R), format="f", digits=2)`. Albany's calibrated R of `r formatC(R_cal, format="f", digits=2)` sits just below the median, next to `r paste(route_b$city[order(abs(route_b$R - R_cal))][1:3], collapse = ", ")`. That is the expected shape: a city whose retail has suburbanised (retail R only `r formatC(a_ecret / pop, format="f", digits=2)`) but which contains the state capital and over half the county's jobs.
+
+The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (`r fp(a_ecret)`) below, the measured utility share (`r fp(a_util)`) above, with the estimate at `r fp(s_cal)` in between.
+
+## 7. A reasonable range, and how it relates to the statistical band
+
+Two different ranges are reported and they should not be confused.
+
+The **statistical band** (68%: \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M; 90%: \$`r fm(rev(est$lo90))`–`r fm(rev(est$hi90))` M) comes from the calibration's residual spread. It treats Albany as no easier to predict than any of the seventeen calibration cities — including Salamanca on tribal land, Ogdensburg on the Canadian border, and Glens Falls sharing a county with Lake George tourism. It is the honest statement of how well the method performs where it can be checked.
+
+The **reasonable planning range of \$11–17 million** (base \$2.2–3.3 billion) is a judgment, and rests on three observations:
+
+1. Every calibration variant in §5.3 lands between \$`r fm(min(cv$rev))` M and \$`r fm(max(cv$rev))` M.
+2. Every alternative *method* in the next section that has no identifiable directional bias lands between roughly \$11 M and \$16 M; the methods outside that span each have a stated reason to be biased.
+3. Albany's allocators resolve at fine NAICS detail, its Economic Census coverage is near-complete, and its one measurable component (utilities) validates the business allocator within 8%. These are the conditions under which the method should do better than its average performance, though nothing in the data proves it.
+
+If a single figure is needed for budgeting, **\$12–13 million** is the prudent choice at current activity levels: near the central estimate, inside every calibration variant, and above the residence-only floor.
+
+## 8. Alternative methodologies
+
+The apportionment was chosen because it is the only approach that (a) respects how the tax law actually sources each type of sale and (b) can be tested against cities whose answer is known. But it is worth seeing what simpler and different methods give, because their spread is itself information.
+
+```{r}
+alts <- tibble(
+  Method = c("A. Population share × county base",
+             "B. ACS aggregate household income share",
+             "C. ACS household share",
+             "D. Economic Census retail receipts share (44-45)",
+             "E. Economic Census receipts share, all matched sectors",
+             "F. Economic Census payroll share, matched sectors",
+             "G. Workplace employment share (LODES)",
+             "H. Measured utility-tax share applied to whole base",
+             "I. Route B transfer: median R of 17 cities × population share",
+             "J. Per-capita base of 17 cities × Albany population (median)",
+             "K. Yonkers analogy: its 0.5-point add-on yield per capita × Albany population",
+             "K'. Yonkers analogy, adjusted for Albany's R relative to Yonkers'",
+             "L. NAICS apportionment, uncalibrated",
+             "M. NAICS apportionment, calibrated (this memo's central)"),
+  `City share` = c(pop, a_inc, a_hh, a_ecret, a_ecall, a_pay, a_work, a_util, median(route_b$R) * pop,
+                   median(pc_cities) * P_c / B_k, NA, NA, B_pred / B_k, s_cal),
+  `Base, $bn` = c(pop, a_inc, a_hh, a_ecret, a_ecall, a_pay, a_work, a_util, median(route_b$R) * pop,
+                  median(pc_cities) * P_c / B_k, NA, NA, B_pred / B_k, s_cal) * B_k / 1e9,
+  `Revenue, $m` = NA_real_,
+  `Direction of bias` = c(
+    "Ignores structure entirely; a coincidence that it lands near the centre",
+    "Low: treats business purchases and commuter/visitor spending as if sourced to residence",
+    "Low, for the same reason; Albany households are small",
+    "Low: retail only, ignores services and business purchases which are more city-concentrated",
+    "High: origin-based receipts; treats consumer retail as concentrated as offices and hospitals",
+    "High: payroll concentrates in high-wage office and health employment; omits public administration",
+    "High: treats the entire base, including retail and vehicles, as if consumed where people work",
+    "High: utilities are the most city-concentrated component of any base",
+    "Assumes Albany is a typical preempting city; the 17 span a fourfold range",
+    "Low: the 17 are mostly small cities with far less commercial and government activity per resident",
+    "Low: Yonkers has the lowest R of any taxing city (0.45); its per-capita base is not Albany's",
+    "Circular — uses this memo's R — but shows the Yonkers add-on scales consistently",
+    "High relative to observed cities: over-predicts the typical calibration city by 10–20%",
+    "—"))
+alts$`Revenue, $m` <- ifelse(is.na(alts$`Base, $bn`), NA, rev(alts$`Base, $bn` * 1e9) / 1e6)
+alts$`Revenue, $m`[11] <- yonk_half / yonk_pop * P_c / 1e6
+alts$`Revenue, $m`[12] <- yonk_half / yonk_pop * P_c / 1e6 * R_cal / R_yonk
+alts |> mutate(`City share` = ifelse(is.na(`City share`), "", fp(`City share`))) |>
+  kable(format = "pipe", digits = c(0, 0, 2, 1, 0), align = "lrrrl")
+```
+
+Reading the table:
+
+- The **residence-side** methods (B, C, D, J) cluster at \$11–15 M; the **workplace-side** methods (E, F, G, H) cluster at \$19–24 M. Each side is right about part of the base and wrong about the rest. The apportionment is the base-weighted combination, and it lands between them — which is the strongest simple argument that it is doing what it should.
+- The **Route B transfer** (I) — assume Albany is a typical taxing city — gives \$`r fm(rev(median(route_b$R) * pop * B_k))` M, but "typical" spans a factor of four across the seventeen cities, so this is a weak anchor.
+- The **Yonkers analogy** (K) is the only method that uses the yield of an actual 0.5-point add-on. Yonkers' special rate is 1.5% (1% plus the 0.5% add-on), so a third of its special-tax collections, \$`r fm(yonk_half)` M for `r formatC(yonk_pop, big.mark=",")` people, is what 0.5 points raises there: \$`r formatC(yonk_half / yonk_pop, format="f", digits=0)` per resident, or \$`r fm(yonk_half / yonk_pop * P_c)` M scaled to Albany's population. That is low because Yonkers is the least commercially concentrated taxing city in the state (R = `r formatC(R_yonk, format="f", digits=2)`); adjusting for Albany's higher R gives \$`r fm(yonk_half / yonk_pop * P_c * R_cal / R_yonk)` M. The adjustment is circular, but the consistency is reassuring in one respect: a city-boundary 0.5-point differential has been administered by DTF for years.
+- The **uncalibrated apportionment** (L) is \$`r fm(rev(B_pred))` M. The calibration's downward correction is the single largest methodological choice in the memo after the allocator assignments themselves, and it is worth `r fp(1 - REV / rev(B_pred), 0)`.
+
+Methods not implemented, and why:
+
+- **A DTF special tabulation.** The Office of Tax Policy Analysis holds return-level data with vendor location and could tabulate taxable sales inside the city limits directly, as it does for counties considering rate changes. This would replace everything above with a measurement. **It is the single most valuable next step** and the city should request it; the school-district utility tax already gives DTF a precedent for separately accounting for sales within the city of Albany.
+- **A demand-side (consumer expenditure) build-up** — resident income × taxable-spending propensity, plus commuter and visitor inflows. Data-hungry, and the inflow term is exactly the unobserved quantity; it would not be independent of the assumptions already made.
+- **A retail gravity or catchment model.** Would refine the store allocator but not the business allocator, which is where the uncertainty is.
+- **Commercial assessed value share** from the city and county assessment rolls as an alternative business allocator. Feasible and cheap; not pulled here. It would be a useful third opinion alongside employment and payroll.
+
+## 9. Sensitivity analysis
+
+### 9.1 Modelling choices inside the apportionment
+
+Each row changes one choice, re-runs the whole apportionment, and re-applies the calibration.
+
+```{r}
+sens |> transmute(Variant, `Raw base, $bn` = B_pred_v / 1e9, `Calibrated base, $bn` = B_cal_v / 1e9,
+                  `Revenue, $m` = Rev / 1e6, `vs central` = fp(Rev / REV - 1)) |>
+  kable(format = "pipe", digits = c(0, 3, 3, 1, 0), align = "lrrrr")
+```
+
+Only one choice matters. Dropping public administration from the business allocator cuts revenue by `r fp(abs(sens$Rev[2]/REV - 1), 0)`; substituting Economic Census payroll, which omits government entirely and weights toward high-wage sectors, cuts it by `r fp(abs(sens$Rev[3]/REV - 1), 0)`. **How much taxable purchasing state agencies do inside the city is the real uncertainty in this estimate**, and no public source measures it.
+
+Everything else is immaterial. The delivered-goods split, flagged in the plan as a key assumption, moves the answer by under 0.1%; the e-commerce assignment, which the disappearance of NAICS 454 made unresolvable, moves it by under 1%. Both are immaterial for the same reason: the Economic Census store share and the ACS income share for those groups are within a point of each other, so it barely matters which is used.
+
+### 9.2 Calibration sample
+
+From §5.3: the calibrated central ranges from \$`r fm(min(cv$rev))` M (excluding Salamanca and Ogdensburg, the two cities with identifiable structural reasons to be mis-predicted) to \$`r fm(max(cv$rev))` M (excluding the four Westchester cities). A slope-fixed-at-one calibration using the geometric mean ratio gives \$`r fm(rev(gm_ratio * B_pred))` M; using the median ratio gives \$`r fm(rev(med_ratio * B_pred))` M.
+
+### 9.3 Behavioural response and administrative deduction
+
+```{r}
+bind_rows(
+  tibble(Assumption = "β = 1.00 (central)", `Revenue, $m` = rev(est$B_c_central) / 1e6),
+  tibble(Assumption = "β = 0.97, whole base", `Revenue, $m` = rev(est$B_c_central, 0.97) / 1e6),
+  tibble(Assumption = "β = 0.97, store classes only", `Revenue, $m` = rev(est$B_c_central) * (1 - 0.03 * store_share_of_base) / 1e6),
+  tibble(Assumption = "β = 0.90, whole base (aggressive)", `Revenue, $m` = rev(est$B_c_central, 0.90) / 1e6),
+  tibble(Assumption = "β = 0.90, store classes only", `Revenue, $m` = rev(est$B_c_central) * (1 - 0.10 * store_share_of_base) / 1e6),
+  tibble(Assumption = paste0("φ = ", fp(phi, 2), " observed (central)"), `Revenue, $m` = rev(est$B_c_central) / 1e6),
+  tibble(Assumption = "φ = 0", `Revenue, $m` = rev(est$B_c_central, ph = 0) / 1e6),
+  tibble(Assumption = "φ = +2% (an explicit administrative charge)", `Revenue, $m` = rev(est$B_c_central, ph = 0.02) / 1e6)) |>
+  kable(format = "pipe", digits = 1, align = "lr")
+```
+
+Neither factor moves the estimate by more than about 10% even under aggressive assumptions, and both are dwarfed by the base uncertainty.
+
+### 9.4 Base year and growth
+
+| Base | County base, $bn | City base at `r fp(s_cal)`, $bn | Revenue, $m |
+|---|---:|---:|---:|
+```{r}
+#| output: asis
+for (i in seq_len(nrow(by_year))) cat(sprintf("| %s | %s | %s | %s |\n", by_year$sales_tax_year[i], fb(by_year$B[i], 3), fb(s_cal * by_year$B[i]), fm(rev(s_cal * by_year$B[i]))))
+cat(sprintf("| Three-year mean used (2022-23 to 2024-25) | %s | %s | %s |\n", fb(B_k, 3), fb(est$B_c_central), fm(REV)))
+```
+
+## 10. Validations
+
+| # | Check | Result |
+|---|---|---|
+| 1 | 4% × county base against county distributions, each year | Gap `r fp(min(-phi_tab$phi))` to `r fp(max(-phi_tab$phi))`; passes |
+| 2 | Economic Census: sum of Albany County places against county total, retail | Places cover 99.2%; residual 0.8% |
+| 3 | Utilities: employment allocator against the directly measured school-district base | `r fp(a_work)` vs `r fp(a_util)` — within `r fp(abs(a_work / a_util - 1), 0)` |
+| 4 | Motor vehicles: DMV resident share against ACS income share | `r fp(a_mv)` vs `r fp(a_inc)`; DMV lower, consistent with lower urban vehicle ownership |
+| 5 | Calibration | Slope `r f3(fit$beta)` (se `r f3(fit$se_beta)`); σ `r f3(fit$sigma)`, above the 0.25 threshold — band widened, not suppressed |
+| 6 | Preemption identity across the 11 calibration counties | (C_k + Σ p_i B_i) ÷ (r_k B_k) between 0.995 and 1.027 |
+| 7 | Albany's implied R against the 17 observed cities | `r formatC(R_cal, format="f", digits=2)` within `r formatC(min(route_b$R), format="f", digits=2)`–`r formatC(max(route_b$R), format="f", digits=2)`, near the median `r formatC(median(route_b$R), format="f", digits=2)` |
+
+Validation 3 deserves emphasis. It is the only place an allocator can be tested against a direct observation of an Albany city base, and the employment allocator — the one carrying the largest share of the estimate and the largest uncertainty — passes it.
+
+## 11. The preemption comparison
+
+Albany County distributes 40% of its collections to cities and towns by census population (OSC 2020, Appendix C). Albany's status-quo receipt is therefore 0.40 × `r fp(pop)` × county collections. Three-year means:
+
+| Option | \$ million / year |
+|---|---:|
+| Status quo: 0.40 × population share × county collections of \$`r fm(C_k)` M | `r fm(0.40 * pop * C_k)` |
+| Preempt 1.5 points: 0.015 × B_c | `r fm(0.015 * est$B_c_central)` |
+| **Add on 0.5 points (this memo)** | **`r fm(REV)`** |
+
+Preemption at the standard 1.5 points would *lose* about \$`r fm(0.40 * pop * C_k - 0.015 * est$B_c_central)` M a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r formatC(R_cal, format="f", digits=2)`. A city has to be a genuine retail concentrator for preemption to work, and Albany — with its county's retail on Wolf Road and at Crossgates — is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched, which is the whole case for it over the conventional structure.
+
+## 12. Timing and first-year cash
+
+Local rate changes take effect on 1 March, 1 June, 1 September or 1 December, with 90 days' notice (Tax Law §1210(d), §1211), and transitional rules apply to straddling contracts (Tax Bulletin ST-895). Distributions lag liability by one to two months, with the first two months of each quarter paid as estimates.
+
+On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** start yields roughly `r fm(REV * 8.5 / 12)` M of cash in the first year (10 months' liability, about 8.5 months' cash) and the full amount from the second. A **1 December** start yields essentially nothing in the first calendar year. If revenue in a particular budget year is the objective, the start date matters as much as most of the modelling choices in §9.
+
+## 13. Limitations
+
+In rough order of importance:
+
+1. **State-government purchasing is real, large, concentrated in the city, and unmeasured.** Employment counts jobs, not purchases. This is the dominant uncertainty and is not reducible with public data; a DTF tabulation would resolve it.
+2. **The method misses by a third on cities where it can be checked.** Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
+3. **The calibration sample is small (17) and selected**: mostly small retail-centre cities, with Utica, Rome and the Westchester cities the closest structural analogues to Albany. The fit is reported with and without Westchester.
+4. **Economic Census receipts are gross, not taxable, and are 2022 values applied to 2022-23 to 2024-25 bases.** The allocators are shares, so level drift matters little; the assumption is that a NAICS group's taxable fraction is similar inside and outside the city.
+5. **Remote sales are not published by delivery jurisdiction**, and NAICS 2022 makes e-commerce unidentifiable in the DTF data. Shown to be immaterial for Albany, but it is an assumption.
+6. **The utility-tax measurement is not clean.** Residential energy is taxed by the county at 1% and by the school district at 3%, so numerator and denominator cover slightly different mixes.
+7. **Ogdensburg's rate**, one of seventeen calibration points, rests on Publication 718-A footnote reasoning rather than a published rate table. It does not drive the fit.
+8. **Cell suppression** removes 3–10% of county × NAICS cells; county bases are sums of published cells. The reconciliation bounds the effect at a few percent.
+
+## 14. Recommendations
+
+1. **Plan on \$11–17 million a year, with \$12–13 million as the budget figure**, at current activity levels, rising with the county base at 2–4% a year. Do not present the estimate without its band.
+2. **Ask DTF's Office of Tax Policy Analysis for a direct tabulation** of taxable sales within the city limits. It would replace this estimate with a measurement and would specifically resolve the state-purchasing question. The school-district utility tax gives DTF an existing precedent for separately accounting for sales within the city of Albany.
+3. **Prefer the add-on to preemption.** With Albany's R below the 1.067 break-even, preemption loses about \$6 million a year relative to the existing distribution; the add-on has no such cost.
+4. **If a start date is discretionary, choose 1 March** for a calendar-year budget; a December start defers essentially all cash to the following year.
+5. If more precision is wanted without DTF's help, the cheapest improvement is a **commercial assessed-value allocator** from the assessment rolls as a third opinion on the business share, followed by a request to the state for **agency purchasing by location** from the Statewide Financial System.
+
+## References
+
+Agrawal, D. R. (2015). The tax gradient: Spatial aspects of fiscal competition. *American Economic Journal: Economic Policy, 7*(2), 1–29. <https://www.aeaweb.org/articles?id=10.1257/pol.20120360>
+
+Baker, S. R., Johnson, S., & Kueng, L. (2021). Shopping for lower sales tax rates. *American Economic Journal: Macroeconomics, 13*(3), 209–250. <https://www.aeaweb.org/articles?id=10.1257/mac.20190026>
+
+New York State Department of Taxation and Finance. (2026). *Taxable sales and purchases quarterly data: Beginning sales tax year 2013–2014* [Data set]. <https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data>
+
+New York State Department of Taxation and Finance. (2025). *State and local sales tax distributions: Beginning fiscal years ended March 31, 1995* [Data set]. <https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718: New York State sales and use tax rates by jurisdiction*. <https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-A: Enactment and effective dates of sales and use tax rates*. <https://www.tax.ny.gov/pdf/publications/sales/pub718a.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-C: Sales and use tax rates on clothing and footwear*. <https://www.tax.ny.gov/pdf/publications/sales/pub718c.pdf>
+
+New York State Department of Taxation and Finance. (1990). *TSB-M-90(6)S: The Albany City School District imposes a 3% sales and use tax on utilities and utility services*. <https://tax.ny.gov/pdf/memos/sales/m90_6s.pdf>
+
+New York State Department of Taxation and Finance. (2014). *Tax Bulletin ST-895: Transitional provisions for sales tax rate changes*. <https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/transitional_provisions.htm>
+
+New York State Department of Motor Vehicles. (2026). *Vehicle, snowmobile, and boat registrations* [Data set]. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
+
+N.Y. Tax Law §§ 1210, 1211, 1214, 1223, 1224.
+
+Office of the New York State Comptroller. (2020). *Understanding local government sales tax in New York State: 2020 update*. <https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
+
+U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171)* [API dataset]. <https://api.census.gov/data/2020/dec/pl.html>
+
+U.S. Census Bureau. (2021). *2020 Census block assignment files*. <https://www2.census.gov/geo/docs/maps-data/data/baf2020/>
+
+U.S. Census Bureau. (2024). *American Community Survey 5-year estimates, 2023* [API dataset]. <https://api.census.gov/data/2023/acs/acs5.html>
+
+U.S. Census Bureau. (2025). *Economic Census 2022: Summary statistics for the U.S., states, and selected geographies* [API dataset `ecnbasic`]. <https://api.census.gov/data/2022/ecnbasic.html>
+
+U.S. Census Bureau. (n.d.). *2020 relationship files: ZCTA to place, ZCTA to block*. <https://www.census.gov/geographies/reference-files/time-series/geo/relationship-files.html>
+
+U.S. Census Bureau, Longitudinal Employer-Household Dynamics. (2025). *LODES version 8: Workplace Area Characteristics, New York, 2023*. <https://lehd.ces.census.gov/data/>

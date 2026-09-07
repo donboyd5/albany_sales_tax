@@ -1,0 +1,44 @@
+---
+title: "Revenue from a 0.5% City of Albany add-on sales tax"
+toc: false
+---
+
+```{r}
+#| include: false
+library(here)
+source(here("R", "04_allocate.R"))
+ALB <- list("Albany city, New York", "3601000", "36001", "ALBANY", "ALBANY")
+appo <- do.call(apportion_city, ALB)
+fit  <- fit_calibration(build_calibration())
+est  <- apply_calibration(fit, sum(appo$B_cg, na.rm = TRUE))
+phi  <- mean(albany_phi()$phi)
+rev  <- function(b) 0.005 * b * (1 - phi) / 1e6
+```
+
+A reproducible estimate of what the City of Albany, New York would raise from a
+0.5 percentage-point sales and use tax layered on the existing 8% — on the same
+base Albany County taxes at 4%, with no preemption and no change to county
+distributions.
+
+::: {.callout-note}
+## Headline
+**About \$`r sprintf("%.1f", rev(est$B_c_central))` million a year**, with a
+68% range of \$`r sprintf("%.1f", rev(est$lo68))`–`r sprintf("%.1f", rev(est$hi68))` million
+and a 90% range of \$`r sprintf("%.1f", rev(est$lo90))`–`r sprintf("%.1f", rev(est$hi90))` million,
+at 2022–2025 activity levels. A reasonable planning range is \$11–17 million.
+:::
+
+## Documents
+
+| | |
+|---|---|
+| [**Memo: policy option, method, data, findings**](analysis/memo.html) | The write-up — goals, data, method, results with ranges, alternative methods, sensitivity analysis, recommendations. Also available as [Markdown](https://github.com/donboyd5/albany_sales_tax/blob/main/docs/albany-halfpct-memo.md). |
+| [**Technical report: the estimate**](analysis/city-halfpct-revenue.html) | Apportionment of the county base by NAICS group, calibration against the 17 New York cities whose base is observed, error band, validations, sensitivity, timing, preemption comparison. |
+| [**Route B benchmark**](analysis/route-b.html) | How concentrated the county sales tax base is inside each of New York's preempting cities — the empirical benchmark the estimate is judged against. |
+
+## Reproducing it
+
+Source, cached data pulls with SHA-256 provenance, and the verified schema notes
+for every dataset are in the
+[GitHub repository](https://github.com/donboyd5/albany_sales_tax). Clone,
+`renv::restore()`, add a Census API key to `.Renviron`, and `quarto render`.

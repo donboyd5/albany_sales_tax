@@ -1,5 +1,8 @@
 # Albany City 0.5% add-on sales tax — revenue estimate
 
+**Published site:** <https://donboyd5.github.io/albany_sales_tax/> ·
+**Memo:** [`docs/albany-halfpct-memo.md`](docs/albany-halfpct-memo.md)
+
 A reproducible estimate, with an error band, of the annual revenue the City of
 Albany, NY would raise from a hypothetical **0.5 percentage-point add-on sales
 and use tax** imposed on the same base Albany County taxes at 4%,
@@ -54,10 +57,14 @@ cd albany_sales_tax
 4. **Render**
 
    ```bash
-   quarto render
+   quarto render                                   # or: make render
+   cp _output/analysis/memo.md docs/albany-halfpct-memo.md
    ```
 
-   Output lands in `_output/`.
+   The site (`index.html` plus the three documents) lands in `_output/`; the
+   memo is also rendered to GitHub-flavored Markdown and kept at
+   `docs/albany-halfpct-memo.md`. `make publish` pushes the rendered site to
+   the `gh-pages` branch, from which GitHub Pages serves it.
 
 ## Layout
 
@@ -67,8 +74,11 @@ data/raw/           cached source pulls + MANIFEST.csv (file, source_url, pulled
 data/processed/     tidied intermediates
 data/crosswalk/     hand-built mapping tables; each carries a `source` column with a URL
 docs/data-layouts.md   verified column lists for every dataset used
-analysis/route-b.qmd            18-city reduced-form benchmark
-analysis/city-halfpct-revenue.qmd   the estimate
+index.qmd           landing page for the published site
+analysis/memo.qmd   the write-up: policy option, goals, data, method, results, alternatives, sensitivity
+analysis/route-b.qmd            17-city reduced-form benchmark
+analysis/city-halfpct-revenue.qmd   the technical estimate
+docs/albany-halfpct-memo.md     the memo, rendered to Markdown (generated -- edit analysis/memo.qmd)
 ```
 
 ## Ground rules
