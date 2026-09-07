@@ -18,4 +18,4 @@ urls:             ## check that every cited URL still resolves
 	Rscript R/99_check_urls.R
 
 publish: render   ## render and push the site to the gh-pages branch (GitHub Pages)
-	quarto publish gh-pages --no-prompt --no-browser
+	scripts/publish_gh_pages.sh
