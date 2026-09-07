@@ -29,3 +29,5 @@ data/raw/*.xlsx
 data/raw/*.zip
 data/raw/*.pdf
 data/raw/large/
+
+**/*.quarto_ipynb

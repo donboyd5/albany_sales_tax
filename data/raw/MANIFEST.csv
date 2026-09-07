@@ -1,5 +1,11 @@
 file,source_url,pulled_at,sha256
+data/raw/census_acs5_2023_county_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:23-0400,783f150021ea49bd2aca87ce4915e1f4620368a8be394644d2a0dd5298647866
+data/raw/census_acs5_2023_place_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:22-0400,5ab9efc878fdccf900b59d4f8208cc221af1965e036f472401fb42c385534ea8
+data/raw/census_pl2020_county_ny.csv,https://api.census.gov/data/2020/dec/pl,2026-09-07T15:18:17-0400,64e08bf85453b63af56a80b5188c95952183ea08a3522e7d2fcfcb935d02fb6c
+data/raw/census_pl2020_place_ny.csv,https://api.census.gov/data/2020/dec/pl,2026-09-07T15:18:17-0400,b7072225b5f1df1908cebba4ef3284342af91a782f347d47437f2f2fa36a46ae
 data/raw/dtf_as001_index.csv,https://www.tax.ny.gov/research/stats/statistics/sales_tax/government/as001.htm,2026-09-07T15:14:50-0400,fb8d44afd8431ef25ec7c1d7abce527dbb72f521c40313f28c874a374754fe75
 data/raw/dtf_distributions.csv,https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7,2026-09-07T15:14:49-0400,44a0de4348dc047015502cf6f7b741fbeed88fc676aa1a812aaa63374f1f7e7f
 data/raw/dtf_sales_status_by_year.csv,https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data,2026-09-07T15:14:49-0400,314685abe32670ea09808149703308f3c6091bc241ed944d61f159bbb6c80789
 data/raw/dtf_taxable_sales_by_naics.csv,https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data,2026-09-07T15:14:49-0400,850600bfac09d2095bd9787f1907c1c5af78c95a32aceafda8a6378bf0905c5d
+data/raw/ec2022_county_sector_ny.csv,https://api.census.gov/data/2022/ecnbasic.html,2026-09-07T15:24:06-0400,6cd337fb5b5134dcade3881d2ba7f93e614b212b2dd0d5956299446deeaa3b27
+data/raw/ec2022_place_sector_ny.csv,https://api.census.gov/data/2022/ecnbasic.html,2026-09-07T15:23:29-0400,2771662e1cf8e3859515fa9cfd838aa92eb8b750503c4f71638bafaf85071520

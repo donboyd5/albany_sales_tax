@@ -1,21 +1,395 @@
 ---
-title: "Route B: how concentrated is the sales tax base in New York's preempting cities?"
-subtitle: "Reduced-form benchmark for an Albany city sales tax"
+title: "Route B: the city share of the county sales tax base in New York's preempting cities"
+subtitle: "A reduced-form benchmark for a City of Albany sales tax"
 date: today
 ---
 
-::: {.callout-warning}
-## Phase 0 placeholder
+```{r setup}
+#| include: false
+library(here)
+source(here("R", "05_calibrate.R"))
+source(here("R", "02_pull_census_ec.R"))
+suppressPackageStartupMessages({library(gt); library(ggplot2)})
 
-This document is scaffolding. It is filled in at **Phase 2**, after the Phase 1
-schema checks confirm what the DTF distribution and rate tables actually contain.
+panel   <- build_route_b()
+route_b <- summarise_route_b(panel)
+ident   <- check_identity(panel)
+supp    <- suppression_report()
+osw     <- oswego_evidence()
+cw_all  <- read_crosswalk_cities()
 
-Phase 2 will compute, for each of the 18 cities outside New York City that impose
-their own sales tax,
+## Albany reference quantities
+alb_pop <- read_pop()
+P_alb_c <- alb_pop$place$P_c[alb_pop$place$place_fips == "3601000"]
+P_alb_k <- alb_pop$county$P_k[alb_pop$county$county_fips == "36001"]
+alb_pop_share <- P_alb_c / P_alb_k
 
-$$R_c = \frac{B_c / B_k}{P_c / P_k}$$
+## the one directly observed Albany city/county base share (Phase 1, §4e)
+dist <- read_distributions()
+acsd <- mean(dist$amt[dist$fy %in% ROUTE_B_FYS &
+                      dist$taxing_jurisdiction == "Albany City School District Consumer Utilities"])
+base <- read_county_base()
+alb_util <- base |>
+  filter(jurisdiction == "ALBANY", fy %in% ROUTE_B_FYS,
+         substr(naics_industry_group, 1, 2) == "22" | substr(naics_industry_group, 1, 3) == "517") |>
+  group_by(fy) |> summarise(B = sum(B, na.rm = TRUE), .groups = "drop")
+a_util <- (acsd / 0.03) / mean(alb_util$B)
+R_util <- a_util / alb_pop_share
 
-— the city's share of its county's taxable sales base relative to its share of
-county population — as a three-year mean, and plot the distribution against
-Albany's status-quo break-even line of $1.6/1.5 = 1.0667$.
+## 2022 Economic Census retail, Albany County (docs/data-layouts.md §5)
+ec_p   <- ec_albany_places("44-45")
+ec_k   <- ec_albany_county("44-45")
+ec_alb <- ec_p$RCPTOT[grepl("^Albany city", ec_p$NAME)]
+ec_col <- ec_p$RCPTOT[grepl("^Colonie town", ec_p$NAME)]
+ec_share_city <- ec_alb / ec_k$RCPTOT
+ec_resid <- 1 - sum(ec_p$RCPTOT, na.rm = TRUE) / ec_k$RCPTOT
+
+breakeven <- albany_breakeven()
+fmt_pct <- function(x, d = 1) sprintf(paste0("%.", d, "f%%"), 100 * x)
+```
+
+## What this document does
+
+The City of Albany does not levy a sales tax, so its sales tax base is not
+observed. Eighteen New York cities outside New York City *do* levy one, and for
+them the city base can be recovered from published distributions. This document
+measures, for those cities, how concentrated the county sales tax base is inside
+the city relative to population:
+
+$$R_c \;=\; \frac{B_c / B_k}{P_c / P_k}$$
+
+$R_c = 1$ means the city holds exactly its per-capita share of the county's
+taxable sales. $R_c > 1$ means the city is a net retail centre for its county.
+The distribution of $R_c$ across these cities is the empirical benchmark against
+which any estimate of Albany's own base has to be judged, and it is the
+prerequisite for the calibration in Phase 3.
+
+Nothing here is an estimate of Albany's revenue. It is a benchmark.
+
+## How the city base is recovered
+
+Within county $k$ the county collects its full rate $r_k$ outside any preempting
+city, and a reduced rate $r_k - p_c$ inside city $c$, while the city collects
+$r_c$ on the same base. Collections $C$ are published; rates are verified from
+Publication 718 and 718-A. So
+
+$$B_c = \frac{C_c}{r_c}, \qquad C_k = r_k B_k - \sum_i p_i B_i$$
+
+with $B_k$ — the whole-county base, including the preempting cities — taken
+directly from the DTF taxable sales file.
+
+Two things in that paragraph were assumptions in the project plan and are now
+verified facts. First, `ny73-2j3u` reports the **whole county**, not the county
+net of its preempting cities. Second, **$p_c = r_c$**: Publication 718 publishes
+the combined rate both inside each preempting city and for the county
+"– except" that city, and for every city but Yonkers the two are identical,
+which forces the county's rate reduction to equal the city's rate exactly. The
+project plan's assumption of a uniform $p_c = 1.5$ is wrong wherever
+$r_c \neq 1.5$, which is nine of the eighteen cities.
+
+Both facts are tested jointly below.
+
+## Rates actually used
+
+```{r}
+#| label: tbl-rates
+#| tbl-cap: "Verified rates. `r_k` is the county rate, `r_c` the city rate, `p_c` the county's rate reduction inside the city. Sources are Publication 718 (combined rates, effective 1 March 2025) and 718-A (enactment history); the full per-row citation is in `data/crosswalk/preempt_cities.csv`."
+cw_all |>
+  transmute(City = city, County = county,
+            `r_k` = r_k, `r_c` = r_c, `p_c` = p_c,
+            Used = ifelse(include, "yes", "excluded")) |>
+  arrange(City) |>
+  gt() |>
+  fmt_number(c(r_k, r_c, p_c), decimals = 2) |>
+  sub_missing(columns = p_c, missing_text = "—") |>
+  tab_style(style = cell_fill(color = "#fdeaea"),
+            locations = cells_body(rows = Used == "excluded")) |>
+  tab_options(table.font.size = pct(90))
+```
+
+Seven of these rates differ from the seed table in the project plan
+(Gloversville, Johnstown, New Rochelle, Norwich, Ogdensburg, Saratoga Springs,
+Yonkers). Ogdensburg is a live case: it repealed its tax in 2000 and re-imposed
+it at 3% effective 1 March 2022, the first day of the analysis window.
+
+**Yonkers is the exception that matters most here.** Its combined rate is
+8⅞% inside the city against 8⅜% in the rest of Westchester. It preempts the
+county's full 4% and imposes 4.5% — a **0.5-point add-on above full
+preemption**. It is the only published New York example of a city rate that
+sits above its county's, and therefore the closest existing analogue to the
+policy this project is costing.
+
+## Validation: does the preemption identity hold?
+
+If $p_i = r_i$ then the rates cancel in aggregate and
+$\left(C_k + \sum_i C_i\right) / (r_k B_k)$ must equal 1. This tests the
+identity and the whole-county reading of $B_k$ jointly, and — because the
+observed collections appear on both sides — it is insensitive to the individual
+city rates.
+
+```{r}
+#| label: tbl-identity
+#| tbl-cap: "Total local collections divided by the county rate applied to the whole county base, three-year mean, FY2023–FY2025."
+ident |>
+  transmute(County = county,
+            `County collections ($M)` = C_k / 1e6,
+            `City collections ($M)`   = C_cities / 1e6,
+            `County base ($B)`        = B_k / 1e9,
+            `Ratio`                   = implied) |>
+  gt() |>
+  fmt_number(c(`County collections ($M)`, `City collections ($M)`), decimals = 1) |>
+  fmt_number(`County base ($B)`, decimals = 2) |>
+  fmt_number(Ratio, decimals = 3) |>
+  tab_options(table.font.size = pct(90))
+```
+
+Every county lands between 0.995 and 1.027. The residual few tenths of a percent
+are what one expects from the one-month offset between the sales tax year
+(March–February) and the state fiscal year (April–March), from late and amended
+returns, and from the administrative deduction. The identity holds.
+
+::: {.callout-important}
+## Oswego is excluded
+
+Oswego is the one county where this fails, and it fails by too much to be noise.
+
+```{r}
+#| label: tbl-oswego
+#| tbl-cap: "Oswego County: collections against 4% of the published county base."
+osw |>
+  filter(fy >= 2015) |>
+  transmute(`Fiscal year` = fy,
+            `County base ($B)` = B_k / 1e9,
+            `County ($M)` = C_k / 1e6,
+            `City ($M)` = C_c / 1e6,
+            `County ÷ 4%·base` = county_only,
+            `(County+City) ÷ 4%·base` = county_plus_city) |>
+  gt() |>
+  fmt_number(`County base ($B)`, decimals = 2) |>
+  fmt_number(c(`County ($M)`, `City ($M)`), decimals = 1) |>
+  fmt_number(c(`County ÷ 4%·base`, `(County+City) ÷ 4%·base`), decimals = 3) |>
+  tab_options(table.font.size = pct(85))
+```
+
+Three published facts cannot all be true at once. Publication 718 gives 8%
+combined both inside and outside the city, which implies the city preempts the
+county's entire 4%. But Oswego County's collections alone equal essentially
+100% of 4% × the county base in *every year from 2014 to 2025*, as though no
+preemption occurred at all. And the city collects a further \$23 M on top.
+Under any single interpretation of the statute one of those three has to give.
+
+Publication 718-A flags the city with footnotes reading "county could not
+preempt any of city's 3%" and "county may not preempt any of city's 4%", which
+matches the collections but not the published combined rate. $p_c$ is not
+identified, so per the project plan Oswego is reported here and dropped from
+everything that follows. It is one observation of seventeen; excluding it does
+not drive any conclusion below.
 :::
+
+## The result
+
+```{r}
+#| label: tbl-routeb
+#| tbl-cap: "Observed city share of the county sales tax base, three-year mean of FY2023–FY2025. Population is the 2020 Census (P1_001N)."
+route_b |>
+  transmute(City = city, County = county,
+            `City base ($M)`   = B_c / 1e6,
+            `County base ($B)` = B_k / 1e9,
+            `Base share s`     = s,
+            `Pop. share`       = pop_share,
+            `R` = R) |>
+  gt() |>
+  fmt_number(`City base ($M)`, decimals = 0) |>
+  fmt_number(`County base ($B)`, decimals = 2) |>
+  fmt_percent(c(`Base share s`, `Pop. share`), decimals = 1) |>
+  fmt_number(R, decimals = 3) |>
+  data_color(columns = R, palette = c("#c6dbef", "#f7f7f7", "#fdd0a2"),
+             domain = c(0.3, 2.0)) |>
+  tab_options(table.font.size = pct(90))
+```
+
+```{r}
+#| label: fig-routeb
+#| fig-cap: "Ratio of the city's share of its county's taxable sales base to its share of county population, three-year mean FY2023–FY2025. Oswego excluded. The dashed line is Albany's break-even; the dotted line is Albany's one directly observed base share, from the school district utility tax."
+#| fig-height: 6.5
+#| fig-width: 8
+pd <- route_b |>
+  mutate(city = factor(city, levels = rev(city[order(R)])),
+         grp  = ifelse(county == "Westchester", "Westchester", "Rest of state"))
+
+ggplot(pd, aes(R, city, colour = grp)) +
+  geom_vline(xintercept = 1, colour = "grey75", linewidth = 0.4) +
+  geom_vline(xintercept = breakeven, linetype = "dashed", colour = "#b2182b", linewidth = 0.55) +
+  geom_vline(xintercept = R_util, linetype = "dotted", colour = "#2166ac", linewidth = 0.7) +
+  geom_segment(aes(x = 0, xend = R, yend = city), colour = "grey85", linewidth = 0.4) +
+  geom_point(size = 3.1) +
+  annotate("text", x = breakeven, y = 0.6, label = sprintf("Albany break-even %.3f", breakeven),
+           hjust = -0.05, size = 3.1, colour = "#b2182b") +
+  annotate("text", x = R_util, y = 17.4, label = sprintf("Albany utilities %.2f", R_util),
+           hjust = 1.05, size = 3.1, colour = "#2166ac") +
+  scale_colour_manual(values = c("Westchester" = "#762a83", "Rest of state" = "#1b7837"), name = NULL) +
+  scale_x_continuous(breaks = seq(0, 2, 0.25), limits = c(0, 2.05), expand = c(0, 0)) +
+  labs(x = expression(R[c]~"= (city base share) ÷ (city population share)"), y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "top")
+```
+
+### What the distribution says
+
+```{r}
+#| label: tbl-stats
+tibble(Statistic = c("n cities", "Median", "Mean", "SD", "Minimum", "Maximum",
+                     "Share above 1.0", "Share above Albany's break-even"),
+       Value = c(sprintf("%d", nrow(route_b)),
+                 sprintf("%.3f", median(route_b$R)), sprintf("%.3f", mean(route_b$R)),
+                 sprintf("%.3f", sd(route_b$R)), sprintf("%.3f", min(route_b$R)),
+                 sprintf("%.3f", max(route_b$R)),
+                 sprintf("%d of %d", sum(route_b$R > 1), nrow(route_b)),
+                 sprintf("%d of %d", sum(route_b$R > breakeven), nrow(route_b)))) |>
+  gt() |> tab_options(table.font.size = pct(90), column_labels.hidden = TRUE)
+```
+
+The central result is that **most preempting cities are not retail
+concentrators**. The median $R_c$ is `r sprintf("%.2f", median(route_b$R))` and
+only `r sum(route_b$R > 1)` of `r nrow(route_b)` cities hold more than their
+per-capita share of the county base. The intuition that a county's central city
+must capture a disproportionate share of its taxable sales is, for this sample,
+simply false more often than not.
+
+The reason is visible in the ranking. The cities above 1.0 are small cities that
+function as the retail hub of a rural county — Oneida in Madison, Ithaca in
+Tompkins, Olean in Cattaraugus — plus White Plains, a genuine regional
+commercial centre. The cities below 1.0 are dense residential cities inside
+counties whose retail has moved to suburban corridors: Yonkers and Mount Vernon
+in Westchester, Utica in Oneida, Gloversville in Fulton, Glens Falls in Warren.
+Suburbanised retail pulls $R_c$ down, and it pulls it well below 1.
+
+**Albany is structurally in the second group, not the first.** Albany County's
+retail is concentrated along the Wolf Road / Route 5 corridor in Colonie and at
+Crossgates in Guilderland, both outside the city. The 2022 Economic Census makes
+this concrete: Albany city recorded
+\$`r sprintf("%.2f", ec_alb/1e6)` B of retail receipts against
+\$`r sprintf("%.2f", ec_col/1e6)` B in the balance of the town of Colonie
+alone, and the city's `r fmt_pct(ec_share_city)` share of county retail
+receipts is *below* its `r fmt_pct(alb_pop_share)` population share.
+
+```{r}
+#| label: tbl-eccov
+#| tbl-cap: "2022 Economic Census retail trade (NAICS 44-45) receipts, Albany County places against the county total. Coverage check for the §4a store-based allocator."
+ec_p |>
+  transmute(Place = sub(", New York$", "", NAME), `Receipts ($000)` = RCPTOT) |>
+  arrange(desc(`Receipts ($000)`)) |>
+  bind_rows(tibble(Place = "— sum of places —",
+                   `Receipts ($000)` = sum(ec_p$RCPTOT, na.rm = TRUE)),
+            tibble(Place = "Albany County (published total)",
+                   `Receipts ($000)` = ec_k$RCPTOT),
+            tibble(Place = "residual (unincorporated / withheld)",
+                   `Receipts ($000)` = ec_k$RCPTOT - sum(ec_p$RCPTOT, na.rm = TRUE))) |>
+  gt() |>
+  fmt_number(`Receipts ($000)`, decimals = 0) |>
+  tab_style(style = cell_text(style = "italic"),
+            locations = cells_body(rows = grepl("^—|^Albany County|^residual", Place))) |>
+  tab_options(table.font.size = pct(85))
+```
+
+The places account for `r sprintf("%.1f%%", 100*(1-ec_resid))` of the county's
+published retail receipts, so the store-based allocator has a solid geographic
+foundation. Note that this is a *receipts* share, not a *taxable sales* share,
+and receipts are recorded at the establishment's location.
+
+### The two reference lines
+
+The dashed line at `r sprintf("%.4f", breakeven)` is where preempting 1.5 points
+would exactly replace what Albany now receives from the county's distribution.
+`r sum(route_b$R > breakeven)` of `r nrow(route_b)` cities clear it. That
+threshold depends on the 0.40 distribution factor carried in from the project
+plan, which is **not yet verified** — confirming Albany County's actual
+distribution formula is a Phase 3 task, and the line will move if the factor is
+wrong.
+
+The dotted line at `r sprintf("%.2f", R_util)` is the only directly observed
+city/county base share Albany has. The Albany City School District levies a 3%
+tax on utilities and telecommunications within the city; dividing its
+collections by 0.03 gives a city base of
+\$`r sprintf("%.0f", (acsd/0.03)/1e6)` M against
+\$`r sprintf("%.0f", mean(alb_util$B)/1e6)` M of county NAICS 22 + 517 taxable
+sales, so $a_\text{utilities}$ = `r fmt_pct(a_util)` against a population share
+of `r fmt_pct(alb_pop_share)`.
+
+That single point sits near the top of the distribution — but it should not be
+read as an estimate of Albany's overall $R$, for two reasons. Utilities and
+telecommunications are the *most* city-concentrated part of any tax base,
+because commercial and institutional electricity, gas and telecom load
+concentrates where the office buildings are, and in Albany's case that includes
+the State Capitol complex. And the measurement is not clean: TSB-M-90(6)S
+establishes that residential gas, electricity and steam are exempt from the
+state tax and taxed by the county at a reduced 1% while the school district
+taxes them at the full 3%, so numerator and denominator cover somewhat
+different mixes.
+
+### Where Albany's estimate will have to land
+
+Taken together the benchmark says Albany's overall $R$ should be expected
+**below the utilities figure and plausibly below 1.0**, in the company of Utica,
+Yonkers and Glens Falls rather than Ithaca and Oneida. Phase 3 builds Albany's
+base from the ground up by NAICS-group apportionment; if that construction
+returns an $R$ far outside
+`r sprintf("%.2f–%.2f", min(route_b$R), max(route_b$R))`, or lands near the top
+of the range, the construction is what should be doubted first.
+
+## Data quality note: cell suppression
+
+DTF withholds individual county × NAICS cells for disclosure. There is no
+jurisdiction total row in `ny73-2j3u`, so a county base is necessarily the sum
+of its *published* groups.
+
+```{r}
+#| label: tbl-supp
+#| tbl-cap: "Withheld county × NAICS cells, mean over FY2023–FY2025, for Albany and the analysis counties."
+supp |>
+  filter(jurisdiction %in% c("ALBANY", unique(panel$dtf_jurisdiction))) |>
+  transmute(Jurisdiction = jurisdiction, `NAICS groups` = n_groups,
+            `Withheld` = n_withheld, `% withheld` = pct_withheld,
+            `Published base ($B)` = B_published / 1e9) |>
+  arrange(desc(`% withheld`)) |>
+  gt() |>
+  fmt_number(c(`NAICS groups`, Withheld), decimals = 1) |>
+  fmt_number(`% withheld`, decimals = 1) |>
+  fmt_number(`Published base ($B)`, decimals = 2) |>
+  tab_options(table.font.size = pct(85))
+```
+
+Between 3% and 10% of the 309 groups are withheld in any given county-year. The
+withheld cells are small by construction — a cell is suppressed when few
+taxpayers report it — and the identity check above bounds their total effect,
+since it reconciles collections against the published base to within 3%. This
+matters more in Phase 3, where the apportionment runs group by group, than it
+does here.
+
+## Sources
+
+New York State Department of Taxation and Finance. (2026). *Taxable sales and purchases quarterly data: Beginning sales tax year 2013–2014* [Data set]. <https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data>
+
+New York State Department of Taxation and Finance. (2025). *State and local sales tax distributions: Beginning fiscal years ended March 31, 1995* [Data set]. <https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718: New York State sales and use tax rates by jurisdiction*. <https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-A: Enactment and effective dates of sales and use tax rates*. <https://www.tax.ny.gov/pdf/publications/sales/pub718a.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-C: Sales and use tax rates on clothing and footwear*. <https://www.tax.ny.gov/pdf/publications/sales/pub718c.pdf>
+
+New York State Department of Taxation and Finance. (1990). *TSB-M-90(6)S: The Albany City School District imposes a 3% sales and use tax on utilities and utility services*. <https://tax.ny.gov/pdf/memos/sales/m90_6s.pdf>
+
+U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171) summary file* [API dataset `dec/pl`]. <https://api.census.gov/data/2020/dec/pl>
+
+U.S. Census Bureau. (2025). *Economic Census: Summary statistics for the U.S., states, and selected geographies: 2022* [API dataset `ecnbasic`]. <https://api.census.gov/data/2022/ecnbasic.html>
+
+---
+
+*Every figure in this document is computed at render time from cached pulls in
+`data/raw/` by `R/05_calibrate.R`. Provenance for each raw file — source URL,
+pull timestamp, SHA-256 — is in `data/raw/MANIFEST.csv`. The rate table is the
+only hand-entered input; each row carries its source URL in
+`data/crosswalk/preempt_cities.csv`.*
