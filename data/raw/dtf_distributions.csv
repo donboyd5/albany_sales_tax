@@ -1,0 +1,1434 @@
+fiscal_year_ended,taxing_jurisdiction,jurisdiction_code,amount_distributed
+2014,New York State Sales and Use Tax,1,11857005283
+2014,New York City Sales and Use Tax,2,6393579447
+2014,Municipal Assistance Corporation Sales and Use Tax,3,0
+2014,Metropolitan Commuter Transportation District Sales and Use Tax,4,811113353
+2014,Albany County Sales and Use Tax,5,239080716
+2014,Allegany County Sales and Use Tax,6,19395602
+2014,Broome County Sales and Use Tax,7,120796729
+2014,Cattaraugus County Sales and Use Tax,8,34910797
+2014,Cayuga County Sales and Use Tax,9,33269683
+2014,Chautauqua County Sales and Use Tax,10,52438320
+2014,Chemung County Sales and Use Tax,11,55417386
+2014,Chenango County Sales and Use Tax,12,20346075
+2014,Clinton County Sales and Use Tax,13,52877408
+2014,Columbia County Sales and Use Tax,14,33559582
+2014,Cortland County Sales and Use Tax,15,27322470
+2014,Delaware County Sales and Use Tax,16,20489736
+2014,Dutchess County Sales and Use Tax,17,164522428
+2014,Erie County Sales and Use Tax,18,706543661
+2014,Essex County Sales and Use Tax,19,26213216
+2014,Franklin County Sales and Use Tax,20,20747917
+2014,Fulton County Sales and Use Tax,21,18504938
+2014,Genesee County Sales and Use Tax,22,37783121
+2014,Greene County Sales and Use Tax,23,28455940
+2014,Hamilton County Sales and Use Tax,24,2853763
+2014,Herkimer County Sales and Use Tax,25,29270482
+2014,Jefferson County Sales and Use Tax,26,70864407
+2014,Lewis County Sales and Use Tax,27,10525171
+2014,Livingston County Sales and Use Tax,28,29979570
+2014,Madison County Sales and Use Tax,29,25058919
+2014,Monroe County Sales and Use Tax,30,442160870
+2014,Montgomery County Sales and Use Tax,31,28135380
+2014,Nassau County Sales and Use Tax,32,1148461315
+2014,Niagara County Sales and Use Tax,33,116143044
+2014,Oneida County Sales and Use Tax,34,130797582
+2014,Onondaga County Sales and Use Tax,35,325397004
+2014,Ontario County Sales and Use Tax,36,76301436
+2014,Orange County Sales and Use Tax,37,259313427
+2014,Orleans County Sales and Use Tax,38,14678548
+2014,Oswego County Sales and Use Tax,39,40657543
+2014,Otsego County Sales and Use Tax,40,34450834
+2014,Putnam County Sales and Use Tax,41,53125373
+2014,Rensselaer County Sales and Use Tax,42,76184199
+2014,Rockland County Sales and Use Tax,43,184942325
+2014,St. Lawrence County Sales and Use Tax,44,45263296
+2014,Saratoga County Sales and Use Tax,45,106977991
+2014,Schenectady County Sales and Use Tax,46,89784718
+2014,Schoharie County Sales and Use Tax,47,14167276
+2014,Schuyler County Sales and Use Tax,48,9448783
+2014,Seneca County Sales and Use Tax,49,23250104
+2014,Steuben County Sales and Use Tax,50,44466509
+2014,Suffolk County Sales and Use Tax,51,1282099875
+2014,Sullivan County Sales and Use Tax,52,33634897
+2014,Tioga County Sales and Use Tax,53,19105499
+2014,Tompkins County Sales and Use Tax,54,46725980
+2014,Ulster County Sales and Use Tax,55,99034123
+2014,Warren County Sales and Use Tax,56,48713464
+2014,Washington County Sales and Use Tax,57,19468033
+2014,Wayne County Sales and Use Tax,58,40336664
+2014,Westchester County Sales and Use Tax,59,489451508
+2014,Wyoming County Sales and Use Tax,60,16682181
+2014,Yates County Sales and Use Tax,61,10568815
+2014,City of Amsterdam Sales and Use Tax,62,28
+2014,City of Auburn Sales and Use Tax,63,8179686
+2014,City of Batavia Sales and Use Tax,64,373
+2014,City of Canandaigua Sales and Use Tax,65,3775
+2014,City of Corning Sales and Use Tax,66,2504354
+2014,City of Cortland Sales and Use Tax,67,0
+2014,City of Elmira Sales and Use Tax,68,54
+2014,City of Fulton Sales and Use Tax,69,0
+2014,City of Geneva Sales and Use Tax,70,3993
+2014,City of Glen Cove Sales and Use Tax,71,0
+2014,City of Glens Falls Sales and Use Tax,72,2656339
+2014,City of Gloversville Sales and Use Tax,73,2769538
+2014,City of Hornell Sales and Use Tax,74,2444655
+2014,City of Ithaca Sales and Use Tax,75,10211223
+2014,City of Johnstown Sales and Use Tax,76,3476410
+2014,City of Mechanicville Sales and Use Tax,77,0
+2014,City of Mount Vernon Sales and Use Tax,78,18462604
+2014,City of New Rochelle Sales and Use Tax,79,26079429
+2014,City of Norwich Sales and Use Tax,80,1552972
+2014,City of Ogdensburg Sales and Use Tax,81,36
+2014,City of Olean Sales and Use Tax,82,4134041
+2014,City of Oneida Sales and Use Tax,83,4304346
+2014,City of Oswego Sales and Use Tax,84,12670359
+2014,City of Plattsburgh Sales and Use Tax,85,0
+2014,City of Rome Sales and Use Tax,86,6710853
+2014,City of Salamanca Sales and Use Tax,87,582314
+2014,City of Saratoga Springs Sales and Use Tax,88,10649253
+2014,City of Schenectady Sales and Use Tax,89,0
+2014,City of Sherrill Sales and Use Tax,90,913
+2014,City of Troy Sales and Use Tax,91,0
+2014,City of Utica Sales and Use Tax,92,9605284
+2014,City of White Plains Sales and Use Tax,93,50821143
+2014,City of Yonkers Sales and Use Tax,94,42170018
+2014,City of Yonkers Special Sales and Use Tax,95,28113318
+2014,City of Newburgh Consumer Utilities,96,928997
+2014,City of Port Jervis Consumer Utilities,97,231067
+2014,Albany City School District Consumer Utilities,98,4192698
+2014,Batavia City School District Consumer Utilities,99,680311
+2014,Cohoes City School District Consumer Utilities,100,667230
+2014,Glen Cove City School District Consumer Utilities,101,1318836
+2014,Gloversville City School District Consumer Utilities,102,593195
+2014,Hornell City School District Consumer Utilities,103,292622
+2014,Hudson City School District Consumer Utilities,104,483832
+2014,Johnstown City School District Consumer Utilities,105,448794
+2014,Lackawanna City School District Consumer Utilities,106,527269
+2014,Long Beach City School District Consumer Utilities,107,1540141
+2014,Middletown City School District Consumer Utilities,108,1252775
+2014,Mt. Vernon City School District Consumer Utilities,109,2432187
+2014,New Rochelle City School District Consumer Utilities,110,3430578
+2014,Newburgh City School District Consumer Utilities,111,1818485
+2014,Niagara Falls City School District Consumer Utilities,112,1946559
+2014,Ogdensburg City School District Consumer Utilities,113,422403
+2014,Peekskill City School District Consumer Utilities,114,796888
+2014,Rensselaer City School District Consumer Utilities,115,369460
+2014,Schenectady City School District Consumer Utilities,116,2206761
+2014,Troy City School District Consumer Utilities,117,1453655
+2014,Utica City School District Consumer Utilities,118,1931732
+2014,Watertown City School District Consumer Utilities,119,1171611
+2014,Watervliet City School District Consumer Utilities,120,339141
+2014,White Plains City School District Consumer Utilities,121,3733517
+2014,New York City Convention Center Development Corporation Hotel Occupancy,122,41845045
+2014,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",123,2218326
+2014,City of Long Beach Hotel Occupancy and Restaurant Meals,124,1351079
+2014,Metropolitan Transportation Authority Aid Trust Account Passenger Car Rental,125,44151125
+2014,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",126,6856464
+2015,New York State Sales and Use Tax,1,12263327571
+2015,New York City Sales and Use Tax,2,6710667508
+2015,Municipal Assistance Corporation Sales and Use Tax,3,0
+2015,Metropolitan Commuter Transportation District Sales and Use Tax,4,704485048
+2015,Albany County Sales and Use Tax,5,252678750
+2015,Allegany County Sales and Use Tax,6,20068318
+2015,Broome County Sales and Use Tax,7,119935166
+2015,Cattaraugus County Sales and Use Tax,8,36884493
+2015,Cayuga County Sales and Use Tax,9,35187385
+2015,Chautauqua County Sales and Use Tax,10,55684595
+2015,Chemung County Sales and Use Tax,11,59147288
+2015,Chenango County Sales and Use Tax,12,21187007
+2015,Clinton County Sales and Use Tax,13,53445159
+2015,Columbia County Sales and Use Tax,14,36040078
+2015,Cortland County Sales and Use Tax,15,29227427
+2015,Delaware County Sales and Use Tax,16,22068222
+2015,Dutchess County Sales and Use Tax,17,174697630
+2015,Erie County Sales and Use Tax,18,733365974
+2015,Essex County Sales and Use Tax,19,28171983
+2015,Franklin County Sales and Use Tax,20,22112891
+2015,Fulton County Sales and Use Tax,21,19626926
+2015,Genesee County Sales and Use Tax,22,38270652
+2015,Greene County Sales and Use Tax,23,29056554
+2015,Hamilton County Sales and Use Tax,24,3491946
+2015,Herkimer County Sales and Use Tax,25,30159573
+2015,Jefferson County Sales and Use Tax,26,71966382
+2015,Lewis County Sales and Use Tax,27,12125273
+2015,Livingston County Sales and Use Tax,28,31401990
+2015,Madison County Sales and Use Tax,29,25922974
+2015,Monroe County Sales and Use Tax,30,453208971
+2015,Montgomery County Sales and Use Tax,31,29422175
+2015,Nassau County Sales and Use Tax,32,1075601388
+2015,Niagara County Sales and Use Tax,33,119282056
+2015,Oneida County Sales and Use Tax,34,133107577
+2015,Onondaga County Sales and Use Tax,35,339021212
+2015,Ontario County Sales and Use Tax,36,78796234
+2015,Orange County Sales and Use Tax,37,261332770
+2015,Orleans County Sales and Use Tax,38,15877952
+2015,Oswego County Sales and Use Tax,39,41812359
+2015,Otsego County Sales and Use Tax,40,36015719
+2015,Putnam County Sales and Use Tax,41,56058374
+2015,Rensselaer County Sales and Use Tax,42,79765205
+2015,Rockland County Sales and Use Tax,43,195995014
+2015,St. Lawrence County Sales and Use Tax,44,56906835
+2015,Saratoga County Sales and Use Tax,45,111997682
+2015,Schenectady County Sales and Use Tax,46,95355613
+2015,Schoharie County Sales and Use Tax,47,15138160
+2015,Schuyler County Sales and Use Tax,48,10170340
+2015,Seneca County Sales and Use Tax,49,22918928
+2015,Steuben County Sales and Use Tax,50,47325966
+2015,Suffolk County Sales and Use Tax,51,1297661047
+2015,Sullivan County Sales and Use Tax,52,36108864
+2015,Tioga County Sales and Use Tax,53,20268170
+2015,Tompkins County Sales and Use Tax,54,50114389
+2015,Ulster County Sales and Use Tax,55,107017490
+2015,Warren County Sales and Use Tax,56,49719792
+2015,Washington County Sales and Use Tax,57,19931886
+2015,Wayne County Sales and Use Tax,58,41637631
+2015,Westchester County Sales and Use Tax,59,504131420
+2015,Wyoming County Sales and Use Tax,60,16787898
+2015,Yates County Sales and Use Tax,61,11020734
+2015,City of Amsterdam Sales and Use Tax,62,8
+2015,City of Auburn Sales and Use Tax,63,9126159
+2015,City of Batavia Sales and Use Tax,64,780
+2015,City of Canandaigua Sales and Use Tax,65,3805
+2015,City of Corning Sales and Use Tax,66,2780478
+2015,City of Cortland Sales and Use Tax,67,0
+2015,City of Elmira Sales and Use Tax,68,14
+2015,City of Fulton Sales and Use Tax,69,0
+2015,City of Geneva Sales and Use Tax,70,5633
+2015,City of Glen Cove Sales and Use Tax,71,0
+2015,City of Glens Falls Sales and Use Tax,72,2722284
+2015,City of Gloversville Sales and Use Tax,73,3676862
+2015,City of Hornell Sales and Use Tax,74,2644677
+2015,City of Ithaca Sales and Use Tax,75,10874900
+2015,City of Johnstown Sales and Use Tax,76,4071834
+2015,City of Mechanicville Sales and Use Tax,77,0
+2015,City of Mount Vernon Sales and Use Tax,78,18735865
+2015,City of New Rochelle Sales and Use Tax,79,26697053
+2015,City of Norwich Sales and Use Tax,80,1561921
+2015,City of Ogdensburg Sales and Use Tax,81,5
+2015,City of Olean Sales and Use Tax,82,4334170
+2015,City of Oneida Sales and Use Tax,83,4415335
+2015,City of Oswego Sales and Use Tax,84,13058205
+2015,City of Plattsburgh Sales and Use Tax,85,0
+2015,City of Rome Sales and Use Tax,86,6990648
+2015,City of Salamanca Sales and Use Tax,87,637733
+2015,City of Saratoga Springs Sales and Use Tax,88,11306420
+2015,City of Schenectady Sales and Use Tax,89,0
+2015,City of Sherrill Sales and Use Tax,90,1205
+2015,City of Troy Sales and Use Tax,91,0
+2015,City of Utica Sales and Use Tax,92,9834394
+2015,City of White Plains Sales and Use Tax,93,51672061
+2015,City of Yonkers Sales and Use Tax,94,43090745
+2015,City of Yonkers Special Sales and Use Tax,95,28727156
+2015,City of Newburgh Consumer Utilities,96,1074658
+2015,City of Port Jervis Consumer Utilities,97,310362
+2015,Albany City School District Consumer Utilities,98,4492570
+2015,Batavia City School District Consumer Utilities,99,820413
+2015,Cohoes City School District Consumer Utilities,100,574371
+2015,Glen Cove City School District Consumer Utilities,101,1403484
+2015,Gloversville City School District Consumer Utilities,102,613252
+2015,Hornell City School District Consumer Utilities,103,332789
+2015,Hudson City School District Consumer Utilities,104,668146
+2015,Johnstown City School District Consumer Utilities,105,479180
+2015,Lackawanna City School District Consumer Utilities,106,596380
+2015,Long Beach City School District Consumer Utilities,107,1778517
+2015,Middletown City School District Consumer Utilities,108,1498209
+2015,Mt. Vernon City School District Consumer Utilities,109,2715270
+2015,New Rochelle City School District Consumer Utilities,110,3499499
+2015,Newburgh City School District Consumer Utilities,111,2020049
+2015,Niagara Falls City School District Consumer Utilities,112,2141365
+2015,Ogdensburg City School District Consumer Utilities,113,417052
+2015,Peekskill City School District Consumer Utilities,114,933368
+2015,Rensselaer City School District Consumer Utilities,115,408332
+2015,Rye City School District Consumer Utilities,116,347604
+2015,Schenectady City School District Consumer Utilities,117,2455496
+2015,Troy City School District Consumer Utilities,118,1547837
+2015,Utica City School District Consumer Utilities,119,2053671
+2015,Watertown City School District Consumer Utilities,120,1253731
+2015,Watervliet City School District Consumer Utilities,121,380992
+2015,White Plains City School District Consumer Utilities,122,3975509
+2015,New York City Convention Center Development Corporation Hotel Occupancy,123,45521939
+2015,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",124,2593807
+2015,City of Long Beach Hotel Occupancy and Restaurant Meals,125,1958993
+2015,Metropolitan Transportation Authority Aid Trust Account Passenger Car Rental,126,45047632
+2015,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",127,7010944
+2016,New York State Sales and Use Tax,1,12782651496
+2016,New York City Sales and Use Tax,2,7153432596
+2016,Municipal Assistance Corporation Sales and Use Tax,3,0
+2016,Metropolitan Commuter Transportation District Sales and Use Tax,4,647127755
+2016,Albany County Sales and Use Tax,5,251654489
+2016,Allegany County Sales and Use Tax,6,19295060
+2016,Broome County Sales and Use Tax,7,119069475
+2016,Cattaraugus County Sales and Use Tax,8,35848900
+2016,Cayuga County Sales and Use Tax,9,33593689
+2016,Chautauqua County Sales and Use Tax,10,55020410
+2016,Chemung County Sales and Use Tax,11,56347212
+2016,Chenango County Sales and Use Tax,12,20363423
+2016,Clinton County Sales and Use Tax,13,50611321
+2016,Columbia County Sales and Use Tax,14,35395890
+2016,Cortland County Sales and Use Tax,15,27752736
+2016,Delaware County Sales and Use Tax,16,19716747
+2016,Dutchess County Sales and Use Tax,17,174413076
+2016,Erie County Sales and Use Tax,18,728267106
+2016,Essex County Sales and Use Tax,19,27139896
+2016,Franklin County Sales and Use Tax,20,20830050
+2016,Fulton County Sales and Use Tax,21,19161401
+2016,Genesee County Sales and Use Tax,22,37712927
+2016,Greene County Sales and Use Tax,23,29599267
+2016,Hamilton County Sales and Use Tax,24,3841352
+2016,Herkimer County Sales and Use Tax,25,30830829
+2016,Jefferson County Sales and Use Tax,26,69526293
+2016,Lewis County Sales and Use Tax,27,11664383
+2016,Livingston County Sales and Use Tax,28,30401040
+2016,Madison County Sales and Use Tax,29,25665898
+2016,Monroe County Sales and Use Tax,30,454338060
+2016,Montgomery County Sales and Use Tax,31,27284552
+2016,Nassau County Sales and Use Tax,32,1105153156
+2016,Niagara County Sales and Use Tax,33,117012927
+2016,Oneida County Sales and Use Tax,34,128650761
+2016,Onondaga County Sales and Use Tax,35,337055177
+2016,Ontario County Sales and Use Tax,36,78825740
+2016,Orange County Sales and Use Tax,37,264403013
+2016,Orleans County Sales and Use Tax,38,15440560
+2016,Oswego County Sales and Use Tax,39,41063712
+2016,Otsego County Sales and Use Tax,40,35366942
+2016,Putnam County Sales and Use Tax,41,54664294
+2016,Rensselaer County Sales and Use Tax,42,79321380
+2016,Rockland County Sales and Use Tax,43,198324313
+2016,St. Lawrence County Sales and Use Tax,44,54770397
+2016,Saratoga County Sales and Use Tax,45,114479107
+2016,Schenectady County Sales and Use Tax,46,93846356
+2016,Schoharie County Sales and Use Tax,47,13747968
+2016,Schuyler County Sales and Use Tax,48,10371954
+2016,Seneca County Sales and Use Tax,49,23465431
+2016,Steuben County Sales and Use Tax,50,52724975
+2016,Suffolk County Sales and Use Tax,51,1313607815
+2016,Sullivan County Sales and Use Tax,52,36613049
+2016,Tioga County Sales and Use Tax,53,19741233
+2016,Tompkins County Sales and Use Tax,54,48332520
+2016,Ulster County Sales and Use Tax,55,108655053
+2016,Warren County Sales and Use Tax,56,50138077
+2016,Washington County Sales and Use Tax,57,20056168
+2016,Wayne County Sales and Use Tax,58,41015618
+2016,Westchester County Sales and Use Tax,59,499585528
+2016,Wyoming County Sales and Use Tax,60,16592784
+2016,Yates County Sales and Use Tax,61,10885547
+2016,City of Amsterdam Sales and Use Tax,62,0
+2016,City of Auburn Sales and Use Tax,63,8463095
+2016,City of Batavia Sales and Use Tax,64,1069
+2016,City of Canandaigua Sales and Use Tax,65,1294
+2016,City of Corning Sales and Use Tax,66,178290
+2016,City of Cortland Sales and Use Tax,67,0
+2016,City of Elmira Sales and Use Tax,68,0
+2016,City of Fulton Sales and Use Tax,69,0
+2016,City of Geneva Sales and Use Tax,70,6674
+2016,City of Glen Cove Sales and Use Tax,71,0
+2016,City of Glens Falls Sales and Use Tax,72,2866936
+2016,City of Gloversville Sales and Use Tax,73,3440675
+2016,City of Hornell Sales and Use Tax,74,134846
+2016,City of Ithaca Sales and Use Tax,75,10608346
+2016,City of Johnstown Sales and Use Tax,76,3547067
+2016,City of Mechanicville Sales and Use Tax,77,0
+2016,City of Mount Vernon Sales and Use Tax,78,18417280
+2016,City of New Rochelle Sales and Use Tax,79,27578446
+2016,City of Norwich Sales and Use Tax,80,1517094
+2016,City of Ogdensburg Sales and Use Tax,81,8
+2016,City of Olean Sales and Use Tax,82,4281315
+2016,City of Oneida Sales and Use Tax,83,4548545
+2016,City of Oswego Sales and Use Tax,84,13038754
+2016,City of Plattsburgh Sales and Use Tax,85,0
+2016,City of Rome Sales and Use Tax,86,6949164
+2016,City of Salamanca Sales and Use Tax,87,574657
+2016,City of Saratoga Springs Sales and Use Tax,88,11643025
+2016,City of Schenectady Sales and Use Tax,89,0
+2016,City of Sherrill Sales and Use Tax,90,0
+2016,City of Troy Sales and Use Tax,91,0
+2016,City of Utica Sales and Use Tax,92,9530978
+2016,City of White Plains Sales and Use Tax,93,50019018
+2016,City of Yonkers Sales and Use Tax,94,49697070
+2016,City of Yonkers Special Sales and Use Tax,95,29024767
+2016,City of Newburgh Consumer Utilities,96,1152453
+2016,City of Port Jervis Consumer Utilities,97,264765
+2016,Albany City School District Consumer Utilities,98,4031365
+2016,Batavia City School District Consumer Utilities,99,758011
+2016,Cohoes City School District Consumer Utilities,100,555775
+2016,Glen Cove City School District Consumer Utilities,101,1459155
+2016,Gloversville City School District Consumer Utilities,102,546143
+2016,Hornell City School District Consumer Utilities,103,258137
+2016,Hudson City School District Consumer Utilities,104,613889
+2016,Johnstown City School District Consumer Utilities,105,416328
+2016,Lackawanna City School District Consumer Utilities,106,525016
+2016,Long Beach City School District Consumer Utilities,107,1654161
+2016,Middletown City School District Consumer Utilities,108,1575784
+2016,Mt. Vernon City School District Consumer Utilities,109,2577175
+2016,New Rochelle City School District Consumer Utilities,110,3374862
+2016,Newburgh City School District Consumer Utilities,111,1970898
+2016,Niagara Falls City School District Consumer Utilities,112,1830930
+2016,Ogdensburg City School District Consumer Utilities,113,395188
+2016,Peekskill City School District Consumer Utilities,114,880650
+2016,Rensselaer City School District Consumer Utilities,115,351753
+2016,Rye City School District Consumer Utilities,116,390748
+2016,Schenectady City School District Consumer Utilities,117,2080395
+2016,Troy City School District Consumer Utilities,118,1526609
+2016,Utica City School District Consumer Utilities,119,1717377
+2016,Watertown City School District Consumer Utilities,120,1166672
+2016,Watervliet City School District Consumer Utilities,121,439910
+2016,White Plains City School District Consumer Utilities,122,3793448
+2016,New York City Convention Center Development Corporation Hotel Occupancy,123,45714603
+2016,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",124,2246520
+2016,City of Long Beach Hotel Occupancy and Restaurant Meals,125,2358288
+2016,Metropolitan Transportation Authority Aid Trust Account Passenger Car Rental,126,24256182
+2016,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",127,6838070
+2017,New York State Sales and Use Tax,1,13239204846
+2017,New York City Sales and Use Tax,2,7044042965
+2017,Municipal Assistance Corporation Sales and Use Tax,3,0
+2017,Metropolitan Commuter Transportation District Sales and Use Tax,4,836733189
+2017,Albany County Sales and Use Tax,5,257227061
+2017,Allegany County Sales and Use Tax,6,18947057
+2017,Broome County Sales and Use Tax,7,121909512
+2017,Cattaraugus County Sales and Use Tax,8,34937501
+2017,Cayuga County Sales and Use Tax,9,34113810
+2017,Chautauqua County Sales and Use Tax,10,61943490
+2017,Chemung County Sales and Use Tax,11,55227157
+2017,Chenango County Sales and Use Tax,12,21460004
+2017,Clinton County Sales and Use Tax,13,51210412
+2017,Columbia County Sales and Use Tax,14,36849189
+2017,Cortland County Sales and Use Tax,15,27728688
+2017,Delaware County Sales and Use Tax,16,21488079
+2017,Dutchess County Sales and Use Tax,17,178460920
+2017,Erie County Sales and Use Tax,18,741732748
+2017,Essex County Sales and Use Tax,19,27605462
+2017,Franklin County Sales and Use Tax,20,20991390
+2017,Fulton County Sales and Use Tax,21,19703588
+2017,Genesee County Sales and Use Tax,22,36927414
+2017,Greene County Sales and Use Tax,23,30650108
+2017,Hamilton County Sales and Use Tax,24,3524815
+2017,Herkimer County Sales and Use Tax,25,29935207
+2017,Jefferson County Sales and Use Tax,26,72443772
+2017,Lewis County Sales and Use Tax,27,11378192
+2017,Livingston County Sales and Use Tax,28,29872474
+2017,Madison County Sales and Use Tax,29,26207319
+2017,Monroe County Sales and Use Tax,30,471858358
+2017,Montgomery County Sales and Use Tax,31,27932197
+2017,Nassau County Sales and Use Tax,32,1121496034
+2017,Niagara County Sales and Use Tax,33,115814189
+2017,Oneida County Sales and Use Tax,34,132702086
+2017,Onondaga County Sales and Use Tax,35,330870887
+2017,Ontario County Sales and Use Tax,36,79641122
+2017,Orange County Sales and Use Tax,37,263817418
+2017,Orleans County Sales and Use Tax,38,15174070
+2017,Oswego County Sales and Use Tax,39,40578076
+2017,Otsego County Sales and Use Tax,40,35911051
+2017,Putnam County Sales and Use Tax,41,58574278
+2017,Rensselaer County Sales and Use Tax,42,80524100
+2017,Rockland County Sales and Use Tax,43,204762804
+2017,St. Lawrence County Sales and Use Tax,44,53678318
+2017,Saratoga County Sales and Use Tax,45,117735578
+2017,Schenectady County Sales and Use Tax,46,94275403
+2017,Schoharie County Sales and Use Tax,47,14705651
+2017,Schuyler County Sales and Use Tax,48,10093974
+2017,Seneca County Sales and Use Tax,49,23363651
+2017,Steuben County Sales and Use Tax,50,51846374
+2017,Suffolk County Sales and Use Tax,51,1319618015
+2017,Sullivan County Sales and Use Tax,52,38914647
+2017,Tioga County Sales and Use Tax,53,19436583
+2017,Tompkins County Sales and Use Tax,54,48288523
+2017,Ulster County Sales and Use Tax,55,110675116
+2017,Warren County Sales and Use Tax,56,51146633
+2017,Washington County Sales and Use Tax,57,19170586
+2017,Wayne County Sales and Use Tax,58,41653963
+2017,Westchester County Sales and Use Tax,59,503785614
+2017,Wyoming County Sales and Use Tax,60,16872712
+2017,Yates County Sales and Use Tax,61,11207059
+2017,City of Amsterdam Sales and Use Tax,62,0
+2017,City of Auburn Sales and Use Tax,63,8428432
+2017,City of Batavia Sales and Use Tax,64,716
+2017,City of Canandaigua Sales and Use Tax,65,2219
+2017,City of Corning Sales and Use Tax,66,28274
+2017,City of Cortland Sales and Use Tax,67,0
+2017,City of Elmira Sales and Use Tax,68,0
+2017,City of Fulton Sales and Use Tax,69,0
+2017,City of Geneva Sales and Use Tax,70,7386
+2017,City of Glen Cove Sales and Use Tax,71,0
+2017,City of Glens Falls Sales and Use Tax,72,2957238
+2017,City of Gloversville Sales and Use Tax,73,3191483
+2017,City of Hornell Sales and Use Tax,74,14930
+2017,City of Ithaca Sales and Use Tax,75,10735166
+2017,City of Johnstown Sales and Use Tax,76,3707415
+2017,City of Mechanicville Sales and Use Tax,77,0
+2017,City of Mount Vernon Sales and Use Tax,78,18268354
+2017,City of New Rochelle Sales and Use Tax,79,27869983
+2017,City of Norwich Sales and Use Tax,80,1567970
+2017,City of Ogdensburg Sales and Use Tax,81,8
+2017,City of Olean Sales and Use Tax,82,4106984
+2017,City of Oneida Sales and Use Tax,83,4608928
+2017,City of Oswego Sales and Use Tax,84,13626621
+2017,City of Plattsburgh Sales and Use Tax,85,0
+2017,City of Rome Sales and Use Tax,86,7259835
+2017,City of Salamanca Sales and Use Tax,87,576121
+2017,City of Saratoga Springs Sales and Use Tax,88,11948083
+2017,City of Schenectady Sales and Use Tax,89,0
+2017,City of Sherrill Sales and Use Tax,90,0
+2017,City of Troy Sales and Use Tax,91,0
+2017,City of Utica Sales and Use Tax,92,9881840
+2017,City of White Plains Sales and Use Tax,93,49620020
+2017,City of Yonkers Sales and Use Tax,94,57975949
+2017,City of Yonkers Special Sales and Use Tax,95,28982031
+2017,City of Newburgh Consumer Utilities,96,1890464
+2017,City of Port Jervis Consumer Utilities,97,218354
+2017,Albany City School District Consumer Utilities,98,3630450
+2017,Batavia City School District Consumer Utilities,99,618101
+2017,Cohoes City School District Consumer Utilities,100,448877
+2017,Glen Cove City School District Consumer Utilities,101,1363688
+2017,Gloversville City School District Consumer Utilities,102,430412
+2017,Hornell City School District Consumer Utilities,103,210383
+2017,Hudson City School District Consumer Utilities,104,614498
+2017,Johnstown City School District Consumer Utilities,105,382331
+2017,Lackawanna City School District Consumer Utilities,106,454356
+2017,Long Beach City School District Consumer Utilities,107,1502132
+2017,Middletown City School District Consumer Utilities,108,1417245
+2017,Mt. Vernon City School District Consumer Utilities,109,2228259
+2017,New Rochelle City School District Consumer Utilities,110,2702149
+2017,Newburgh City School District Consumer Utilities,111,1915435
+2017,Niagara Falls City School District Consumer Utilities,112,1667223
+2017,Ogdensburg City School District Consumer Utilities,113,340579
+2017,Peekskill City School District Consumer Utilities,114,809649
+2017,Rensselaer City School District Consumer Utilities,115,376685
+2017,Rye City School District Consumer Utilities,116,651837
+2017,Schenectady City School District Consumer Utilities,117,2169749
+2017,Troy City School District Consumer Utilities,118,1324824
+2017,Utica City School District Consumer Utilities,119,1618894
+2017,Watertown City School District Consumer Utilities,120,885269
+2017,Watervliet City School District Consumer Utilities,121,303199
+2017,White Plains City School District Consumer Utilities,122,3419486
+2017,New York City Convention Center Development Corporation Hotel Occupancy,123,54483770
+2017,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",124,2230049
+2017,City of Long Beach Hotel Occupancy and Restaurant Meals,125,2217776
+2017,Metropolitan Transportation Authority Aid Trust Account Passenger Car Rental,126,53628386
+2017,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",127,6915315
+2018,New York State Sales and Use Tax,1,13830380736
+2018,New York City Sales and Use Tax,2,7527108425
+2018,Metropolitan Commuter Transportation District Sales and Use Tax,3,945105616
+2018,Albany County Sales and Use Tax,4,260775584
+2018,Allegany County Sales and Use Tax,5,19978264
+2018,Broome County Sales and Use Tax,6,126900590
+2018,Cattaraugus County Sales and Use Tax,7,36820362
+2018,Cayuga County Sales and Use Tax,8,37529428
+2018,Chautauqua County Sales and Use Tax,9,64758180
+2018,Chemung County Sales and Use Tax,10,57401963
+2018,Chenango County Sales and Use Tax,11,22318103
+2018,Clinton County Sales and Use Tax,12,53254213
+2018,Columbia County Sales and Use Tax,13,40042116
+2018,Cortland County Sales and Use Tax,14,28853430
+2018,Delaware County Sales and Use Tax,15,22024687
+2018,Dutchess County Sales and Use Tax,16,183718347
+2018,Erie County Sales and Use Tax,17,770580503
+2018,Essex County Sales and Use Tax,18,29198925
+2018,Franklin County Sales and Use Tax,19,22433355
+2018,Fulton County Sales and Use Tax,20,20905972
+2018,Genesee County Sales and Use Tax,21,38958885
+2018,Greene County Sales and Use Tax,22,31324913
+2018,Hamilton County Sales and Use Tax,23,3639723
+2018,Herkimer County Sales and Use Tax,24,30613007
+2018,Jefferson County Sales and Use Tax,25,75390527
+2018,Lewis County Sales and Use Tax,26,12035304
+2018,Livingston County Sales and Use Tax,27,32143300
+2018,Madison County Sales and Use Tax,28,29500033
+2018,Monroe County Sales and Use Tax,29,495109218
+2018,Montgomery County Sales and Use Tax,30,29399381
+2018,Nassau County Sales and Use Tax,31,1169933711
+2018,Niagara County Sales and Use Tax,32,119181949
+2018,Oneida County Sales and Use Tax,33,137775803
+2018,Onondaga County Sales and Use Tax,34,341248918
+2018,Ontario County Sales and Use Tax,35,82247283
+2018,Orange County Sales and Use Tax,36,281762554
+2018,Orleans County Sales and Use Tax,37,16373530
+2018,Oswego County Sales and Use Tax,38,46089844
+2018,Otsego County Sales and Use Tax,39,37161369
+2018,Putnam County Sales and Use Tax,40,59283804
+2018,Rensselaer County Sales and Use Tax,41,83980493
+2018,Rockland County Sales and Use Tax,42,211480323
+2018,St. Lawrence County Sales and Use Tax,43,57037615
+2018,Saratoga County Sales and Use Tax,44,120026666
+2018,Schenectady County Sales and Use Tax,45,102533134
+2018,Schoharie County Sales and Use Tax,46,15485318
+2018,Schuyler County Sales and Use Tax,47,10773493
+2018,Seneca County Sales and Use Tax,48,25155067
+2018,Steuben County Sales and Use Tax,49,55475994
+2018,Suffolk County Sales and Use Tax,50,1404875125
+2018,Sullivan County Sales and Use Tax,51,40239334
+2018,Tioga County Sales and Use Tax,52,21090899
+2018,Tompkins County Sales and Use Tax,53,51644019
+2018,Ulster County Sales and Use Tax,54,116005361
+2018,Warren County Sales and Use Tax,55,52246630
+2018,Washington County Sales and Use Tax,56,19651688
+2018,Wayne County Sales and Use Tax,57,42968676
+2018,Westchester County Sales and Use Tax,58,528641766
+2018,Wyoming County Sales and Use Tax,59,18395795
+2018,Yates County Sales and Use Tax,60,11835703
+2018,City of Auburn Sales and Use Tax,61,8684760
+2018,City of Batavia Sales and Use Tax,62,199
+2018,City of Canandaigua Sales and Use Tax,63,203
+2018,City of Corning Sales and Use Tax,64,31430
+2018,City of Geneva Sales and Use Tax,65,2820
+2018,City of Glens Falls Sales and Use Tax,66,3071926
+2018,City of Gloversville Sales and Use Tax,67,3457614
+2018,City of Hornell Sales and Use Tax,68,8776
+2018,City of Ithaca Sales and Use Tax,69,11485826
+2018,City of Johnstown Sales and Use Tax,70,3807204
+2018,City of Mount Vernon Sales and Use Tax,71,20449009
+2018,City of New Rochelle Sales and Use Tax,72,28294146
+2018,City of Norwich Sales and Use Tax,73,1455854
+2018,City of Ogdensburg Sales and Use Tax,74,28
+2018,City of Olean Sales and Use Tax,75,4185400
+2018,City of Oneida Sales and Use Tax,76,4615368
+2018,City of Oswego Sales and Use Tax,77,14089783
+2018,City of Rome Sales and Use Tax,78,7436243
+2018,City of Salamanca Sales and Use Tax,79,654583
+2018,City of Saratoga Springs Sales and Use Tax,80,11877391
+2018,City of Utica Sales and Use Tax,81,10012136
+2018,City of White Plains Sales and Use Tax,82,49643193
+2018,City of Yonkers Sales and Use Tax,83,61360950
+2018,City of Yonkers Special Sales and Use Tax,84,30767899
+2018,City of Newburgh Consumer Utilities,85,1738449
+2018,City of Port Jervis Consumer Utilities,86,306920
+2018,Albany City School District Consumer Utilities,87,3907690
+2018,Batavia City School District Consumer Utilities,88,670692
+2018,Cohoes City School District Consumer Utilities,89,499625
+2018,Glen Cove City School District Consumer Utilities,90,1377850
+2018,Gloversville City School District Consumer Utilities,91,538731
+2018,Hornell City School District Consumer Utilities,92,258372
+2018,Hudson City School District Consumer Utilities,93,601573
+2018,Johnstown City School District Consumer Utilities,94,442156
+2018,Lackawanna City School District Consumer Utilities,95,491051
+2018,Long Beach City School District Consumer Utilities,96,1579483
+2018,Middletown City School District Consumer Utilities,97,1762189
+2018,Mt. Vernon City School District Consumer Utilities,98,2393220
+2018,New Rochelle City School District Consumer Utilities,99,2507544
+2018,Newburgh City School District Consumer Utilities,100,2245097
+2018,Niagara Falls City School District Consumer Utilities,101,1792347
+2018,Ogdensburg City School District Consumer Utilities,102,360616
+2018,Peekskill City School District Consumer Utilities,103,837711
+2018,Rensselaer City School District Consumer Utilities,104,405351
+2018,Rye City School District Consumer Utilities,105,705219
+2018,Schenectady City School District Consumer Utilities,106,2037860
+2018,Troy City School District Consumer Utilities,107,1302271
+2018,Utica City School District Consumer Utilities,108,1723742
+2018,Watertown City School District Consumer Utilities,109,1093014
+2018,Watervliet City School District Consumer Utilities,110,327545
+2018,White Plains City School District Consumer Utilities,111,2971922
+2018,New York City Convention Center Development Corporation Hotel Occupancy,112,48607511
+2018,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",113,2353312
+2018,City of Long Beach Hotel Occupancy and Restaurant Meals,114,2443810
+2018,Metropolitan Transportation Authority Aid Trust Account Passenger Car Rental,115,36195945
+2018,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,8176689
+2019,New York State Sales and Use Tax,1,14492533000
+2019,New York City Sales and Use Tax,2,7905700094
+2019,Metropolitan Commuter Transportation District Sales and Use Tax,3,908240643
+2019,Albany County Sales and Use Tax,4,276337829
+2019,Allegany County Sales and Use Tax,5,21555319
+2019,Broome County Sales and Use Tax,6,135561220
+2019,Cattaraugus County Sales and Use Tax,7,38660348
+2019,Cayuga County Sales and Use Tax,8,36847287
+2019,Chautauqua County Sales and Use Tax,9,67717035
+2019,Chemung County Sales and Use Tax,10,61336640
+2019,Chenango County Sales and Use Tax,11,24162911
+2019,Clinton County Sales and Use Tax,12,57034933
+2019,Columbia County Sales and Use Tax,13,43252314
+2019,Cortland County Sales and Use Tax,14,29706103
+2019,Delaware County Sales and Use Tax,15,22669092
+2019,Dutchess County Sales and Use Tax,16,211866178
+2019,Erie County Sales and Use Tax,17,799526677
+2019,Essex County Sales and Use Tax,18,31866359
+2019,Franklin County Sales and Use Tax,19,23947427
+2019,Fulton County Sales and Use Tax,20,22844556
+2019,Genesee County Sales and Use Tax,21,42378566
+2019,Greene County Sales and Use Tax,22,32821220
+2019,Hamilton County Sales and Use Tax,23,4197684
+2019,Herkimer County Sales and Use Tax,24,32630109
+2019,Jefferson County Sales and Use Tax,25,78701927
+2019,Lewis County Sales and Use Tax,26,12423777
+2019,Livingston County Sales and Use Tax,27,34847040
+2019,Madison County Sales and Use Tax,28,29268478
+2019,Monroe County Sales and Use Tax,29,505201241
+2019,Montgomery County Sales and Use Tax,30,30960739
+2019,Nassau County Sales and Use Tax,31,1205037400
+2019,Niagara County Sales and Use Tax,32,125451614
+2019,Oneida County Sales and Use Tax,33,144122553
+2019,Onondaga County Sales and Use Tax,34,366045629
+2019,Ontario County Sales and Use Tax,35,85224022
+2019,Orange County Sales and Use Tax,36,292247839
+2019,Orleans County Sales and Use Tax,37,16875407
+2019,Oswego County Sales and Use Tax,38,47837034
+2019,Otsego County Sales and Use Tax,39,39020604
+2019,Putnam County Sales and Use Tax,40,63578422
+2019,Rensselaer County Sales and Use Tax,41,89273110
+2019,Rockland County Sales and Use Tax,42,218308128
+2019,St. Lawrence County Sales and Use Tax,43,59153993
+2019,Saratoga County Sales and Use Tax,44,125039203
+2019,Schenectady County Sales and Use Tax,45,101886306
+2019,Schoharie County Sales and Use Tax,46,16068459
+2019,Schuyler County Sales and Use Tax,47,11455318
+2019,Seneca County Sales and Use Tax,48,26040303
+2019,Steuben County Sales and Use Tax,49,59016857
+2019,Suffolk County Sales and Use Tax,50,1457601894
+2019,Sullivan County Sales and Use Tax,51,46804676
+2019,Tioga County Sales and Use Tax,52,24257920
+2019,Tompkins County Sales and Use Tax,53,54352001
+2019,Ulster County Sales and Use Tax,54,119925778
+2019,Warren County Sales and Use Tax,55,55219712
+2019,Washington County Sales and Use Tax,56,20389156
+2019,Wayne County Sales and Use Tax,57,45659585
+2019,Westchester County Sales and Use Tax,58,554246133
+2019,Wyoming County Sales and Use Tax,59,18345269
+2019,Yates County Sales and Use Tax,60,12768881
+2019,City of Auburn Sales and Use Tax,61,9232716
+2019,City of Batavia Sales and Use Tax,62,173
+2019,City of Canandaigua Sales and Use Tax,63,318
+2019,City of Corning Sales and Use Tax,64,-116564
+2019,City of Geneva Sales and Use Tax,65,4171
+2019,City of Glens Falls Sales and Use Tax,66,3298496
+2019,City of Gloversville Sales and Use Tax,67,4053928
+2019,City of Hornell Sales and Use Tax,68,3250
+2019,City of Ithaca Sales and Use Tax,69,11975486
+2019,City of Johnstown Sales and Use Tax,70,4096716
+2019,City of Mount Vernon Sales and Use Tax,71,21886857
+2019,City of New Rochelle Sales and Use Tax,72,29853549
+2019,City of Norwich Sales and Use Tax,73,1671572
+2019,City of Ogdensburg Sales and Use Tax,74,3
+2019,City of Olean Sales and Use Tax,75,4351311
+2019,City of Oneida Sales and Use Tax,76,4435549
+2019,City of Oswego Sales and Use Tax,77,14717723
+2019,City of Rome Sales and Use Tax,78,7987888
+2019,City of Salamanca Sales and Use Tax,79,677712
+2019,City of Saratoga Springs Sales and Use Tax,80,12757183
+2019,City of Utica Sales and Use Tax,81,10673963
+2019,City of White Plains Sales and Use Tax,82,49146783
+2019,City of Yonkers Sales and Use Tax,83,64614646
+2019,City of Yonkers Special Sales and Use Tax,84,32354740
+2019,City of Newburgh Consumer Utilities,85,1859852
+2019,City of Port Jervis Consumer Utilities,86,345426
+2019,Albany City School District Consumer Utilities,87,3947844
+2019,Batavia City School District Consumer Utilities,88,714644
+2019,Cohoes City School District Consumer Utilities,89,519710
+2019,Glen Cove City School District Consumer Utilities,90,1503308
+2019,Gloversville City School District Consumer Utilities,91,704186
+2019,Hornell City School District Consumer Utilities,92,281096
+2019,Hudson City School District Consumer Utilities,93,1034166
+2019,Johnstown City School District Consumer Utilities,94,539979
+2019,Lackawanna City School District Consumer Utilities,95,571331
+2019,Long Beach City School District Consumer Utilities,96,1711590
+2019,Middletown City School District Consumer Utilities,97,2081288
+2019,Mt. Vernon City School District Consumer Utilities,98,2610003
+2019,New Rochelle City School District Consumer Utilities,99,2719759
+2019,Newburgh City School District Consumer Utilities,100,2616214
+2019,Niagara Falls City School District Consumer Utilities,101,1770775
+2019,Ogdensburg City School District Consumer Utilities,102,366578
+2019,Peekskill City School District Consumer Utilities,103,1021078
+2019,Rensselaer City School District Consumer Utilities,104,480107
+2019,Rye City School District Consumer Utilities,105,814935
+2019,Schenectady City School District Consumer Utilities,106,2241880
+2019,Troy City School District Consumer Utilities,107,1278404
+2019,Utica City School District Consumer Utilities,108,1700372
+2019,Watertown City School District Consumer Utilities,109,1252587
+2019,Watervliet City School District Consumer Utilities,110,343004
+2019,White Plains City School District Consumer Utilities,111,3402069
+2019,New York City Convention Center Development Corporation Hotel Occupancy,112,51430026
+2019,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",113,2454451
+2019,City of Long Beach Hotel Occupancy and Restaurant Meals,114,2461051
+2019,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",115,7973402
+2020,New York State Sales and Use Tax,1,15073717366
+2020,New York City Sales and Use Tax,2,8344340629
+2020,Metropolitan Commuter Transportation District Sales and Use Tax,3,1058531050
+2020,Albany County Sales and Use Tax,4,288115767
+2020,Allegany County Sales and Use Tax,5,22564636
+2020,Broome County Sales and Use Tax,6,143445520
+2020,Cattaraugus County Sales and Use Tax,7,40650597
+2020,Cayuga County Sales and Use Tax,8,38458949
+2020,Chautauqua County Sales and Use Tax,9,71619758
+2020,Chemung County Sales and Use Tax,10,63223017
+2020,Chenango County Sales and Use Tax,11,24952209
+2020,Clinton County Sales and Use Tax,12,60479199
+2020,Columbia County Sales and Use Tax,13,45393059
+2020,Cortland County Sales and Use Tax,14,31451008
+2020,Delaware County Sales and Use Tax,15,22545987
+2020,Dutchess County Sales and Use Tax,16,220102123
+2020,Erie County Sales and Use Tax,17,836394566
+2020,Essex County Sales and Use Tax,18,32117401
+2020,Franklin County Sales and Use Tax,19,25340804
+2020,Fulton County Sales and Use Tax,20,22626804
+2020,Genesee County Sales and Use Tax,21,42780502
+2020,Greene County Sales and Use Tax,22,35065007
+2020,Hamilton County Sales and Use Tax,23,4356230
+2020,Herkimer County Sales and Use Tax,24,34382256
+2020,Jefferson County Sales and Use Tax,25,80617718
+2020,Lewis County Sales and Use Tax,26,13129528
+2020,Livingston County Sales and Use Tax,27,35850617
+2020,Madison County Sales and Use Tax,28,30872086
+2020,Monroe County Sales and Use Tax,29,531285254
+2020,Montgomery County Sales and Use Tax,30,33244786
+2020,Nassau County Sales and Use Tax,31,1259962447
+2020,Niagara County Sales and Use Tax,32,131368554
+2020,Oneida County Sales and Use Tax,33,150884277
+2020,Onondaga County Sales and Use Tax,34,373779992
+2020,Ontario County Sales and Use Tax,35,89812399
+2020,Orange County Sales and Use Tax,36,303205237
+2020,Orleans County Sales and Use Tax,37,17866968
+2020,Oswego County Sales and Use Tax,38,48165864
+2020,Otsego County Sales and Use Tax,39,40773768
+2020,Putnam County Sales and Use Tax,40,67269965
+2020,Rensselaer County Sales and Use Tax,41,95550571
+2020,Rockland County Sales and Use Tax,42,236498544
+2020,St. Lawrence County Sales and Use Tax,43,62914230
+2020,Saratoga County Sales and Use Tax,44,131136996
+2020,Schenectady County Sales and Use Tax,45,105310560
+2020,Schoharie County Sales and Use Tax,46,16284302
+2020,Schuyler County Sales and Use Tax,47,12157577
+2020,Seneca County Sales and Use Tax,48,28086159
+2020,Steuben County Sales and Use Tax,49,60170344
+2020,Suffolk County Sales and Use Tax,50,1530406740
+2020,Sullivan County Sales and Use Tax,51,48069082
+2020,Tioga County Sales and Use Tax,52,25219749
+2020,Tompkins County Sales and Use Tax,53,57490186
+2020,Ulster County Sales and Use Tax,54,129081133
+2020,Warren County Sales and Use Tax,55,56634121
+2020,Washington County Sales and Use Tax,56,21949732
+2020,Wayne County Sales and Use Tax,57,48630921
+2020,Westchester County Sales and Use Tax,58,649251752
+2020,Wyoming County Sales and Use Tax,59,19334968
+2020,Yates County Sales and Use Tax,60,13916823
+2020,City of Auburn Sales and Use Tax,61,9825652
+2020,City of Canandaigua Sales and Use Tax,62,55
+2020,City of Corning Sales and Use Tax,63,160024
+2020,City of Fulton Sales and Use Tax,64,816
+2020,City of Geneva Sales and Use Tax,65,2869
+2020,City of Glens Falls Sales and Use Tax,66,3558635
+2020,City of Gloversville Sales and Use Tax,67,3952507
+2020,City of Hornell Sales and Use Tax,68,3108
+2020,City of Ithaca Sales and Use Tax,69,12503916
+2020,City of Johnstown Sales and Use Tax,70,4204170
+2020,City of Mount Vernon Sales and Use Tax,71,22606606
+2020,City of New Rochelle Sales and Use Tax,72,31463991
+2020,City of Norwich Sales and Use Tax,73,1844812
+2020,City of Olean Sales and Use Tax,74,4400768
+2020,City of Oneida Sales and Use Tax,75,4870151
+2020,City of Oswego Sales and Use Tax,76,14644088
+2020,City of Rome Sales and Use Tax,77,8126701
+2020,City of Salamanca Sales and Use Tax,78,686702
+2020,City of Saratoga Springs Sales and Use Tax,79,13511323
+2020,City of Sherrill Sales and Use Tax,80,539
+2020,City of Utica Sales and Use Tax,81,11355767
+2020,City of White Plains Sales and Use Tax,82,53249549
+2020,City of Yonkers Sales and Use Tax,83,66265710
+2020,City of Yonkers Special Sales and Use Tax,84,33220791
+2020,City of Newburgh Consumer Utilities,85,1115862
+2020,City of Port Jervis Consumer Utilities,86,358861
+2020,Albany City School District Consumer Utilities,87,4129193
+2020,Batavia City School District Consumer Utilities,88,669697
+2020,Cohoes City School District Consumer Utilities,89,547927
+2020,Glen Cove City School District Consumer Utilities,90,1490543
+2020,Gloversville City School District Consumer Utilities,91,557260
+2020,Hornell City School District Consumer Utilities,92,296215
+2020,Hudson City School District Consumer Utilities,93,607739
+2020,Johnstown City School District Consumer Utilities,94,449404
+2020,Lackawanna City School District Consumer Utilities,95,533173
+2020,Long Beach City School District Consumer Utilities,96,1654398
+2020,Middletown City School District Consumer Utilities,97,1998668
+2020,Mt. Vernon City School District Consumer Utilities,98,2564449
+2020,New Rochelle City School District Consumer Utilities,99,3026766
+2020,Newburgh City School District Consumer Utilities,100,2578108
+2020,Niagara Falls City School District Consumer Utilities,101,1909523
+2020,Ogdensburg City School District Consumer Utilities,102,350283
+2020,Peekskill City School District Consumer Utilities,103,939573
+2020,Pougkeepsie City School District Consumer Utilities,104,207735
+2020,Rensselaer City School District Consumer Utilities,105,375247
+2020,Rye City School District Consumer Utilities,106,773108
+2020,Schenectady City School District Consumer Utilities,107,2283723
+2020,Troy City School District Consumer Utilities,108,1340385
+2020,Utica City School District Consumer Utilities,109,1800360
+2020,Watertown City School District Consumer Utilities,110,996100
+2020,Watervliet City School District Consumer Utilities,111,338060
+2020,White Plains City School District Consumer Utilities,112,3572883
+2020,New York City Convention Center Development Corporation Hotel Occupancy,113,52271408
+2020,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",114,2094859
+2020,City of Long Beach Hotel Occupancy and Restaurant Meals,115,2808977
+2020,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,8152812
+2021,New York State Sales and Use Tax,1,13347477200
+2021,New York City Sales and Use Tax,2,6620383340
+2021,Metropolitan Commuter Transportation District Sales and Use Tax,3,889972365
+2021,Albany County Sales and Use Tax,4,262424604
+2021,Allegany County Sales and Use Tax,5,23628631
+2021,Broome County Sales and Use Tax,6,139684406
+2021,Cattaraugus County Sales and Use Tax,7,40648439
+2021,Cayuga County Sales and Use Tax,8,38500064
+2021,Chautauqua County Sales and Use Tax,9,71542992
+2021,Chemung County Sales and Use Tax,10,59904284
+2021,Chenango County Sales and Use Tax,11,25151626
+2021,Clinton County Sales and Use Tax,12,57234945
+2021,Columbia County Sales and Use Tax,13,45873966
+2021,Cortland County Sales and Use Tax,14,31154799
+2021,Delaware County Sales and Use Tax,15,24621116
+2021,Dutchess County Sales and Use Tax,16,211389734
+2021,Erie County Sales and Use Tax,17,808211676
+2021,Essex County Sales and Use Tax,18,32015962
+2021,Franklin County Sales and Use Tax,19,26666676
+2021,Fulton County Sales and Use Tax,20,23601516
+2021,Genesee County Sales and Use Tax,21,41129844
+2021,Greene County Sales and Use Tax,22,36828281
+2021,Hamilton County Sales and Use Tax,23,4217553
+2021,Herkimer County Sales and Use Tax,24,34935272
+2021,Jefferson County Sales and Use Tax,25,82213919
+2021,Lewis County Sales and Use Tax,26,13324922
+2021,Livingston County Sales and Use Tax,27,36190204
+2021,Madison County Sales and Use Tax,28,32212694
+2021,Monroe County Sales and Use Tax,29,503308238
+2021,Montgomery County Sales and Use Tax,30,35215839
+2021,Nassau County Sales and Use Tax,31,1177031586
+2021,Niagara County Sales and Use Tax,32,128807835
+2021,Oneida County Sales and Use Tax,33,148431439
+2021,Onondaga County Sales and Use Tax,34,361759334
+2021,Ontario County Sales and Use Tax,35,85226629
+2021,Orange County Sales and Use Tax,36,278571115
+2021,Orleans County Sales and Use Tax,37,19334480
+2021,Oswego County Sales and Use Tax,38,53571726
+2021,Otsego County Sales and Use Tax,39,37270316
+2021,Putnam County Sales and Use Tax,40,66721591
+2021,Rensselaer County Sales and Use Tax,41,97095616
+2021,Rockland County Sales and Use Tax,42,224255300
+2021,St. Lawrence County Sales and Use Tax,43,64216928
+2021,Saratoga County Sales and Use Tax,44,127505744
+2021,Schenectady County Sales and Use Tax,45,104331198
+2021,Schoharie County Sales and Use Tax,46,16889924
+2021,Schuyler County Sales and Use Tax,47,11617570
+2021,Seneca County Sales and Use Tax,48,25381756
+2021,Steuben County Sales and Use Tax,49,57912503
+2021,Suffolk County Sales and Use Tax,50,1482132005
+2021,Sullivan County Sales and Use Tax,51,50032022
+2021,Tioga County Sales and Use Tax,52,24243888
+2021,Tompkins County Sales and Use Tax,53,50308326
+2021,Ulster County Sales and Use Tax,54,127829651
+2021,Warren County Sales and Use Tax,55,55003776
+2021,Washington County Sales and Use Tax,56,22660294
+2021,Wayne County Sales and Use Tax,57,52533976
+2021,Westchester County Sales and Use Tax,58,676138329
+2021,Wyoming County Sales and Use Tax,59,19883954
+2021,Yates County Sales and Use Tax,60,14763054
+2021,City of Auburn Sales and Use Tax,61,9413756
+2021,City of Canandaigua Sales and Use Tax,62,127
+2021,City of Corning Sales and Use Tax,63,306349
+2021,City of Fulton Sales and Use Tax,64,429
+2021,City of Geneva Sales and Use Tax,65,147
+2021,City of Glens Falls Sales and Use Tax,66,3416319
+2021,City of Gloversville Sales and Use Tax,67,4655936
+2021,City of Hornell Sales and Use Tax,68,413912
+2021,City of Ithaca Sales and Use Tax,69,11259751
+2021,City of Johnstown Sales and Use Tax,70,6598846
+2021,City of Mount Vernon Sales and Use Tax,71,20776938
+2021,City of New Rochelle Sales and Use Tax,72,28203340
+2021,City of Norwich Sales and Use Tax,73,2048158
+2021,City of Olean Sales and Use Tax,74,5140503
+2021,City of Oneida Sales and Use Tax,75,5709660
+2021,City of Oswego Sales and Use Tax,76,13671654
+2021,City of Rome Sales and Use Tax,77,8549731
+2021,City of Salamanca Sales and Use Tax,78,1659793
+2021,City of Saratoga Springs Sales and Use Tax,79,13782532
+2021,City of Sherrill Sales and Use Tax,80,260
+2021,City of Utica Sales and Use Tax,81,15495939
+2021,City of White Plains Sales and Use Tax,82,40542777
+2021,City of Yonkers Sales and Use Tax,83,56874432
+2021,City of Yonkers Special Sales and Use Tax,84,53096567
+2021,City of Newburgh Consumer Utilities,85,1202756
+2021,City of Port Jervis Consumer Utilities,86,362267
+2021,Albany City School District Consumer Utilities,87,4030110
+2021,Batavia City School District Consumer Utilities,88,644551
+2021,Cohoes City School District Consumer Utilities,89,535464
+2021,Glen Cove City School District Consumer Utilities,90,1277741
+2021,Gloversville City School District Consumer Utilities,91,598438
+2021,Hornell City School District Consumer Utilities,92,289429
+2021,Hudson City School District Consumer Utilities,93,627392
+2021,Johnstown City School District Consumer Utilities,94,483243
+2021,Lackawanna City School District Consumer Utilities,95,466763
+2021,Long Beach City School District Consumer Utilities,96,1619382
+2021,Middletown City School District Consumer Utilities,97,2147447
+2021,Mt. Vernon City School District Consumer Utilities,98,2832388
+2021,New Rochelle City School District Consumer Utilities,99,3430682
+2021,Newburgh City School District Consumer Utilities,100,2703613
+2021,Niagara Falls City School District Consumer Utilities,101,1814276
+2021,Ogdensburg City School District Consumer Utilities,102,364309
+2021,Peekskill City School District Consumer Utilities,103,930662
+2021,Pougkeepsie City School District Consumer Utilities,104,1705874
+2021,Rensselaer City School District Consumer Utilities,105,416010
+2021,Rye City School District Consumer Utilities,106,786953
+2021,Schenectady City School District Consumer Utilities,107,2156511
+2021,Troy City School District Consumer Utilities,108,1285931
+2021,Utica City School District Consumer Utilities,109,1742461
+2021,Watertown City School District Consumer Utilities,110,1143540
+2021,Watervliet City School District Consumer Utilities,111,333555
+2021,White Plains City School District Consumer Utilities,112,3886149
+2021,New York City Convention Center Development Corporation Hotel Occupancy,113,26767852
+2021,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",114,1939155
+2021,City of Long Beach Hotel Occupancy and Restaurant Meals,115,2308541
+2021,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,5757039
+2022,New York State Sales and Use Tax,1,16497853997
+2022,New York City Sales and Use Tax,2,8069083846
+2022,Metropolitan Commuter Transportation District Sales and Use Tax,3,1119978533
+2022,Albany County Sales and Use Tax,4,325712767
+2022,Allegany County Sales and Use Tax,5,28200216
+2022,Broome County Sales and Use Tax,6,167351971
+2022,Cattaraugus County Sales and Use Tax,7,49350071
+2022,Cayuga County Sales and Use Tax,8,48668959
+2022,Chautauqua County Sales and Use Tax,9,87940314
+2022,Chemung County Sales and Use Tax,10,72369542
+2022,Chenango County Sales and Use Tax,11,30228788
+2022,Clinton County Sales and Use Tax,12,68790601
+2022,Columbia County Sales and Use Tax,13,57963721
+2022,Cortland County Sales and Use Tax,14,38440839
+2022,Delaware County Sales and Use Tax,15,30348588
+2022,Dutchess County Sales and Use Tax,16,256948750
+2022,Erie County Sales and Use Tax,17,970524553
+2022,Essex County Sales and Use Tax,18,39480805
+2022,Franklin County Sales and Use Tax,19,31527498
+2022,Fulton County Sales and Use Tax,20,27729401
+2022,Genesee County Sales and Use Tax,21,51172033
+2022,Greene County Sales and Use Tax,22,44640107
+2022,Hamilton County Sales and Use Tax,23,5018246
+2022,Herkimer County Sales and Use Tax,24,41737111
+2022,Jefferson County Sales and Use Tax,25,100811835
+2022,Lewis County Sales and Use Tax,26,16503704
+2022,Livingston County Sales and Use Tax,27,43257970
+2022,Madison County Sales and Use Tax,28,38389357
+2022,Monroe County Sales and Use Tax,29,617878403
+2022,Montgomery County Sales and Use Tax,30,42444553
+2022,Nassau County Sales and Use Tax,31,1470018867
+2022,Niagara County Sales and Use Tax,32,154382825
+2022,Oneida County Sales and Use Tax,33,180251149
+2022,Onondaga County Sales and Use Tax,34,444838133
+2022,Ontario County Sales and Use Tax,35,107156967
+2022,Orange County Sales and Use Tax,36,361641895
+2022,Orleans County Sales and Use Tax,37,22380075
+2022,Oswego County Sales and Use Tax,38,56647223
+2022,Otsego County Sales and Use Tax,39,46074968
+2022,Putnam County Sales and Use Tax,40,80651951
+2022,Rensselaer County Sales and Use Tax,41,113015731
+2022,Rockland County Sales and Use Tax,42,278893385
+2022,St. Lawrence County Sales and Use Tax,43,76397151
+2022,Saratoga County Sales and Use Tax,44,157028220
+2022,Schenectady County Sales and Use Tax,45,122871563
+2022,Schoharie County Sales and Use Tax,46,20382598
+2022,Schuyler County Sales and Use Tax,47,14546289
+2022,Seneca County Sales and Use Tax,48,31678872
+2022,Steuben County Sales and Use Tax,49,71566254
+2022,Suffolk County Sales and Use Tax,50,1857419327
+2022,Sullivan County Sales and Use Tax,51,66605997
+2022,Tioga County Sales and Use Tax,52,29866262
+2022,Tompkins County Sales and Use Tax,53,63825719
+2022,Ulster County Sales and Use Tax,54,159517795
+2022,Warren County Sales and Use Tax,55,67327375
+2022,Washington County Sales and Use Tax,56,27235037
+2022,Wayne County Sales and Use Tax,57,60591473
+2022,Westchester County Sales and Use Tax,58,831420449
+2022,Wyoming County Sales and Use Tax,59,23337611
+2022,Yates County Sales and Use Tax,60,18337721
+2022,City of Auburn Sales and Use Tax,61,11012233
+2022,City of Corning Sales and Use Tax,62,20598
+2022,City of Fulton Sales and Use Tax,63,647
+2022,City of Geneva Sales and Use Tax,64,225
+2022,City of Glens Falls Sales and Use Tax,65,4160281
+2022,City of Gloversville Sales and Use Tax,66,4551525
+2022,City of Hornell Sales and Use Tax,67,1950
+2022,City of Ithaca Sales and Use Tax,68,13063365
+2022,City of Johnstown Sales and Use Tax,69,4814818
+2022,City of Mount Vernon Sales and Use Tax,70,28147273
+2022,City of New Rochelle Sales and Use Tax,71,38212155
+2022,City of Norwich Sales and Use Tax,72,2341244
+2022,City of Ogdensburg Sales and Use Tax,73,4
+2022,City of Olean Sales and Use Tax,74,5406932
+2022,City of Oneida Sales and Use Tax,75,6379884
+2022,City of Oswego Sales and Use Tax,76,17249883
+2022,City of Rome Sales and Use Tax,77,9653855
+2022,City of Salamanca Sales and Use Tax,78,855063
+2022,City of Saratoga Springs Sales and Use Tax,79,15176535
+2022,City of Sherrill Sales and Use Tax,80,37
+2022,City of Utica Sales and Use Tax,81,13269700
+2022,City of White Plains Sales and Use Tax,82,53116047
+2022,City of Yonkers Sales and Use Tax,83,77521528
+2022,City of Yonkers Special Sales and Use Tax,84,38774171
+2022,City of Newburgh Consumer Utilities,85,1225124
+2022,City of Port Jervis Consumer Utilities,86,412282
+2022,Albany City School District Consumer Utilities,87,4143857
+2022,Batavia City School District Consumer Utilities,88,758319
+2022,Cohoes City School District Consumer Utilities,89,607028
+2022,Glen Cove City School District Consumer Utilities,90,1507876
+2022,Gloversville City School District Consumer Utilities,91,634746
+2022,Hornell City School District Consumer Utilities,92,321121
+2022,Hudson City School District Consumer Utilities,93,706382
+2022,Johnstown City School District Consumer Utilities,94,504325
+2022,Lackawanna City School District Consumer Utilities,95,563542
+2022,Long Beach City School District Consumer Utilities,96,1743725
+2022,Middletown City School District Consumer Utilities,97,2251307
+2022,Mt. Vernon City School District Consumer Utilities,98,3203375
+2022,New Rochelle City School District Consumer Utilities,99,3831928
+2022,Newburgh City School District Consumer Utilities,100,2761467
+2022,Niagara Falls City School District Consumer Utilities,101,1975688
+2022,Ogdensburg City School District Consumer Utilities,102,348978
+2022,Peekskill City School District Consumer Utilities,103,1056168
+2022,Rensselaer City School District Consumer Utilities,104,426975
+2022,Rye City School District Consumer Utilities,105,934800
+2022,Schenectady City School District Consumer Utilities,106,2518448
+2022,Troy City School District Consumer Utilities,107,1475649
+2022,Utica City School District Consumer Utilities,108,2048784
+2022,Watertown City School District Consumer Utilities,109,1172697
+2022,Watervliet City School District Consumer Utilities,110,394325
+2022,White Plains City School District Consumer Utilities,111,4597117
+2022,New York City Convention Center Development Corporation Hotel Occupancy,112,21663975
+2022,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",113,2359550
+2022,City of Long Beach Hotel Occupancy and Restaurant Meals,114,3251585
+2022,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",115,8299626
+2023,New York State Sales and Use Tax,1,17819001244
+2023,New York City Sales and Use Tax,2,9708782121
+2023,Metropolitan Commuter Transportation District Sales and Use Tax,3,1259790757
+2023,Albany County Sales and Use Tax,4,368165973
+2023,Allegany County Sales and Use Tax,5,29738427
+2023,Broome County Sales and Use Tax,6,179622156
+2023,Cattaraugus County Sales and Use Tax,7,50885910
+2023,Cayuga County Sales and Use Tax,8,49950464
+2023,Chautauqua County Sales and Use Tax,9,88966278
+2023,Chemung County Sales and Use Tax,10,74391172
+2023,Chenango County Sales and Use Tax,11,30842730
+2023,Clinton County Sales and Use Tax,12,73007378
+2023,Columbia County Sales and Use Tax,13,63730773
+2023,Cortland County Sales and Use Tax,14,39894055
+2023,Delaware County Sales and Use Tax,15,32215932
+2023,Dutchess County Sales and Use Tax,16,259183321
+2023,Erie County Sales and Use Tax,17,1033059508
+2023,Essex County Sales and Use Tax,18,41698805
+2023,Franklin County Sales and Use Tax,19,33455894
+2023,Fulton County Sales and Use Tax,20,29403035
+2023,Genesee County Sales and Use Tax,21,55525765
+2023,Greene County Sales and Use Tax,22,46903041
+2023,Hamilton County Sales and Use Tax,23,5356304
+2023,Herkimer County Sales and Use Tax,24,43797192
+2023,Jefferson County Sales and Use Tax,25,102564520
+2023,Lewis County Sales and Use Tax,26,18751479
+2023,Livingston County Sales and Use Tax,27,45570942
+2023,Madison County Sales and Use Tax,28,40105922
+2023,Monroe County Sales and Use Tax,29,640745054
+2023,Montgomery County Sales and Use Tax,30,47182233
+2023,Nassau County Sales and Use Tax,31,1560671466
+2023,Niagara County Sales and Use Tax,32,162313149
+2023,Oneida County Sales and Use Tax,33,190056963
+2023,Onondaga County Sales and Use Tax,34,459579421
+2023,Ontario County Sales and Use Tax,35,114657339
+2023,Orange County Sales and Use Tax,36,386674563
+2023,Orleans County Sales and Use Tax,37,22790891
+2023,Oswego County Sales and Use Tax,38,62626834
+2023,Otsego County Sales and Use Tax,39,49033280
+2023,Putnam County Sales and Use Tax,40,83528589
+2023,Rensselaer County Sales and Use Tax,41,123560908
+2023,Rockland County Sales and Use Tax,42,293103033
+2023,St. Lawrence County Sales and Use Tax,43,81915693
+2023,Saratoga County Sales and Use Tax,44,162922666
+2023,Schenectady County Sales and Use Tax,45,129774131
+2023,Schoharie County Sales and Use Tax,46,22538231
+2023,Schuyler County Sales and Use Tax,47,15244301
+2023,Seneca County Sales and Use Tax,48,32517466
+2023,Steuben County Sales and Use Tax,49,77770512
+2023,Suffolk County Sales and Use Tax,50,1943336117
+2023,Sullivan County Sales and Use Tax,51,71666896
+2023,Tioga County Sales and Use Tax,52,32239625
+2023,Tompkins County Sales and Use Tax,53,66554192
+2023,Ulster County Sales and Use Tax,54,168150253
+2023,Warren County Sales and Use Tax,55,71773364
+2023,Washington County Sales and Use Tax,56,28170035
+2023,Wayne County Sales and Use Tax,57,61644598
+2023,Westchester County Sales and Use Tax,58,906415889
+2023,Wyoming County Sales and Use Tax,59,25000367
+2023,Yates County Sales and Use Tax,60,22229858
+2023,City of Auburn Sales and Use Tax,61,11019275
+2023,City of Corning Sales and Use Tax,62,1148
+2023,City of Fulton Sales and Use Tax,63,998
+2023,City of Geneva Sales and Use Tax,64,820
+2023,City of Glens Falls Sales and Use Tax,65,4569398
+2023,City of Gloversville Sales and Use Tax,66,4524052
+2023,City of Hornell Sales and Use Tax,67,2585
+2023,City of Ithaca Sales and Use Tax,68,14647153
+2023,City of Johnstown Sales and Use Tax,69,5403838
+2023,City of Mount Vernon Sales and Use Tax,70,28839177
+2023,City of New Rochelle Sales and Use Tax,71,41211742
+2023,City of Norwich Sales and Use Tax,72,2447433
+2023,City of Ogdensburg Sales and Use Tax,73,1894594
+2023,City of Olean Sales and Use Tax,74,5282425
+2023,City of Oneida Sales and Use Tax,75,6621968
+2023,City of Oswego Sales and Use Tax,76,18959548
+2023,City of Rome Sales and Use Tax,77,9702058
+2023,City of Salamanca Sales and Use Tax,78,852070
+2023,City of Saratoga Springs Sales and Use Tax,79,17069932
+2023,City of Sherrill Sales and Use Tax,80,91
+2023,City of Utica Sales and Use Tax,81,14051709
+2023,City of White Plains Sales and Use Tax,82,56316892
+2023,City of Yonkers Sales and Use Tax,83,81601300
+2023,City of Yonkers Special Sales and Use Tax,84,40816953
+2023,City of Newburgh Consumer Utilities,85,1567426
+2023,City of Port Jervis Consumer Utilities,86,480723
+2023,Albany City School District Consumer Utilities,87,5072001
+2023,Batavia City School District Consumer Utilities,88,885689
+2023,Cohoes City School District Consumer Utilities,89,750841
+2023,Glen Cove City School District Consumer Utilities,90,1690518
+2023,Gloversville City School District Consumer Utilities,91,846136
+2023,Hornell City School District Consumer Utilities,92,403273
+2023,Hudson City School District Consumer Utilities,93,860218
+2023,Johnstown City School District Consumer Utilities,94,679940
+2023,Lackawanna City School District Consumer Utilities,95,706177
+2023,Long Beach City School District Consumer Utilities,96,1967758
+2023,Middletown City School District Consumer Utilities,97,2476968
+2023,Mt. Vernon City School District Consumer Utilities,98,3230904
+2023,New Rochelle City School District Consumer Utilities,99,4242056
+2023,Newburgh City School District Consumer Utilities,100,3688332
+2023,Niagara Falls City School District Consumer Utilities,101,2477246
+2023,Ogdensburg City School District Consumer Utilities,102,298405
+2023,Peekskill City School District Consumer Utilities,103,1242718
+2023,Poughkeepsie City School District Consumer Utilities,104,1886238
+2023,Rensselaer City School District Consumer Utilities,105,490531
+2023,Rye City School District Consumer Utilities,106,1097049
+2023,Schenectady City School District Consumer Utilities,107,3124010
+2023,Troy City School District Consumer Utilities,108,1743550
+2023,Utica City School District Consumer Utilities,109,2447863
+2023,Watertown City School District Consumer Utilities,110,1441563
+2023,Watervliet City School District Consumer Utilities,111,456078
+2023,White Plains City School District Consumer Utilities,112,4956306
+2023,New York City Convention Center Development Corporation Hotel Occupancy,113,43809456
+2023,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",114,2660402
+2023,City of Long Beach Hotel Occupancy and Restaurant Meals,115,3620497
+2023,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,9541205
+2024,New York State Sales and Use Tax,1,18709013111
+2024,New York City Sales and Use Tax,2,10204615336
+2024,Metropolitan Commuter Transportation District Sales and Use Tax,3,1319718081
+2024,Albany County Sales and Use Tax,4,357303003
+2024,Allegany County Sales and Use Tax,5,30663603
+2024,Broome County Sales and Use Tax,6,180917910
+2024,Cattaraugus County Sales and Use Tax,7,51170556
+2024,Cayuga County Sales and Use Tax,8,46489212
+2024,Chautauqua County Sales and Use Tax,9,91726317
+2024,Chemung County Sales and Use Tax,10,75802728
+2024,Chenango County Sales and Use Tax,11,32781017
+2024,Clinton County Sales and Use Tax,12,74695109
+2024,Columbia County Sales and Use Tax,13,61892344
+2024,Cortland County Sales and Use Tax,14,39043400
+2024,Delaware County Sales and Use Tax,15,31190464
+2024,Dutchess County Sales and Use Tax,16,252256594
+2024,Erie County Sales and Use Tax,17,1038974182
+2024,Essex County Sales and Use Tax,18,42585729
+2024,Franklin County Sales and Use Tax,19,33606974
+2024,Fulton County Sales and Use Tax,20,29475470
+2024,Genesee County Sales and Use Tax,21,56355874
+2024,Greene County Sales and Use Tax,22,48256953
+2024,Hamilton County Sales and Use Tax,23,5408066
+2024,Herkimer County Sales and Use Tax,24,45745400
+2024,Jefferson County Sales and Use Tax,25,103725000
+2024,Lewis County Sales and Use Tax,26,18089340
+2024,Livingston County Sales and Use Tax,27,47789905
+2024,Madison County Sales and Use Tax,28,41857344
+2024,Monroe County Sales and Use Tax,29,637806619
+2024,Montgomery County Sales and Use Tax,30,47019553
+2024,Nassau County Sales and Use Tax,31,1561637134
+2024,Niagara County Sales and Use Tax,32,168520240
+2024,Oneida County Sales and Use Tax,33,196845083
+2024,Onondaga County Sales and Use Tax,34,486483659
+2024,Ontario County Sales and Use Tax,35,115026864
+2024,Orange County Sales and Use Tax,36,390627332
+2024,Orleans County Sales and Use Tax,37,23067221
+2024,Oswego County Sales and Use Tax,38,62393526
+2024,Otsego County Sales and Use Tax,39,50462113
+2024,Putnam County Sales and Use Tax,40,89048484
+2024,Rensselaer County Sales and Use Tax,41,124519791
+2024,Rockland County Sales and Use Tax,42,281377520
+2024,St. Lawrence County Sales and Use Tax,43,80435537
+2024,Saratoga County Sales and Use Tax,44,172071280
+2024,Schenectady County Sales and Use Tax,45,131508149
+2024,Schoharie County Sales and Use Tax,46,24684942
+2024,Schuyler County Sales and Use Tax,47,16112027
+2024,Seneca County Sales and Use Tax,48,33076621
+2024,Steuben County Sales and Use Tax,49,75133553
+2024,Suffolk County Sales and Use Tax,50,1930876953
+2024,Sullivan County Sales and Use Tax,51,78851400
+2024,Tioga County Sales and Use Tax,52,33388442
+2024,Tompkins County Sales and Use Tax,53,66038473
+2024,Ulster County Sales and Use Tax,54,170370529
+2024,Warren County Sales and Use Tax,55,73075970
+2024,Washington County Sales and Use Tax,56,29691879
+2024,Wayne County Sales and Use Tax,57,64328098
+2024,Westchester County Sales and Use Tax,58,874486490
+2024,Wyoming County Sales and Use Tax,59,26170817
+2024,Yates County Sales and Use Tax,60,20573825
+2024,City of Auburn Sales and Use Tax,61,10807046
+2024,City of Corning Sales and Use Tax,62,929
+2024,City of Fulton Sales and Use Tax,63,438
+2024,City of Geneva Sales and Use Tax,64,3465
+2024,City of Glens Falls Sales and Use Tax,65,4963723
+2024,City of Gloversville Sales and Use Tax,66,4462695
+2024,City of Hornell Sales and Use Tax,67,2408
+2024,City of Ithaca Sales and Use Tax,68,14103563
+2024,City of Johnstown Sales and Use Tax,69,5448836
+2024,City of Mount Vernon Sales and Use Tax,70,30144118
+2024,City of New Rochelle Sales and Use Tax,71,41268546
+2024,City of Norwich Sales and Use Tax,72,2623022
+2024,City of Ogdensburg Sales and Use Tax,73,2063360
+2024,City of Olean Sales and Use Tax,74,5341381
+2024,City of Oneida Sales and Use Tax,75,6947381
+2024,City of Oswego Sales and Use Tax,76,21834975
+2024,City of Rome Sales and Use Tax,77,10014188
+2024,City of Salamanca Sales and Use Tax,78,869889
+2024,City of Saratoga Springs Sales and Use Tax,79,18384725
+2024,City of Sherrill Sales and Use Tax,80,85
+2024,City of Utica Sales and Use Tax,81,13920344
+2024,City of White Plains Sales and Use Tax,82,56623541
+2024,City of Yonkers Sales and Use Tax,83,79535558
+2024,City of Yonkers Special Sales and Use Tax,84,39765745
+2024,City of Newburgh Consumer Utilities,85,1534842
+2024,City of Port Jervis Consumer Utilities,86,474908
+2024,Albany City School District Consumer Utilities,87,4762554
+2024,Batavia City School District Consumer Utilities,88,886627
+2024,Cohoes City School District Consumer Utilities,89,696966
+2024,Glen Cove City School District Consumer Utilities,90,1517312
+2024,Gloversville City School District Consumer Utilities,91,738723
+2024,Hornell City School District Consumer Utilities,92,416662
+2024,Hudson City School District Consumer Utilities,93,800465
+2024,Johnstown City School District Consumer Utilities,94,642692
+2024,Lackawanna City School District Consumer Utilities,95,795491
+2024,Long Beach City School District Consumer Utilities,96,1910794
+2024,Middletown City School District Consumer Utilities,97,2508098
+2024,Mt. Vernon City School District Consumer Utilities,98,4585545
+2024,New Rochelle City School District Consumer Utilities,99,4961849
+2024,Newburgh City School District Consumer Utilities,100,3930195
+2024,Niagara Falls City School District Consumer Utilities,101,2396097
+2024,Ogdensburg City School District Consumer Utilities,102,407218
+2024,Peekskill City School District Consumer Utilities,103,1286109
+2024,Poughkeepsie City School District Consumer Utilities,104,1867890
+2024,Rensselaer City School District Consumer Utilities,105,513868
+2024,Rye City School District Consumer Utilities,106,1110623
+2024,Schenectady City School District Consumer Utilities,107,2964164
+2024,Troy City School District Consumer Utilities,108,1601659
+2024,Utica City School District Consumer Utilities,109,2271663
+2024,Watertown City School District Consumer Utilities,110,1356037
+2024,Watervliet City School District Consumer Utilities,111,430710
+2024,White Plains City School District Consumer Utilities,112,5574431
+2024,New York City Convention Center Development Corporation Hotel Occupancy,113,49966881
+2024,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",114,2621354
+2024,City of Long Beach Hotel Occupancy and Restaurant Meals,115,4005364
+2024,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,9481009
+2025,New York State Sales and Use Tax,1,19096165401
+2025,New York City Sales and Use Tax,2,10478287112
+2025,Metropolitan Commuter Transportation District Sales and Use Tax,3,1348268052
+2025,Albany County Sales and Use Tax,4,373153058
+2025,Allegany County Sales and Use Tax,5,29704715
+2025,Broome County Sales and Use Tax,6,190245682
+2025,Cattaraugus County Sales and Use Tax,7,52122078
+2025,Cayuga County Sales and Use Tax,8,48559944
+2025,Chautauqua County Sales and Use Tax,9,91930844
+2025,Chemung County Sales and Use Tax,10,74146293
+2025,Chenango County Sales and Use Tax,11,32068717
+2025,Clinton County Sales and Use Tax,12,75362702
+2025,Columbia County Sales and Use Tax,13,61130375
+2025,Cortland County Sales and Use Tax,14,40887912
+2025,Delaware County Sales and Use Tax,15,31467634
+2025,Dutchess County Sales and Use Tax,16,263559077
+2025,Erie County Sales and Use Tax,17,1029512430
+2025,Essex County Sales and Use Tax,18,42941871
+2025,Franklin County Sales and Use Tax,19,33631166
+2025,Fulton County Sales and Use Tax,20,30471992
+2025,Genesee County Sales and Use Tax,21,56334616
+2025,Greene County Sales and Use Tax,22,50687385
+2025,Hamilton County Sales and Use Tax,23,5491364
+2025,Herkimer County Sales and Use Tax,24,45617894
+2025,Jefferson County Sales and Use Tax,25,104011884
+2025,Lewis County Sales and Use Tax,26,18841228
+2025,Livingston County Sales and Use Tax,27,48574028
+2025,Madison County Sales and Use Tax,28,41907595
+2025,Monroe County Sales and Use Tax,29,634168719
+2025,Montgomery County Sales and Use Tax,30,49008335
+2025,Nassau County Sales and Use Tax,31,1580591459
+2025,Niagara County Sales and Use Tax,32,168021405
+2025,Oneida County Sales and Use Tax,33,198936154
+2025,Onondaga County Sales and Use Tax,34,493604628
+2025,Ontario County Sales and Use Tax,35,116386269
+2025,Orange County Sales and Use Tax,36,396116464
+2025,Orleans County Sales and Use Tax,37,23518158
+2025,Oswego County Sales and Use Tax,38,62270542
+2025,Otsego County Sales and Use Tax,39,52503140
+2025,Putnam County Sales and Use Tax,40,85629227
+2025,Rensselaer County Sales and Use Tax,41,125589739
+2025,Rockland County Sales and Use Tax,42,290528031
+2025,St. Lawrence County Sales and Use Tax,43,85756096
+2025,Saratoga County Sales and Use Tax,44,171868618
+2025,Schenectady County Sales and Use Tax,45,139977651
+2025,Schoharie County Sales and Use Tax,46,24652734
+2025,Schuyler County Sales and Use Tax,47,16897922
+2025,Seneca County Sales and Use Tax,48,33106316
+2025,Steuben County Sales and Use Tax,49,74219442
+2025,Suffolk County Sales and Use Tax,50,1940186889
+2025,Sullivan County Sales and Use Tax,51,80807223
+2025,Tioga County Sales and Use Tax,52,31863733
+2025,Tompkins County Sales and Use Tax,53,67226906
+2025,Ulster County Sales and Use Tax,54,175346949
+2025,Warren County Sales and Use Tax,55,74511654
+2025,Washington County Sales and Use Tax,56,30749218
+2025,Wayne County Sales and Use Tax,57,66073570
+2025,Westchester County Sales and Use Tax,58,939298388
+2025,Wyoming County Sales and Use Tax,59,27016189
+2025,Yates County Sales and Use Tax,60,20107575
+2025,City of Auburn Sales and Use Tax,61,11529410
+2025,City of Corning Sales and Use Tax,62,498
+2025,City of Fulton Sales and Use Tax,63,123
+2025,City of Geneva Sales and Use Tax,64,425
+2025,City of Glens Falls Sales and Use Tax,65,5170819
+2025,City of Gloversville Sales and Use Tax,66,4875389
+2025,City of Hornell Sales and Use Tax,67,614
+2025,City of Ithaca Sales and Use Tax,68,14695884
+2025,City of Johnstown Sales and Use Tax,69,5814099
+2025,City of Mount Vernon Sales and Use Tax,70,29648800
+2025,City of New Rochelle Sales and Use Tax,71,43297784
+2025,City of Norwich Sales and Use Tax,72,2378838
+2025,City of Ogdensburg Sales and Use Tax,73,2132515
+2025,City of Olean Sales and Use Tax,74,5337214
+2025,City of Oneida Sales and Use Tax,75,6835729
+2025,City of Oswego Sales and Use Tax,76,23163849
+2025,City of Rome Sales and Use Tax,77,10256420
+2025,City of Salamanca Sales and Use Tax,78,853767
+2025,City of Saratoga Springs Sales and Use Tax,79,19319786
+2025,City of Sherrill Sales and Use Tax,80,194
+2025,City of Utica Sales and Use Tax,81,14688095
+2025,City of White Plains Sales and Use Tax,82,58502639
+2025,City of Yonkers Sales and Use Tax,83,83381305
+2025,City of Yonkers Special Sales and Use Tax,84,41694668
+2025,City of Newburgh Consumer Utilities,85,1420214
+2025,City of Port Jervis Consumer Utilities,86,445320
+2025,Albany City School District Consumer Utilities,87,4574192
+2025,Batavia City School District Consumer Utilities,88,760625
+2025,Cohoes City School District Consumer Utilities,89,666316
+2025,Glen Cove City School District Consumer Utilities,90,1509488
+2025,Gloversville City School District Consumer Utilities,91,712034
+2025,Hornell City School District Consumer Utilities,92,359650
+2025,Hudson City School District Consumer Utilities,93,801383
+2025,Johnstown City School District Consumer Utilities,94,585553
+2025,Lackawanna City School District Consumer Utilities,95,532593
+2025,Long Beach City School District Consumer Utilities,96,2060546
+2025,Middletown City School District Consumer Utilities,97,2445159
+2025,Mt. Vernon City School District Consumer Utilities,98,4047603
+2025,New Rochelle City School District Consumer Utilities,99,5857115
+2025,Newburgh City School District Consumer Utilities,100,3131548
+2025,Niagara Falls City School District Consumer Utilities,101,2261354
+2025,Ogdensburg City School District Consumer Utilities,102,471987
+2025,Peekskill City School District Consumer Utilities,103,1665325
+2025,Poughkeepsie City School District Consumer Utilities,104,1668110
+2025,Rensselaer City School District Consumer Utilities,105,529161
+2025,Rye City School District Consumer Utilities,106,1601126
+2025,Schenectady City School District Consumer Utilities,107,2674161
+2025,Troy City School District Consumer Utilities,108,1487330
+2025,Utica City School District Consumer Utilities,109,2221958
+2025,Watertown City School District Consumer Utilities,110,1326374
+2025,Watervliet City School District Consumer Utilities,111,429059
+2025,White Plains City School District Consumer Utilities,112,5913319
+2025,New York City Convention Center Development Corporation Hotel Occupancy,113,50804132
+2025,"City of Lockport Admissions, Club Dues, Food, Drink, Amusements and Utilities Services",114,2554248
+2025,City of Long Beach Hotel Occupancy and Restaurant Meals,115,5155892
+2025,"City of Niagara Falls Admissions, Club Dues, Food, Drink, Amusements, Hotel Occupancy, Utilities Services",116,9738722

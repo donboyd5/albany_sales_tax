@@ -1,0 +1,5 @@
+file,source_url,pulled_at,sha256
+data/raw/dtf_as001_index.csv,https://www.tax.ny.gov/research/stats/statistics/sales_tax/government/as001.htm,2026-09-07T15:14:50-0400,fb8d44afd8431ef25ec7c1d7abce527dbb72f521c40313f28c874a374754fe75
+data/raw/dtf_distributions.csv,https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7,2026-09-07T15:14:49-0400,44a0de4348dc047015502cf6f7b741fbeed88fc676aa1a812aaa63374f1f7e7f
+data/raw/dtf_sales_status_by_year.csv,https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data,2026-09-07T15:14:49-0400,314685abe32670ea09808149703308f3c6091bc241ed944d61f159bbb6c80789
+data/raw/dtf_taxable_sales_by_naics.csv,https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data,2026-09-07T15:14:49-0400,850600bfac09d2095bd9787f1907c1c5af78c95a32aceafda8a6378bf0905c5d

@@ -1,0 +1,18 @@
+sales_tax_year,sales_tax_quarter,selling_period,status,n
+2022 - 2023,1,March - May,F,309
+2022 - 2023,2,June - August,F,309
+2022 - 2023,3,September - November,F,309
+2022 - 2023,4,December - February,F,309
+2023 - 2024,1,March - May,F,309
+2023 - 2024,2,June - August,F,309
+2023 - 2024,3,September - November,F,309
+2023 - 2024,4,December - February,F,309
+2024 - 2025,1,March - May,P,309
+2024 - 2025,2,June - August,P,309
+2024 - 2025,3,September - November,P,309
+2024 - 2025,4,December - February,P,309
+2025 - 2026,1,March - May,P,309
+2025 - 2026,2,June - August,P,309
+2025 - 2026,3,September - November,P,309
+2025 - 2026,4,December - February,P,309
+2026 - 2027,1,March - May,P,309
