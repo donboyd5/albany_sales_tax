@@ -138,11 +138,11 @@ appo |>
             `Share of base` = sum(B_kg) / B_k,
             `Effective a_g` = sum(B_cg, na.rm = TRUE) / sum(B_kg),
             `City base ($M)` = sum(B_cg, na.rm = TRUE) / 1e6, .groups = "drop") |>
-  mutate(Allocator = c(business = "LODES workplace employment",
+  mutate(Allocator = c(business = "LODES employment excl. public admin",
                        delivered_split = "50% Econ Census receipts / 50% ACS income",
                        motor_vehicle = "DMV resident registrations",
                        store = "Econ Census receipts",
-                       utilities = "LODES workplace employment")[sourcing_class],
+                       utilities = "LODES employment excl. public admin")[sourcing_class],
          Class = sourcing_class) |>
   select(Class, Allocator, Groups, `County base ($M)`, `Share of base`,
          `Effective a_g`, `City base ($M)`) |>
@@ -156,13 +156,21 @@ appo |>
 
 Two choices deserve comment.
 
-**Motor vehicles are 4411 and 4412 only.** Tax Law §1214 sources sales of
-vehicles required to be registered to the purchaser's residence, so the dealer's
-location carries no information about where the tax lands. That reasoning does
-not extend to 4413 (parts, accessories and tires), which is ordinary
-over-the-counter retail and is left store-based. The project plan specified all
-of NAICS 441; 4413 is \$65 M of a \$`r B(B_k)` B base and moving it changes the
-answer by less than a tenth of a percent — it is in the sensitivity table.
+**Motor vehicles are 4411, 4412 and 9261.** Vehicle sales are sourced to the
+purchaser's residence, not the dealer's location: Publication 838 instructs
+dealers that "sales tax is collected at the combined rate in effect in the
+local jurisdiction where the customer is a resident, regardless of where the
+vehicle is delivered", and Form DTF-802 applies the same rule at DMV
+registration. That reasoning does not extend to 4413 (parts, accessories and
+tires), which is ordinary over-the-counter retail and is left store-based; the
+project plan specified all of NAICS 441, and 4413 is \$65 M of a \$`r B(B_k)` B
+base — it is in the sensitivity table. NAICS 9261, *Administration of Economic
+Programs*, is added to this class: it carries \$8.5 B of statewide "taxable
+sales" spread across counties in proportion to population and car ownership
+(Albany County's share is exactly its population share), the signature of the
+tax DMV collects at registration on private-party vehicle sales rather than of
+state-agency vendor activity concentrated in Albany. This is inferred from the
+pattern, not documented by DTF.
 
 **There is no e-commerce class**, because NAICS 2022 eliminated sector 454 and
 folded electronic shopping into the store categories. The plan assumed a
@@ -176,9 +184,9 @@ shows why.
 #| label: tbl-alloc
 #| tbl-cap: "City share of the county under each allocator, with the population share for reference."
 tibble(
-  Allocator = c("LODES workplace employment (business, utilities)",
+  Allocator = c("LODES total employment",
                 "  — of which public administration",
-                "  — excluding public administration",
+                "  — excluding public administration (used for business, utilities)",
                 "Economic Census payroll, matched sectors",
                 "Economic Census receipts, store classes (base-weighted)",
                 "DMV resident registrations, model year ≥ 2024",
@@ -203,31 +211,40 @@ tibble(
 ```
 
 The spread across allocators is the whole story of this estimate. Albany city
-holds **`r PC(work_share("3601000","36001"))` of the county's jobs** but only
+holds **`r PC(work_share_ex_pubadmin("3601000","36001"))` of the county's
+non-government jobs** (and `r PC(work_share("3601000","36001"))` of all jobs) but only
 **`r PC(mv_share("3601000","ALBANY"))` of its vehicle registrations** — a
 factor of two and a half, around a population share of `r PC(POP_SHARE)`. Which
 allocator applies to which part of the base determines the answer.
 
 Two results are worth pulling out.
 
-**State government.** `r PC(pubadmin_share("3601000","36001"))` of Albany
-County's public-administration jobs are inside the city, and public
-administration is
+**Government is exempt, so government jobs are left out.**
+`r PC(pubadmin_share("3601000","36001"))` of Albany County's public-administration
+jobs are inside the city, and public administration is
 `r PC(with(lodes_place |> filter(cty=="36001"), sum(CNS20)/sum(C000)))` of all
-county employment. The Capitol complex is the single largest concentrated
-taxable purchaser in the county and it is invisible to the Economic Census. This
-is why LODES rather than Economic Census payroll is the central business
-allocator, and it is the biggest single sensitivity in §7.
+county employment. The business class consists of taxable sales by
+business-serving vendors sourced to the *customer's* location, so its allocator
+has to stand for where purchasing businesses are; New York State and its
+agencies are exempt purchasers (Tax Law §1116(a)(1)) and their jobs generate no
+taxable purchasing of their own. What state workers spend at lunch and after
+work is already in the store classes through the receipts of city restaurants
+and shops. The central business allocator is therefore employment *excluding*
+public administration; total employment is a sensitivity (§7), and the
+calibration cannot distinguish the two because the calibration cities have so
+little government employment.
 
-**Validation 3 passes.** The utilities class is allocated in the generic
-apportionment by workplace employment, giving
-`r PC(work_share("3601000","36001"))`. It can also be *measured*: the Albany
-City School District's 3% utility tax implies a city utility base of
+**Validation 3.** The utilities class is allocated in the generic apportionment
+by the business allocator, giving
+`r PC(work_share_ex_pubadmin("3601000","36001"))`. It can also be *measured*: the
+Albany City School District's 3% utility tax implies a city utility base of
 `r PC(albany_measured_utility_share())` of the county's NAICS 22 + 517 base. The
-allocator and the measurement agree to within
-`r sprintf("%.0f", abs(100*(work_share("3601000","36001")/albany_measured_utility_share()-1)))`%.
-That is the only place in this exercise where an allocator can be checked
-against a direct observation of an Albany city base, and it holds.
+measured share sits between the private-employment allocator and total
+employment (`r PC(work_share("3601000","36001"))`), closer to the former. This is
+the only place in this exercise where an allocator can be checked against a
+direct observation of an Albany city base; the check is reassuring rather than
+exact, and using the measured share directly for that class is in the
+sensitivity table.
 
 **Validation 4.** The DMV registration share
 (`r PC(mv_share("3601000","ALBANY"))`) sits below the ACS income share
@@ -448,10 +465,10 @@ below that median, in the company of
 
 That is where it should be. Albany is a city whose county's retail has moved to
 the Wolf Road corridor and Crossgates — its retail $R$ is only
-`r sprintf("%.2f", 0.2594/POP_SHARE)` — but which contains the State Capitol and
-`r PC(work_share("3601000","36001"))` of county employment. Weak retail pulling
-down, concentrated employment pulling up, landing near parity, is the expected
-shape.
+`r sprintf("%.2f", 0.2594/POP_SHARE)` — but which holds
+`r PC(work_share_ex_pubadmin("3601000","36001"))` of the county's private-sector
+jobs. Weak retail pulling down, concentrated employment pulling up, landing
+below parity, is the expected shape.
 
 ### The preemption comparator
 
@@ -490,14 +507,15 @@ leaves the distribution untouched, does not face this trade-off at all.
 variants <- tribble(
   ~Variant, ~args,
   "Central", list(),
-  "Business allocator: excl. public administration", list(business_allocator = "lodes_ex_pubadmin"),
+  "Business allocator: total employment incl. public administration", list(business_allocator = "lodes"),
   "Business allocator: Econ Census payroll",         list(business_allocator = "ec_payroll"),
   "Delivered goods 0% to residence",                 list(delivered_to_residence = 0),
   "Delivered goods 100% to residence",               list(delivered_to_residence = 1),
   "Residence allocator: households not income",      list(resid_var = "hh"),
   "E-commerce: 15% of prone groups to residence",    list(ecommerce_frac = 0.15),
   "E-commerce: 30% of prone groups to residence",    list(ecommerce_frac = 0.30),
-  "NAICS 4413 sourced to residence",                 list(mv_include_4413 = TRUE))
+  "NAICS 4413 sourced to residence",                 list(mv_include_4413 = TRUE),
+  "Motor vehicles: ACS vehicles available",          list(mv_allocator = "acs_vehicles"))
 
 sens <- variants |>
   rowwise() |>
@@ -528,12 +546,13 @@ same reason: reassigning receipts from a `r PC(0.2594)` allocator to a
 `r PC(resid_share("01000","001","agginc"))` allocator barely changes anything.
 **The unresolvable data problem turned out to be immaterial.**
 
-What does matter is the **business allocator**. Excluding public administration
-cuts the estimate by
-`r sprintf("%.0f", abs(100*(sens$Rev[2]/REV-1)))`%. That is the real uncertainty
-in this exercise, and it is a substantive question rather than a technical one:
-how much taxable purchasing does state government actually do inside the city?
-LODES counts the jobs; nothing public counts the purchases.
+What does matter is the **business allocator**. Counting government jobs raises
+the estimate by `r sprintf("%.0f", 100*(sens$Rev[2]/REV-1))`%. Government is an
+exempt purchaser, so the central case leaves those jobs out; but the calibration
+cities have too little government employment to test the choice, so it rests on
+the conceptual argument rather than on evidence. Using the school district's
+directly measured share for the utilities class instead of the allocator changes
+the estimate by well under 1%.
 
 ### Behavioural response, β
 
@@ -598,7 +617,7 @@ modelling choices in §7.
 |---|---|---|
 | 1 | 4% × county base vs county distributions | Gap `r PC(min(-phi_tab$phi),1)` to `r PC(max(-phi_tab$phi),1)`; passes (plan threshold 10%) |
 | 2 | Economic Census places vs county total | Places cover 99.2% of county retail receipts; residual 0.8% |
-| 3 | Utilities: allocator vs measured school-district base | `r PC(work_share("3601000","36001"))` vs `r PC(albany_measured_utility_share())` — agree within `r sprintf("%.0f", abs(100*(work_share("3601000","36001")/albany_measured_utility_share()-1)))`% |
+| 3 | Utilities: allocator vs measured school-district base | allocator `r PC(work_share_ex_pubadmin("3601000","36001"))`, measured `r PC(albany_measured_utility_share())`, total employment `r PC(work_share("3601000","36001"))` — measured lies between |
 | 4 | Motor vehicles: DMV vs ACS income share | `r PC(mv_share("3601000","ALBANY"))` vs `r PC(resid_share("01000","001","agginc"))`; DMV lower, consistent with lower urban vehicle ownership |
 | 5 | Calibration fit | β = `r sprintf("%.3f", fit$beta)` (se `r sprintf("%.3f", fit$se_beta)`), σ = `r sprintf("%.3f", fit$sigma)` — **exceeds the 0.25 threshold; band widened** |
 | 6 | Sensitivity table | §7; business allocator dominates, everything else < 1% |
@@ -608,12 +627,13 @@ modelling choices in §7.
 
 Honest ranking of what the reader should worry about.
 
-1. **State government purchasing.** `r PC(pubadmin_share("3601000","36001"))` of
-   county public-administration employment is in the city, and dropping public
-   administration from the allocator moves revenue by
-   `r sprintf("%.0f", abs(100*(sens$Rev[2]/REV-1)))`%. No public source measures
-   what state agencies actually buy, where, or how much of it is taxable. This is
-   the largest real uncertainty and it is not reducible with public data.
+1. **The exempt public sector.** `r PC(pubadmin_share("3601000","36001"))` of
+   county public-administration employment is in the city. Government purchases
+   are exempt, so those jobs are excluded from the business allocator; including
+   them would raise revenue by
+   `r sprintf("%.0f", 100*(sens$Rev[2]/REV-1))`%, and the calibration cannot
+   adjudicate. Hospitals and universities, largely exempt too, remain in the
+   count. This is the largest real uncertainty.
 2. **The calibration spread itself.** σ = `r sprintf("%.3f", fit$sigma)` says the
    method misses by a third on cities where the truth is known. Albany may be an
    easier case than Salamanca or Ogdensburg — it is large, and its allocators

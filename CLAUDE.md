@@ -85,16 +85,22 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 - **4a store-based** — allocator: 2022 EC `RCPTOT` at `economic place`, finest
   unsuppressed NAICS level; fall back to `PAYANN`, then ZBP payroll; record the
   fallback per group.
-- **4b motor vehicles (441)** — sourced to purchaser residence; allocator: DMV
-  registrations aggregated by ZIP/county, ZIP->place via the 2020 ZCTA-Place
-  relationship file. Never assign whole ZIPs; Albany ZIPs straddle Colonie,
-  Guilderland and Menands.
+- **4b motor vehicles (4411, 4412, and 9261)** — sourced to purchaser residence
+  (Tax Law s.1214; Pub 838; Form DTF-802); allocator: DMV registrations by
+  county x ZIP, split ZIP->place by 2020 block population (block->place from the
+  Block Assignment Files, block->ZCTA from the relationship file). 4413 parts and
+  tires stay store-based. 9261 is included because its $8.5B statewide is
+  distributed like population/car ownership -- DMV-collected tax on private
+  vehicle sales, not state-agency vendor activity.
 - **4c delivered-to-residence** — nonstore/e-commerce plus the delivered half of
   furniture/appliance/building-material groups; allocator: ACS B19025 aggregate
   household income share (central), B11001 household share (sensitivity).
-- **4d business purchases and use tax** — allocator: LODES WAC 2022 workplace
-  employment share, block->place via `stplc`; ZBP payroll share as alternative.
-  Keep public administration in numerator and denominator and flag it.
+- **4d business purchases and use tax** — taxable sales of business-serving
+  vendors sourced to the customer's location. Allocator: LODES WAC 2023
+  workplace employment share **excluding public administration** (governments
+  are exempt purchasers, Tax Law s.1116(a)(1)); total employment and EC payroll
+  as sensitivities. The plan's original "state government is a large taxable
+  purchaser" premise was wrong and was corrected 2026-09-08.
 - **4e utilities (22 **and** 517 — TSB-M-90(6)S confirms the school district tax
   covers telecom)** — allocated by workplace employment in the generic
   apportionment so the calibration can run on every city; the ACSD measurement
@@ -103,18 +109,12 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 
 ## Phase 3 headline
 
-Revenue approximately **$13.5 M/year**, 68% band $9.4-19.3 M, 90% band
-$7.5-24.3 M. B_c calibrated = $2.68 B, implied R = 0.94. Calibration slope
-1.023 (se 0.114) but sigma = 0.358 in logs, above the 0.25 tripwire, so the band
-is deliberately wide. Largest real uncertainty is state-government purchasing:
-87.6% of county public-administration jobs are in the city and dropping public
-administration from the business allocator moves revenue by about 9%.
-
-## Conventions
-
-- Paths via `here::here()`. Never `setwd()`.
-- Sales tax year runs March-February; state fiscal year April-March. Keep the two
-  straight and label every table with which one it uses.
-- Write intermediates to `data/processed/` as `.rds` or `.csv`; qmd files read
-  processed data and do not themselves hit the network except to verify that
-  cited URLs resolve.
+Revenue approximately **$12.2 M/year** (central allocator: employment excluding
+public administration; 9261 in the motor-vehicle class), 68% band $8.4-17.7 M,
+90% band $6.6-22.5 M; upper case $13.4 M with government jobs counted;
+reasonable planning range $10-15 M, budget figure $12 M. B_c calibrated =
+$2.42 B, implied R = 0.85. Calibration slope 1.02 but sigma = 0.37 in logs,
+above the 0.25 tripwire, so the band is deliberately wide. The 17 calibration
+cities have too little government employment to distinguish the two business
+allocators, so the choice rests on the exemption argument. See
+docs/albany-halfpct-memo.md.

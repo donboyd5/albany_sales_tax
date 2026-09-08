@@ -77,6 +77,18 @@ across `4551` Department Stores, `4552` Warehouse Clubs/Supercenters, `4599`
 Other Miscellaneous Retailers, `4581` Clothing, and others, with no published
 split. This changes the plan — see the Phase 1 report.
 
+### NAICS 9261 is not what it looks like
+
+`9261 Administration of Economic Programs` carries $139 M in Albany County and
+**$8.5 B statewide** (the NY STATE row equals the sum of counties). Albany
+County's share of the statewide figure is 1.6% — exactly its population share —
+and the county distribution tracks car ownership (Suffolk 9.5%, Westchester
+8.5%, NYC 32%). 9261 is the NAICS group of motor-vehicle departments; the figure
+has the signature of tax collected by DMV at registration on private-party
+vehicle sales, which is residence-sourced. It is classified with the
+motor-vehicle class, not the business class. Inferred from the pattern, not
+documented.
+
 ### Albany County base (all NAICS groups, $ billions)
 
 | sales tax year | base | 4% of base |

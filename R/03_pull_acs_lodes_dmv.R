@@ -58,6 +58,23 @@ message("03_pull_acs_lodes_dmv.R: ", nrow(pop_place_pl), " places / ",
         nrow(pop_county_pl), " counties (PL 2020); ",
         nrow(acs_place), " places / ", nrow(acs_county), " counties (ACS ", ACS_YEAR, ").")
 
+## ACS aggregate vehicles available (B25046_001E): a residence-based vehicle
+## measure with exact place geography and no ZIP splitting, used to check the
+## DMV allocator. It is a stock of all vehicles rather than a flow of recent
+## purchases.
+acs_vehicles <- cache_pull(
+  sprintf("census_acs5_%s_vehicles_ny.csv", ACS_YEAR), ACS_URL,
+  function() {
+    bind_rows(
+      census_get(paste0(ACS_YEAR, "/acs/acs5"),
+                 list(get = "NAME,B25046_001E", "for" = "place:*", "in" = "state:36")) |>
+        mutate(level = "place", geo = place),
+      census_get(paste0(ACS_YEAR, "/acs/acs5"),
+                 list(get = "NAME,B25046_001E", "for" = "county:*", "in" = "state:36")) |>
+        mutate(level = "county", geo = county)) |>
+      select(level, geo, NAME, B25046_001E)
+  }) |> mutate(vehicles = as.numeric(B25046_001E))
+
 ## --- LEHD LODES WAC (§4d business-purchase allocator) ---------------------
 ## Workplace employment by block, aggregated to place through the LODES
 ## crosswalk's `stplc` field. lehdr 1.2.0 cannot aggregate to place (agg_geo

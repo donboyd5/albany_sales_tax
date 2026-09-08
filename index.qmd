@@ -1,6 +1,7 @@
 ---
 title: "Revenue from a 0.5% City of Albany add-on sales tax"
 toc: false
+number-sections: false
 ---
 
 ```{r}
@@ -25,7 +26,7 @@ distributions.
 **About \$`r sprintf("%.1f", rev(est$B_c_central))` million a year**, with a
 68% range of \$`r sprintf("%.1f", rev(est$lo68))`–`r sprintf("%.1f", rev(est$hi68))` million
 and a 90% range of \$`r sprintf("%.1f", rev(est$lo90))`–`r sprintf("%.1f", rev(est$hi90))` million,
-at 2022–2025 activity levels. A reasonable planning range is \$11–17 million.
+at 2022–2025 activity levels. A reasonable planning range is \$10–15 million.
 :::
 
 ## Documents

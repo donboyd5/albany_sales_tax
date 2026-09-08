@@ -26,8 +26,16 @@ ANALYSIS_FYS <- 2023:2025
 ##                    generic apportionment so the calibration can run
 ##                    everywhere.
 ##   motor_vehicle    4411 Automobile Dealers and 4412 Other Motor Vehicle
-##                    Dealers. Tax Law s.1214 sources sales of vehicles
-##                    required to be registered to the purchaser's residence.
+##                    Dealers, plus 9261 Administration of Economic Programs.
+##                    Tax Law s.1214 sources sales of vehicles required to be
+##                    registered to the purchaser's residence (Pub 838). 9261
+##                    is the NAICS group of motor-vehicle departments; its
+##                    $8.5B of statewide "taxable sales" is spread across
+##                    counties in proportion to population and car ownership
+##                    (Albany County's share equals its population share), which
+##                    is the signature of tax collected by DMV at registration
+##                    on private-party vehicle sales -- residence-sourced -- not
+##                    of state agencies selling taxable goods in Albany.
 ##                    4413 (parts, accessories, tires) is ordinary
 ##                    over-the-counter retail and stays store-based; it is
 ##                    small ($65M of a $9.1B base) and is tested in the
@@ -43,12 +51,18 @@ ANALYSIS_FYS <- 2023:2025
 ##                    information other than telecom, finance, real estate
 ##                    other than rental, professional, administrative,
 ##                    education, health, other services, transportation,
-##                    agriculture, mining and public administration.
+##                    agriculture, mining and public administration. These are
+##                    the taxable sales of business-serving vendors (and their
+##                    use tax), sourced to where the customer is, so the
+##                    allocator is where private economic activity is.
+##                    Government purchases are EXEMPT (Tax Law s.1116(a)(1)),
+##                    so public-administration jobs are excluded from the
+##                    central allocator; total employment is a sensitivity.
 naics_class <- function(g) {
   s2 <- substr(g, 1, 2); s3 <- substr(g, 1, 3)
   dplyr::case_when(
     s2 == "22" | s3 == "517"                    ~ "utilities",
-    g %in% c("4411", "4412")                    ~ "motor_vehicle",
+    g %in% c("4411", "4412", "9261")            ~ "motor_vehicle",
     g %in% c("4441", "4442", "4491", "4492")    ~ "delivered_split",
     s3 %in% c("441","444","445","449","455",
               "456","457","458","459")          ~ "store",
@@ -59,11 +73,11 @@ naics_class <- function(g) {
 }
 
 CLASS_RATIONALE <- c(
-  utilities = "NAICS 22 and 517. The Albany City School District's 3% tax covers both utilities and telecommunications (TSB-M-90(6)S), giving a directly measured city base; allocated by workplace employment in the generic apportionment so the same method runs for every calibration city.",
-  motor_vehicle = "Sales of vehicles required to be registered are sourced to the purchaser's residence, not the dealer's location (Tax Law s.1214), so dealer location carries no information. Allocated by resident registrations.",
+  utilities = "NAICS 22 and 517. The Albany City School District's 3% tax covers both utilities and telecommunications (TSB-M-90(6)S), giving a directly measured city base; allocated by the business allocator (private workplace employment) in the generic apportionment so the same method runs for every calibration city, with the measured value as a check.",
+  motor_vehicle = "Sales of vehicles required to be registered are sourced to the purchaser's residence, not the dealer's location (Tax Law s.1214; Publication 838), so dealer location carries no information. Allocated by resident registrations. NAICS 9261 is included because its statewide taxable sales ($8.5B) are distributed across counties like population and car ownership, consistent with tax collected by DMV at registration on private-party vehicle sales rather than with state-agency vendor activity.",
   delivered_split = "Predominantly delivered goods. Establishment receipts overstate the selling jurisdiction because delivery is destination-sourced, so the group is split 50/50 between the store allocator and the residence allocator.",
   store = "Over-the-counter sales sourced where the sale occurs, so establishment receipts are the natural allocator and origin is approximately destination.",
-  business = "Purchases by businesses and governments, and purchases subject to use tax. Consumed where the establishment operates, so workplace employment is the allocator. State government is a large taxable purchaser concentrated in the city and is absent from the Economic Census, so public administration is retained in both numerator and denominator."
+  business = "Taxable sales of business-serving vendors (wholesale, contractors, information, professional and administrative services, etc.) and purchases subject to use tax, sourced to the customer's location. Allocated by where private economic activity is: workplace employment excluding public administration, since government purchases are exempt under Tax Law s.1116(a)(1). Total employment and Economic Census payroll are sensitivities."
 )
 
 CLASS_SOURCE <- c(
@@ -176,6 +190,15 @@ mv_share <- function(place_fips, dmv_county) {
   sum(d$n * d$w) / sum(d$n)
 }
 
+## Alternative motor-vehicle allocator: ACS aggregate vehicles available, a
+## stock measure with exact place geography (no ZIP splitting).
+acs_vehicle_share <- function(place_fips5, county_fips3) {
+  p <- acs_vehicles$vehicles[acs_vehicles$level == "place"  & acs_vehicles$geo == place_fips5]
+  k <- acs_vehicles$vehicles[acs_vehicles$level == "county" & acs_vehicles$geo == county_fips3]
+  if (length(p) != 1 || length(k) != 1 || is.na(k) || k == 0) return(NA_real_)
+  p / k
+}
+
 ## Directly measured utility share, Albany only: ACSD collections / 0.03 over
 ## county NAICS 22 + 517 taxable sales.
 albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
@@ -202,11 +225,14 @@ albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
 ##   county_fips5   e.g. "36001"
 ##   dtf_juris      e.g. "ALBANY"
 ##   dmv_county     e.g. "ALBANY"
+BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll")
+
 apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
                            delivered_to_residence = 0.5,
-                           resid_var = "agginc") {
-
+                           resid_var = "agginc",
+                           business_allocator = BUSINESS_ALLOCATORS) {
+  business_allocator <- match.arg(business_allocator)
   county_fips3 <- substr(county_fips5, 3, 5)
   place_fips5  <- substr(place_fips, 3, 7)
   cw <- read_naics_crosswalk()
@@ -218,7 +244,10 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
     filter(!is.na(B_kg)) |>
     left_join(cw, by = "naics_industry_group")
 
-  a_work  <- work_share(place_fips, county_fips5)
+  a_work  <- switch(business_allocator,
+    lodes_ex_pubadmin = work_share_ex_pubadmin(place_fips, county_fips5),
+    lodes             = work_share(place_fips, county_fips5),
+    ec_payroll        = ec_payroll_share(ec_place_name, county_fips3))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
   a_mv    <- mv_share(place_fips, dmv_county)
 
@@ -248,7 +277,10 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                                                delivered_to_residence * a_resid,
         TRUE                                ~ a_store_used),
       allocator = case_when(
-        sourcing_class %in% c("utilities", "business") ~ "LODES workplace employment",
+        sourcing_class %in% c("utilities", "business") ~ c(
+          lodes_ex_pubadmin = "LODES employment excl. public admin",
+          lodes = "LODES total employment",
+          ec_payroll = "EC payroll")[business_allocator],
         sourcing_class == "motor_vehicle"              ~ "DMV resident registrations",
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
@@ -309,26 +341,24 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
                               dmv_county, fys = ANALYSIS_FYS,
                               delivered_to_residence = 0.5,
                               resid_var = "agginc",
-                              business_allocator = c("lodes", "lodes_ex_pubadmin", "ec_payroll"),
+                              business_allocator = BUSINESS_ALLOCATORS,
                               ecommerce_frac = 0,
-                              mv_include_4413 = FALSE) {
+                              mv_include_4413 = FALSE,
+                              mv_allocator = c("dmv", "acs_vehicles")) {
   business_allocator <- match.arg(business_allocator)
+  mv_allocator <- match.arg(mv_allocator)
   d <- apportion_city(ec_place_name, place_fips, county_fips5, dtf_juris, dmv_county,
                       fys = fys, delivered_to_residence = delivered_to_residence,
-                      resid_var = resid_var)
+                      resid_var = resid_var, business_allocator = business_allocator)
   county_fips3 <- substr(county_fips5, 3, 5)
   place_fips5  <- substr(place_fips, 3, 7)
-
-  a_bus <- switch(business_allocator,
-    lodes             = work_share(place_fips, county_fips5),
-    lodes_ex_pubadmin = work_share_ex_pubadmin(place_fips, county_fips5),
-    ec_payroll        = ec_payroll_share(ec_place_name, county_fips3))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
   a_mv    <- mv_share(place_fips, dmv_county)
 
-  d <- d |>
-    mutate(a_g = ifelse(sourcing_class %in% c("business", "utilities"), a_bus, a_g))
-
+  if (mv_allocator == "acs_vehicles") {
+    a_mv <- acs_vehicle_share(place_fips5, county_fips3)
+    d <- d |> mutate(a_g = ifelse(sourcing_class == "motor_vehicle", a_mv, a_g))
+  }
   if (mv_include_4413) {
     d <- d |> mutate(a_g = ifelse(naics_industry_group == "4413", a_mv, a_g))
   }

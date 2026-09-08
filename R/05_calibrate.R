@@ -17,11 +17,21 @@ ROUTE_B_FYS <- 2023:2025
 
 ## --- inputs ---------------------------------------------------------------
 
-read_crosswalk_cities <- function() {
-  read_csv(file.path(PATHS$crosswalk, "preempt_cities.csv"),
-           col_types = cols(.default = col_character(),
-                            r_k = col_double(), r_c = col_double(),
-                            p_c = col_double(), include = col_logical()))
+## `rate_source = "pub718a_col"` swaps in the rate printed in Publication
+## 718-A's percentage column for the six cities where it conflicts with the
+## verified rate (see docs/data-layouts.md 3b). Used only as a sensitivity.
+read_crosswalk_cities <- function(rate_source = c("verified", "pub718a_col")) {
+  rate_source <- match.arg(rate_source)
+  cw <- read_csv(file.path(PATHS$crosswalk, "preempt_cities.csv"),
+                 col_types = cols(.default = col_character(),
+                                  r_k = col_double(), r_c = col_double(),
+                                  p_c = col_double(), r_c_pub718a_col = col_double(),
+                                  include = col_logical()))
+  if (rate_source == "pub718a_col") {
+    cw <- cw |> mutate(p_c = ifelse(is.na(p_c), NA, p_c + (r_c_pub718a_col - r_c)),
+                       r_c = r_c_pub718a_col)
+  }
+  cw
 }
 
 read_distributions <- function() {
@@ -64,8 +74,8 @@ read_pop <- function() {
 ##
 ## B_k is taken directly from ny73-2j3u, which Phase 1 established covers the
 ## whole county including its preempting cities.
-build_route_b <- function(fys = ROUTE_B_FYS) {
-  cw   <- read_crosswalk_cities()
+build_route_b <- function(fys = ROUTE_B_FYS, rate_source = "verified") {
+  cw   <- read_crosswalk_cities(rate_source)
   dist <- read_distributions()
   base <- read_county_base()
   pop  <- read_pop()
@@ -184,8 +194,8 @@ if (sys.nframe() == 0L) {   # only when run via Rscript, not when sourced
 
 ## Run the identical apportionment on every calibration city and pair the
 ## prediction with the observed base from the reduced form.
-build_calibration <- function(fys = ANALYSIS_FYS, ...) {
-  obs <- summarise_route_b(build_route_b(fys))
+build_calibration <- function(fys = ANALYSIS_FYS, rate_source = "verified", ...) {
+  obs <- summarise_route_b(build_route_b(fys, rate_source))
   cw  <- read_crosswalk_cities() |> filter(include)
 
   pred <- cw |>
@@ -251,4 +261,27 @@ albany_phi <- function(fys = ANALYSIS_FYS) {
   d <- read_distributions() |>
     filter(taxing_jurisdiction == "Albany County Sales and Use Tax") |> select(fy, C = amt)
   inner_join(b, d, by = "fy") |> mutate(phi = 1 - C / (0.04 * B))
+}
+
+## Calibration under an alternative modelling choice: re-run the apportionment
+## variant on every calibration city AND on Albany, refit, and apply. This is
+## the consistent way to test an allocator -- the sensitivity rows that apply
+## the central fit to a variant prediction understate the effect of a choice
+## that also changes the calibration cities' predictions.
+build_calibration_variant <- function(..., fys = ANALYSIS_FYS, rate_source = "verified") {
+  obs <- summarise_route_b(build_route_b(fys, rate_source))
+  cw  <- read_crosswalk_cities(rate_source) |> filter(include)
+  pred <- cw |>
+    transmute(city, county,
+              ec_name = paste0(city, " city, New York"), place_fips = substr(place_fips, 1, 7),
+              county5 = paste0("36", substr(county_fips, 3, 5)),
+              dtf_juris = dtf_jurisdiction, dmv_county = dtf_jurisdiction) |>
+    rowwise() |>
+    mutate(B_c_pred = apportion_variant(ec_name, place_fips, county5, dtf_juris, dmv_county,
+                                        fys = fys, ...)) |>
+    ungroup()
+  obs |> select(city, county, B_c_obs = B_c, B_k, P_c, P_k, s, pop_share, R) |>
+    left_join(pred |> select(city, B_c_pred), by = "city") |>
+    mutate(ratio = B_c_obs / B_c_pred, log_obs = log(B_c_obs), log_pred = log(B_c_pred),
+           westchester = county == "Westchester")
 }

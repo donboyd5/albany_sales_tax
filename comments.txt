@@ -1,0 +1,12 @@
+comments
+- yonkers discussion does not explain why non-yonkers westchester rate is 8-3/8% and yonkers is 8-7/8%; must be the mta?
+- additional goal should be to compare to existing pop-based share of county tax (comparison done but goal not stated)
+- why do the section headers have a grey number and then a bold number that is 1 lower (e.g., 5 4. Data)
+- data needs a fuller explanation of source
+- what does this mean "Publication 718-A’s percentage column is not the imposed city rate for six cities; its own footnotes, Publication 718’s combined rates and OSC’s Figure 2 agree with each other against it." are you saying Pub 718-A is wrong?
+- are we sure motor vehicle sales are sourced to city of residence? you have registrations by county and zip not city, so we don't know what they are?
+- what is "R ratio"
+- we need an overview chapter that explains simply what the methodology is so that a policy analyst who is not a sales tax expert and not an economist understands the method. should fit on one page, with bullets. should mention data sources.
+
+
+- 

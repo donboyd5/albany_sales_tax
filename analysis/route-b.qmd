@@ -378,9 +378,10 @@ of `r fmt_pct(alb_pop_share)`.
 That single point sits near the top of the distribution — but it should not be
 read as an estimate of Albany's overall $R$, for two reasons. Utilities and
 telecommunications are the *most* city-concentrated part of any tax base,
-because commercial and institutional electricity, gas and telecom load
-concentrates where the office buildings are, and in Albany's case that includes
-the State Capitol complex. And the measurement is not clean: TSB-M-90(6)S
+because commercial electricity, gas and telecom load concentrates where the
+office buildings are. (State agencies' own utility purchases are exempt and
+appear in neither figure, so this is taxable commercial and residential load.)
+And the measurement is not clean: TSB-M-90(6)S
 establishes that residential gas, electricity and steam are exempt from the
 state tax and taxed by the county at a reduced 1% while the school district
 taxes them at the full 3%, so numerator and denominator cover somewhat
@@ -394,8 +395,8 @@ $R \approx `r sprintf("%.2f", R_retail)`$; the utility part is measured at
 $R \approx `r sprintf("%.2f", R_util)`$. Albany's overall $R$ is a
 base-weighted mix of those and of the business-purchase and delivered-goods
 components that Phase 3 has yet to allocate — the first of which, driven by
-state government and downtown office employment, should be strongly
-city-concentrated, and the second of which, driven by residence, should not be
+downtown private-sector employment (government purchases being exempt), should
+be city-concentrated, and the second of which, driven by residence, should not be
 (the city's aggregate household income share is only
 `r fmt_pct(inc_share)`).
 
