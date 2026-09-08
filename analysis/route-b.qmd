@@ -2,6 +2,7 @@
 title: "Route B: the city share of the county sales tax base in New York's preempting cities"
 subtitle: "A reduced-form benchmark for a City of Albany sales tax"
 date: today
+number-sections: false
 ---
 
 ```{r setup}
@@ -142,12 +143,16 @@ The rates above are therefore the OSC / footnote / Pub 718 set. The 718-A
 column is retained in `data/crosswalk/preempt_cities.csv` as `r_c_pub718a_col`
 so the alternative can be recomputed.
 
-**Ogdensburg is the one weak row.** It repealed its tax in 2000 and re-imposed
-it effective 1 March 2022, so it is absent from OSC's January 2020 table and its
-rate rests on the footnote reasoning alone. If it is 3.0 rather than 1.5, its
-$R$ falls from `r sprintf("%.2f", route_b$R[route_b$city=="Ogdensburg"])` to
-about half that. It is one small observation and changes no conclusion here, but
-it is the row to confirm with DTF.
+**Ogdensburg is the one city where the 718-A column was right.** It repealed
+its tax in 2000 and re-imposed it effective 1 March 2022, so it is absent from
+OSC's January 2020 table. Its city code imposes 3% under Tax Law §1210(a),
+preempting the county's base 3%; St. Lawrence keeps only its non-preemptable
+additional 1% (§1224), so county 1% + city 3% matches Pub 718's combined 8% and
+DTF notice ST-22-1. An earlier draft of this analysis inferred 1.5% from footnote
+`a` by analogy and was wrong; at 3% its $R$ is
+`r sprintf("%.2f", route_b$R[route_b$city=="Ogdensburg"])`, the lowest in the
+set. Its code is also brand new, and its implied share is still rising year on
+year — see the main report's §5A.
 :::
 
 **Yonkers is the case that matters most.** Its combined rate is 8⅞% inside the

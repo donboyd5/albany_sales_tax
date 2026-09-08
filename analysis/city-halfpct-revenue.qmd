@@ -2,6 +2,7 @@
 title: "Revenue from a 0.5% City of Albany add-on sales tax"
 subtitle: "Apportionment of the county base, calibrated against New York's preempting cities"
 date: today
+number-sections: false
 ---
 
 ```{r setup}
@@ -245,11 +246,19 @@ by the business allocator, giving
 Albany City School District's 3% utility tax implies a city utility base of
 `r PC(albany_measured_utility_share())` of the county's NAICS 22 + 517 base. The
 measured share sits between the private-employment allocator and total
-employment (`r PC(work_share("3601000","36001"))`), closer to the former. This is
-the only place in this exercise where an allocator can be checked against a
-direct observation of an Albany city base; the check is reassuring rather than
-exact, and using the measured share directly for that class is in the
-sensitivity table.
+employment (`r PC(work_share("3601000","36001"))`) — and closer to total
+employment, `r sprintf("%.1f", 100*abs(albany_measured_utility_share()-work_share("3601000","36001")))`
+points from it against
+`r sprintf("%.1f", 100*abs(albany_measured_utility_share()-work_share_ex_pubadmin("3601000","36001")))`
+points from the allocator used. That is not evidence for counting government
+jobs: the State's own utility purchases are exempt and appear in neither the
+school-district collections nor the county's taxable sales, so the 48.9% is
+*taxable* commercial and residential load, which concentrates where the office
+buildings are rather than where the government payroll is. It does say the
+business-purchase share of the city may sit a little above the private-employment
+allocator, and it is the only place in this exercise where an allocator can be
+checked against a direct observation of an Albany city base. Using the measured
+share directly for that class is in the sensitivity table.
 
 **Validation 4.** The DMV registration share
 (`r PC(mv_share("3601000","ALBANY"))`) sits below the ACS income share
@@ -303,8 +312,8 @@ appo |>
 
 Of the `r sum(appo$sourcing_class %in% c("store","delivered_split"))` groups
 needing an Economic Census share,
-`r sum(grepl("4-digit", appo$store_method))` resolved at the 4-digit level and
-`r sum(grepl("3-digit", appo$store_method))` fell back to 3-digit. None needed
+`r sum(grepl("4-digit", appo$store_method[appo$sourcing_class %in% c("store","delivered_split")]))` resolved at the 4-digit level and
+`r sum(grepl("3-digit", appo$store_method[appo$sourcing_class %in% c("store","delivered_split")]))` fell back to 3-digit. None needed
 the sector level and none went unresolved.
 
 ## 5. Calibration
@@ -347,7 +356,8 @@ f_ns  <- { d <- c_ns; m <- lm(log_obs ~ log_pred, d)
            list(n = nrow(d), n_clusters = n_distinct(d$county), alpha = coef(m)[1],
                 se_alpha = ct[1,2], beta = coef(m)[2], se_beta = ct[2,2],
                 sigma = summary(m)$sigma, r2 = summary(m)$r.squared) }
-bind_rows(mk("All 17 cities (used)", fit),
+bind_rows(mk("All 17 cities", fit),
+          mk("Excluding Salamanca and Ogdensburg (used)", fit_pref),
           mk("Excluding Westchester", fit_nw),
           mk("Excluding Salamanca", f_ns)) |>
   gt() |>
@@ -401,11 +411,13 @@ two, and only those two, brings it to
 That is the calibration used; the all-seventeen figure is carried alongside it
 throughout. The memo's §5A works through the reasons city by city.
 
-In plain terms: on the cities where the answer is known, this method is
-routinely wrong by a third in either direction. The 68% band below is
-`r sprintf("%.0f", 100*(exp(fit$sigma)-1))`% up and
-`r sprintf("%.0f", 100*(1-exp(-fit$sigma)))`% down, and the 90% band is roughly a
-factor of `r sprintf("%.1f", exp(1.645*fit$sigma))` from bottom to top. Any
+In plain terms: on the cities where the answer is known, a one-σ miss is
+`r sprintf("%.0f", 100*(exp(fit_pref$sigma)-1))`% up or
+`r sprintf("%.0f", 100*(1-exp(-fit_pref$sigma)))`% down on the preferred fit, and
+`r sprintf("%.0f", 100*(exp(fit$sigma)-1))`% up or
+`r sprintf("%.0f", 100*(1-exp(-fit$sigma)))`% down across all seventeen. The band
+is multiplicative, so up and down are not equal. The 90% band spans a factor of
+`r sprintf("%.1f", exp(2*1.645*fit_pref$sigma))` on the preferred fit. Any
 narrower presentation of this estimate would be false precision.
 :::
 
@@ -581,8 +593,10 @@ immobile. Only the store classes, about
 of the base, are plausibly mobile at all, and only near the city line.
 
 $\beta = 1.0$ is carried as central. A low case of
-$\beta = `r sprintf("%.2f", BETA_LO)`$ — implying an elasticity of taxable sales
-with respect to the tax-inclusive price of about 0.5 — gives
+$\beta = `r sprintf("%.2f", BETA_LO)`$ — a 3% loss of base against a 6.25%
+increase in the tax, i.e. an elasticity of about 0.5 with respect to the *tax
+rate*; with respect to the tax-inclusive price, which rises only 0.46%, it is
+about 6.5, which is why this is a deliberately aggressive low case — gives
 \$`r M(rev_of(est$B_c_central, BETA_LO))` M, a
 `r sprintf("%.1f", 100*(1-BETA_LO))`% reduction. This is small relative to the
 calibration band and does not change any conclusion.
@@ -635,7 +649,7 @@ modelling choices in §7.
 | 2 | Economic Census places vs county total | Places cover 99.2% of county retail receipts; residual 0.8% |
 | 3 | Utilities: allocator vs measured school-district base | allocator `r PC(work_share_ex_pubadmin("3601000","36001"))`, measured `r PC(albany_measured_utility_share())`, total employment `r PC(work_share("3601000","36001"))` — measured lies between |
 | 4 | Motor vehicles: DMV vs ACS income share | `r PC(mv_share("3601000","ALBANY"))` vs `r PC(resid_share("01000","001","agginc"))`; DMV lower, consistent with lower urban vehicle ownership |
-| 5 | Calibration fit | β = `r sprintf("%.3f", fit$beta)` (se `r sprintf("%.3f", fit$se_beta)`), σ = `r sprintf("%.3f", fit$sigma)` — **exceeds the 0.25 threshold; band widened** |
+| 5 | Calibration fit | Preferred (15 cities): β = `r sprintf("%.3f", fit_pref$beta)` (se `r sprintf("%.3f", fit_pref$se_beta)`), σ = `r sprintf("%.3f", fit_pref$sigma)`. All 17: σ = `r sprintf("%.3f", fit$sigma)`, **above the 0.25 threshold the plan set for the full sample** |
 | 6 | Sensitivity table | §7; business allocator dominates, everything else < 1% |
 | 7 | Albany's R against the Route B distribution | `r sprintf("%.2f", R_alb)` against a range of `r sprintf("%.2f–%.2f", min(route_b$R), max(route_b$R))`, median `r sprintf("%.2f", median(route_b$R))` — inside |
 

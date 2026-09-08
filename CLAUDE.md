@@ -104,8 +104,11 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 - **4e utilities (22 **and** 517 — TSB-M-90(6)S confirms the school district tax
   covers telecom)** — allocated by workplace employment in the generic
   apportionment so the calibration can run on every city; the ACSD measurement
-  (city base = collections / 0.03) is used as validation 3, and the two agree to
-  within about 8%.
+  (city base = collections / 0.03) is used as validation 3: the measured share
+  (48.9%) lies between the private-employment allocator (42.8%) and total
+  employment (52.9%), closer to the latter. State utility purchases are exempt
+  and appear in neither figure, so this is taxable commercial load, not
+  evidence for counting government jobs.
 
 ## Phase 3 headline
 

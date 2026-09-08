@@ -225,7 +225,7 @@ Three independent sources agree against that column:
 | Mount Vernon | 2.5 | **2.5** | 2.5 | all sources |
 | New Rochelle | 3.0 | **2.5** | 2.5 | OSC + footnote m + Pub 718 |
 | Norwich | 3.0 | **1.5** | 1.5 | OSC + footnote a + Pub 718 |
-| Ogdensburg | 3.0 | **1.5** | 1.5 | footnote a + Pub 718 only — **weakest row** |
+| Ogdensburg | 3.0 | **3.0** | 3.0 | city code (§1210(a)) + §1224 + DTF ST-22-1 — **corrected 2026-09-08**, see below |
 | Olean | 1.5 | **1.5** | 1.5 | all sources |
 | Oneida | 2.0 | **2.0** | 2.0 | all sources |
 | Oswego | 4.0 | **4.0** | — | excluded, see §6 |
@@ -241,10 +241,16 @@ Yonkers. The prompt's `p_c default 1.5` is still wrong: **`p_c = r_c` for every
 city but Yonkers**, forced by Pub 718 publishing the same combined rate inside
 and outside each city.
 
-**Ogdensburg is the one weakly supported row.** It repealed in 2000 and
-re-imposed effective 1 March 2022, so it is absent from OSC's January 2020
-table; its 1.5% rests on footnote `a` plus Pub 718 alone. If it is really 3.0,
-its base halves and its R falls from 0.71 to 0.35. Worth confirming with DTF.
+**Ogdensburg — corrected.** It repealed in 2000 and re-imposed effective
+1 March 2022, so it is absent from OSC's January 2020 table. An earlier reading
+inferred 1.5% from footnote `a` by analogy with Norwich; that was wrong. The city
+code imposes **3%** under Tax Law §1210(a); the city preempted the county's base
+3% within the city, and St. Lawrence retains only its additional 1%, which is not
+subject to preemption under §1224. County-in-city 1% + city 3% = 4% local,
+matching Pub 718's combined 8% and DTF notice ST-22-1 ("the rates to charge in
+the county and city remain the same"). Its base is therefore \$71 M, not
+\$142 M, and its R is 0.35. For this one city Pub 718-A's percentage column
+was right.
 
 **Yonkers.** Pub 718 gives 8⅞% inside the city against 8⅜% outside — a
 **+0.5 point differential**, the only one in the state, and the only published

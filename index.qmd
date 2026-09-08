@@ -27,7 +27,7 @@ distributions.
 **About \$`r sprintf("%.1f", rev(est$B_c_central))` million a year**, with a
 68% range of \$`r sprintf("%.1f", rev(est$lo68))`–`r sprintf("%.1f", rev(est$hi68))` million
 and a 90% range of \$`r sprintf("%.1f", rev(est$lo90))`–`r sprintf("%.1f", rev(est$hi90))` million,
-at 2022–2025 activity levels. A reasonable planning range is \$9–14 million.
+at 2022–2025 activity levels. The memo gives a planning range built from every specification tried.
 :::
 
 ## Documents

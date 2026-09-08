@@ -332,3 +332,53 @@ county_base_per_capita <- function(fys = ANALYSIS_FYS) {
     group_by(jurisdiction, fy) |> summarise(B = sum(B, na.rm = TRUE), .groups = "drop") |>
     group_by(jurisdiction) |> summarise(B = mean(B), .groups = "drop")
 }
+
+## --- section C continued: uncertainty in sigma, leave-one-out, functional form
+
+## Chi-square confidence interval for the residual SD itself. With n-2 degrees
+## of freedom this is wide, and it is the honest statement of how well the
+## band width is known.
+sigma_ci <- function(fit, level = 0.95) {
+  df <- fit$n - 2; s <- fit$sigma
+  c(lo = s * sqrt(df / qchisq(1 - (1 - level) / 2, df)),
+    hi = s * sqrt(df / qchisq((1 - level) / 2, df)))
+}
+
+## Leave-one-out: refit dropping each city in turn. Shows whether the two
+## excluded cities are the only ones whose removal changes sigma materially.
+leave_one_out <- function(calib, B_pred) {
+  purrr::map_dfr(c("(none)", calib$city), function(cc) {
+    d <- if (cc == "(none)") calib else calib |> filter(city != cc)
+    m <- lm(log_obs ~ log_pred, d)
+    tibble(dropped = cc, n = nrow(d), beta = unname(coef(m)[2]),
+           sigma = summary(m)$sigma,
+           B_c = exp(unname(coef(m)[1]) + unname(coef(m)[2]) * log(B_pred)))
+  })
+}
+
+## Exclusion set x functional form. The log-log slope, a slope fixed at one
+## (geometric-mean ratio), and the median ratio, each on both samples.
+calibration_grid <- function(calib, B_pred, exclude = names(CALIB_EXCLUDE)) {
+  sets <- list(`All 17` = calib,
+               `Excluding Salamanca and Ogdensburg` = calib |> filter(!city %in% exclude))
+  purrr::map_dfr(names(sets), function(nm) {
+    d <- sets[[nm]]; m <- lm(log_obs ~ log_pred, d)
+    tibble(Sample = nm, n = nrow(d),
+           `Log-log fit` = exp(unname(coef(m)[1]) + unname(coef(m)[2]) * log(B_pred)),
+           `Slope fixed at 1` = exp(mean(d$log_obs - d$log_pred)) * B_pred,
+           `Median ratio` = median(d$ratio) * B_pred)
+  })
+}
+
+## Ogdensburg's ramp after its code was created: implied share of county base by
+## year, relative to the latest year. n = 1; used only to frame a first-year
+## haircut, not to change the steady-state estimate.
+new_code_ramp <- function() {
+  d <- read_distributions() |>
+    filter(taxing_jurisdiction == "City of Ogdensburg Sales and Use Tax", fy >= 2023)
+  b <- read_county_base() |> filter(jurisdiction == "ST LAWRENCE") |>
+    group_by(fy) |> summarise(B_k = sum(B, na.rm = TRUE), .groups = "drop")
+  r_c <- read_crosswalk_cities()$r_c[read_crosswalk_cities()$city == "Ogdensburg"] / 100
+  d |> inner_join(b, by = "fy") |> mutate(share = (amt / r_c) / B_k) |>
+    arrange(fy) |> mutate(rel_to_latest = share / last(share)) |> select(fy, share, rel_to_latest)
+}

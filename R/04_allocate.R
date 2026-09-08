@@ -225,7 +225,7 @@ albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
 ##   county_fips5   e.g. "36001"
 ##   dtf_juris      e.g. "ALBANY"
 ##   dmv_county     e.g. "ALBANY"
-BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll")
+BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll", "lodes_ex_exempt")
 
 apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
@@ -246,6 +246,7 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
 
   a_work  <- switch(business_allocator,
     lodes_ex_pubadmin = work_share_ex_pubadmin(place_fips, county_fips5),
+    lodes_ex_exempt   = work_share_ex_exempt(place_fips, county_fips5),
     lodes             = work_share(place_fips, county_fips5),
     ec_payroll        = ec_payroll_share(ec_place_name, county_fips3))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
@@ -280,7 +281,8 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
         sourcing_class %in% c("utilities", "business") ~ c(
           lodes_ex_pubadmin = "LODES employment excl. public admin",
           lodes = "LODES total employment",
-          ec_payroll = "EC payroll")[business_allocator],
+          ec_payroll = "EC payroll",
+          lodes_ex_exempt = "LODES employment excl. govt, education, health")[business_allocator],
         sourcing_class == "motor_vehicle"              ~ "DMV resident registrations",
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
@@ -308,6 +310,17 @@ message("04_allocate.R loaded.")
 ## weakest-measured part of the base.
 work_share_ex_pubadmin <- function(place_fips, county_fips5) {
   d <- lodes_place |> filter(cty == county_fips5) |> mutate(priv = C000 - CNS20)
+  if (nrow(d) == 0 || sum(d$priv) <= 0) return(NA_real_)
+  sum(d$priv[d$stplc == place_fips]) / sum(d$priv)
+}
+
+## Bound on the exempt-institution problem: employment excluding public
+## administration AND the education and health-care sectors (CNS15, CNS16),
+## which are dominated by exempt universities and hospitals but also contain
+## taxable private clinics and schools. A bound, not an estimate.
+work_share_ex_exempt <- function(place_fips, county_fips5) {
+  d <- lodes_place |> filter(cty == county_fips5) |>
+    mutate(priv = C000 - CNS20 - CNS15 - CNS16)
   if (nrow(d) == 0 || sum(d$priv) <= 0) return(NA_real_)
   sum(d$priv[d$stplc == place_fips]) / sum(d$priv)
 }

@@ -30,7 +30,16 @@ Rendered HTML is in `_output/`; the published site is
 
 Ranked by (probability wrong) × (effect on the answer).
 
-**a. The two excluded calibration cities.** The headline \$11.1 M uses 15 of 17
+**a. The two excluded calibration cities — and, tangled with them, the functional
+form.** On the 15-city sample the log-log fit gives \$11.1 M but a slope fixed
+at 1 (geometric-mean ratio) gives \$13.1 M; on all 17 the two forms agree
+(\$12.5 M vs \$11.4 M the other way). The log-log slope of 0.88 is carried by
+the four Westchester cities. The leave-one-out table in memo §5A shows only
+Salamanca and Ogdensburg change σ, which supports the exclusion; the grid in
+§9.2 shows the exclusion then makes the functional form matter. Both are
+reported; the planning range is the envelope.
+
+**a′ (original).** The two excluded calibration cities. The headline \$11.1 M uses 15 of 17
 cities; all 17 gives \$12.5 M with a much wider band (σ 0.19 vs 0.45). Salamanca
 and Ogdensburg are dropped for documented reasons (Seneca Nation territory;
 brand-new jurisdiction code plus a border-traffic collapse). The reasons are
@@ -74,6 +83,11 @@ survive.
 | Economic Census read without suppression flags | EC publishes withheld cells as `0` plus a companion `_F` flag; without the flag they look like real zeros | `_F` variables pulled and converted to `NA` |
 | ZIP→place by land area | Understates a dense core badly (ZCTA 12203 is 40% of Albany city by area, 62% by population) | Exact 2020 block-population weights |
 | Agrawal (2015) citation from the project plan | Both the DOI and the title were wrong | `10.1257/pol.20120360`, *The Tax Gradient: Spatial Aspects of Fiscal Competition* |
+| Validation 3 said the measured utility share was "closer to the private-sector allocator" | Arithmetic error: 48.9% is 4.0 points from total employment (52.9%) and 6.1 from the allocator used (42.8%) | Corrected, with the defence made explicitly: State utility purchases are exempt, so the measured share is taxable commercial load, not evidence for counting government jobs |
+| β = 0.97 labelled "an elasticity of about 0.5 with respect to the tax-inclusive price" | 0.5 is the elasticity to the tax *rate*; to the price (+0.46%) it is ≈ 6.5 | Relabelled; the low case is now described as deliberately aggressive |
+| "Off by a third", "wrong by a third in either direction" | Loose, stale after σ changed, and wrong on the upside of a multiplicative band | Computed: +57%/−36% at σ 0.453, +21%/−17% at 0.192 |
+| Three different planning ranges and budget figures across the memo; a hardcoded "$6 million" preemption loss | An edit script chained assertions and wrote the file only at the end; when one pattern failed, every earlier substitution in that script was silently lost. Several sections kept stale hand-typed figures for a full commit | Planning range, budget figure and preemption loss are now computed in the setup chunk; edit scripts write incrementally and report each patch |
+| Route B report rendered with Ogdensburg at 1.5% after the crosswalk said 3.0% | Quarto's `freeze: auto` reuses a document's cached results when *its own source* is unchanged, even if a data file it reads has changed | `_freeze/` is deleted before every full render (`make render` does this) |
 
 ---
 
@@ -125,6 +139,18 @@ fractions.
 
 ---
 
+## 4A. Process failure worth knowing about
+
+Several contradictions a reviewer found on 2026-09-08 — three different
+planning ranges in one document, a stale "$6 million", a §12 first-year ramp
+that was announced in code comments but absent from the text — had one cause.
+Text edits were applied by Python scripts that asserted each search string
+existed and wrote the file only at the end; when one string failed to match,
+the script aborted and every *earlier* substitution in it was lost without any
+message. The fix is procedural: patch helpers now write after every
+substitution and print which labels landed and which missed. If you find a
+number that contradicts the setup chunk, suspect this first.
+
 ## 5. Things tried that did not work — do not redo them
 
 - **Predicting the county effect.** County fixed effects explain 83% of the
@@ -136,6 +162,10 @@ fractions.
   (all |cor| < 0.27 against log ratio). **The county effect is real and
   currently unpredictable.** This is the main reason the band cannot be
   narrowed further with public data.
+- **Quantifying the hospital/university exposure.** *Now done*: LODES CNS15
+  (education) and CNS16 (health) are in `lodes_place`; dropping them with
+  government gives a business share of 35.6% and a bound of about −\$0.6 M
+  (memo §9.1). An earlier draft said this could not be done; it could.
 - **Backing out an implied business-class allocator per city.** Solving for the
   `a_bus` that would reconcile each city's observed base gives *negative* values
   for the worst-predicted cities (Salamanca −0.41, Auburn −0.35). Impossible,
