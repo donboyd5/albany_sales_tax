@@ -10,7 +10,8 @@ library(here)
 source(here("R", "04_allocate.R"))
 ALB <- list("Albany city, New York", "3601000", "36001", "ALBANY", "ALBANY")
 appo <- do.call(apportion_city, ALB)
-fit  <- fit_calibration(build_calibration())
+cal  <- build_calibration()
+fit  <- fit_calibration(cal |> filter(!city %in% names(CALIB_EXCLUDE)))
 est  <- apply_calibration(fit, sum(appo$B_cg, na.rm = TRUE))
 phi  <- mean(albany_phi()$phi)
 rev  <- function(b) 0.005 * b * (1 - phi) / 1e6
@@ -26,7 +27,7 @@ distributions.
 **About \$`r sprintf("%.1f", rev(est$B_c_central))` million a year**, with a
 68% range of \$`r sprintf("%.1f", rev(est$lo68))`–`r sprintf("%.1f", rev(est$hi68))` million
 and a 90% range of \$`r sprintf("%.1f", rev(est$lo90))`–`r sprintf("%.1f", rev(est$hi90))` million,
-at 2022–2025 activity levels. A reasonable planning range is \$10–15 million.
+at 2022–2025 activity levels. A reasonable planning range is \$9–14 million.
 :::
 
 ## Documents

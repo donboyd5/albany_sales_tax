@@ -14,5 +14,5 @@ data/raw/dtf_sales_status_by_year.csv,https://data.ny.gov/Government-Finance/Tax
 data/raw/dtf_taxable_sales_by_naics.csv,https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data,2026-09-07T15:14:49-0400,850600bfac09d2095bd9787f1907c1c5af78c95a32aceafda8a6378bf0905c5d
 data/raw/ec2022_county_sector_ny.csv,https://api.census.gov/data/2022/ecnbasic.html,2026-09-07T16:28:45-0400,52706adc1852ebbf767829f6d067fb70ebb6eddba6e72368beee1112a55261b1
 data/raw/ec2022_place_sector_ny.csv,https://api.census.gov/data/2022/ecnbasic.html,2026-09-07T16:28:41-0400,665c792514ee2c60c0e98043976bb1d71f51b582eaaec4cee9303bd555be46a6
-data/raw/lodes_wac_2023_ny_by_place.csv,https://lehd.ces.census.gov/data/lodes/LODES8/ny/wac/ny_wac_S000_JT00_2023.csv.gz,2026-09-07T16:30:22-0400,e8bdd12681b4b04db4995f8cb0732a94dfaba4ec88b50efa73f6686209b46d53
+data/raw/lodes_wac_2023_ny_by_place.csv,https://lehd.ces.census.gov/data/lodes/LODES8/ny/wac/ny_wac_S000_JT00_2023.csv.gz,2026-09-08T07:11:08-0400,35763a2be3b3bf03ad432811eb7ce75e12abf0114c65ddedaf14eff1849c2514
 data/raw/zcta_place_rel2020.csv,https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_place20_natl.txt,2026-09-07T16:30:23-0400,d7805bd3d66bc18d657d64429ee2fd7f9d31f1be394ad4501990682b98b9d5fa

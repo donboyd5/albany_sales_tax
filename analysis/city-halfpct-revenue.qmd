@@ -23,7 +23,12 @@ B_pred <- sum(appo$B_cg, na.rm = TRUE)
 calib  <- build_calibration()
 fit    <- fit_calibration(calib)
 fit_nw <- fit_calibration(calib, drop_westchester = TRUE)
-est    <- apply_calibration(fit, B_pred)
+## Preferred: excludes the two cities with a verified structural reason that
+## does not transfer to Albany (CALIB_EXCLUDE in R/05_calibrate.R; see the memo).
+cal_pref <- calib |> filter(!city %in% names(CALIB_EXCLUDE))
+fit_pref <- fit_calibration(cal_pref)
+est_all  <- apply_calibration(fit, B_pred)
+est      <- apply_calibration(fit_pref, B_pred)
 
 phi_tab <- albany_phi()
 phi     <- mean(phi_tab$phi)
@@ -385,8 +390,16 @@ distinguishable from zero either.
 ## The residual spread exceeds the threshold, and the band is widened accordingly
 
 The plan set a tripwire: if the residual SD in logs exceeds about 0.25, say so
-and widen the band rather than suppress it. It is
-**`r sprintf("%.3f", fit$sigma)`**.
+and widen the band rather than suppress it. Across all seventeen cities it is
+**`r sprintf("%.3f", fit$sigma)`**. Two of the seventeen — Salamanca, whose
+population is entirely on Seneca Nation territory, and Ogdensburg, whose
+jurisdiction code was created in 2022 and whose implied share is still rising —
+have verified structural reasons that do not apply to Albany. Excluding those
+two, and only those two, brings it to
+**`r sprintf("%.3f", fit_pref$sigma)`** with a slope of
+`r sprintf("%.3f", fit_pref$beta)` (se `r sprintf("%.3f", fit_pref$se_beta)`).
+That is the calibration used; the all-seventeen figure is carried alongside it
+throughout. The memo's §5A works through the reasons city by city.
 
 In plain terms: on the cities where the answer is known, this method is
 routinely wrong by a third in either direction. The 68% band below is

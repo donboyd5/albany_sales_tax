@@ -105,10 +105,11 @@ lodes_place <- cache_pull(
     wac |>
       left_join(xw, by = c("w_geocode" = "tabblk2020")) |>
       group_by(cty, stplc) |>
-      summarise(across(c(C000, CNS20), \(x) sum(x, na.rm = TRUE)),
+      summarise(across(c(C000, paste0("CNS", sprintf("%02d", 1:20))),
+                       \(x) sum(x, na.rm = TRUE)),
                 n_blocks = n(), .groups = "drop")
   }) |>
-  mutate(across(c(C000, CNS20, n_blocks), as.numeric))
+  mutate(across(c(C000, paste0("CNS", sprintf("%02d", 1:20)), n_blocks), as.numeric))
 
 ## --- ZCTA to place relationship file (2020) -------------------------------
 ## Albany's ZIPs straddle Colonie, Guilderland and Menands, so ZIP-based

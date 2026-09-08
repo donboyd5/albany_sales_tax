@@ -285,3 +285,50 @@ build_calibration_variant <- function(..., fys = ANALYSIS_FYS, rate_source = "ve
     mutate(ratio = B_c_obs / B_c_pred, log_obs = log(B_c_obs), log_pred = log(B_c_pred),
            westchester = county == "Westchester")
 }
+
+
+## =========================================================================
+## Section C: diagnostics -- why observed and predicted differ
+## =========================================================================
+
+## Cities excluded from the preferred calibration. Both have a verified
+## structural reason, established from sources independent of this analysis,
+## that does not apply to Albany. Excluding observations after seeing that they
+## are inconvenient is illegitimate; excluding them for a documented reason
+## that is known not to transfer is not. Both fits are always reported.
+CALIB_EXCLUDE <- c(
+  Salamanca  = "100% of the city's population is on the Seneca Nation's Allegany Territory (2020 Census Block Assignment Files, AIANNH area 0080). Retail there is substantially outside the state and local tax base under the 1842 Buffalo Creek Treaty and 20 NYCRR 529.9, while the Economic Census counts its receipts.",
+  Ogdensburg = "The city tax was re-imposed effective 1 March 2022 (DTF notice ST-22-1), so its jurisdiction code is new and its implied base share is still rising (3.01% -> 3.38% -> 3.45% of the county base over FY2023-25, against a flat ~47% for long-established Ithaca). Cross-border traffic from Canada also fell sharply over the same period. Albany would face the same new-code effect in its first years, so this is used for the first-year discount rather than for the steady state."
+)
+
+## Share of the variance in log(observed/predicted) that is between counties
+## rather than between cities within a county.
+county_effect_share <- function(calib) {
+  summary(lm(log(ratio) ~ county, data = calib))$r.squared
+}
+
+## Per-city decomposition: how much of the predicted base comes from each
+## sourcing class, and what allocator level was reached.
+calibration_diagnostics <- function(fys = ANALYSIS_FYS) {
+  cw  <- read_crosswalk_cities() |> filter(include)
+  cal <- build_calibration(fys)
+  purrr::map_dfr(seq_len(nrow(cw)), function(i) {
+    nm <- paste0(cw$city[i], " city, New York"); pf <- substr(cw$place_fips[i], 1, 7)
+    c5 <- paste0("36", substr(cw$county_fips[i], 3, 5)); dj <- cw$dtf_jurisdiction[i]
+    d  <- apportion_city(nm, pf, c5, dj, dj, fys = fys)
+    st <- d |> filter(sourcing_class %in% c("store", "delivered_split"))
+    tibble(city = cw$city[i],
+           store_share_of_pred = sum(st$B_cg, na.rm = TRUE) / sum(d$B_cg, na.rm = TRUE),
+           wt_sector_fallback  = sum(st$B_kg[grepl("sector", st$store_method)]) / sum(st$B_kg),
+           a_store = sum(st$B_cg, na.rm = TRUE) / sum(st$B_kg))
+  }) |> left_join(cal |> select(city, county, ratio, pop_share, R), by = "city")
+}
+
+## County base per capita -- the "how much activity is not tied to residents"
+## measure that motivates, but does not statistically explain, the county effect.
+county_base_per_capita <- function(fys = ANALYSIS_FYS) {
+  pop <- read_pop()$county
+  read_county_base() |> filter(fy %in% fys) |>
+    group_by(jurisdiction, fy) |> summarise(B = sum(B, na.rm = TRUE), .groups = "drop") |>
+    group_by(jurisdiction) |> summarise(B = mean(B), .groups = "drop")
+}

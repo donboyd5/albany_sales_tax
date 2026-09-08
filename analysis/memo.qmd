@@ -45,8 +45,19 @@ est    <- apply_calibration(fit, B_pred)
 phi    <- mean(albany_phi()$phi)
 phi_tab <- albany_phi()
 rev    <- function(b, beta = 1, ph = phi) 0.005 * b * (1 - ph) * beta
-REV    <- rev(est$B_c_central)
-s_cal  <- est$B_c_central / B_k
+
+## Preferred calibration: drops the two cities with a verified structural
+## reason that does not transfer to Albany (CALIB_EXCLUDE, R/05_calibrate.R).
+cal_pref <- calib |> filter(!city %in% names(CALIB_EXCLUDE))
+fit_pref <- fit_calibration(cal_pref)
+est_pref <- apply_calibration(fit_pref, B_pred)
+cty_fe   <- county_effect_share(calib)
+gm_all   <- exp(mean(log(calib$ratio))); gm_pref <- exp(mean(log(cal_pref$ratio)))
+diag     <- calibration_diagnostics()
+
+REV    <- rev(est_pref$B_c_central)
+REV_all <- rev(est$B_c_central)
+s_cal  <- est_pref$B_c_central / B_k
 R_cal  <- s_cal / pop
 route_b <- summarise_route_b(build_route_b())
 
@@ -172,12 +183,13 @@ rev_9261_as_business <- rev(apply_calibration(fit, B_pred + B_9261 * (a_wxp - a_
 | **Policy option** | A 0.5 percentage-point City of Albany sales and use tax, added on top of the existing 8% (4% state, 4% county), on the same base the county taxes, destination-sourced, with no preemption of the county tax and no change to county distributions. |
 | **Central estimate** | **\$`r fm(REV)` million a year** at `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` activity levels; about **\$`r fm(rev(s_cal * B_latest))` million** at the latest full year (`r by_year$sales_tax_year[by_year$fy == 2026]`) |
 | **Upper case** | **\$`r fm(alloc_fits[["Revenue, $m"]][2] * 1e6)` million** if government jobs are counted in the allocator for business purchases (§9.1); the central case leaves them out because governments are exempt purchasers |
-| **City taxable base** | **\$`r fb(est$B_c_central)` billion**, `r fp(s_cal)` of the county's \$`r fb(B_k)` billion, against a `r fp(pop)` population share |
-| **Reasonable planning range** | **\$10–15 million** (base \$2.0–3.0 billion) — see §7 for how this differs from the statistical band |
-| **Statistical band** | 68%: \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M; 90%: \$`r fm(rev(est$lo90))`–`r fm(rev(est$hi90))` M |
+| **City taxable base** | **\$`r fb(est_pref$B_c_central)` billion**, `r fp(s_cal)` of the county's \$`r fb(B_k)` billion, against a `r fp(pop)` population share |
+| **Reasonable planning range** | **\$9–14 million** (base \$1.8–2.8 billion) — see §7 for how this differs from the statistical band |
+| **Statistical band** | 68%: \$`r fm(rev(est_pref$lo68))`–`r fm(rev(est_pref$hi68))` M; 90%: \$`r fm(rev(est_pref$lo90))`–`r fm(rev(est_pref$hi90))` M |
+| **If no cities are excluded** | \$`r fm(REV_all)` M, 68% \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M. §5A gives the reasons for excluding two of the seventeen. |
 | **Largest uncertainty** | How to treat the city's very large public sector. Government purchases are exempt from sales tax, so government jobs are left out of the allocator for business purchases; counting them would add about \$`r fm(sens$Rev[2] - REV)` M. The 17 cities the method is checked against have too little government employment to settle it either way. |
 | **Against what the city receives now** | The city's population-based share of the county tax is about \$`r fm(status_quo)` M a year; the add-on would add \$`r fm(REV)` M on top of it (+`r fp(REV / status_quo, 0)`) without touching it |
-| **Preemption comparison** | Preempting 1.5 points instead would yield \$`r fm(0.015 * est$B_c_central)` M against the \$`r fm(status_quo)` M it would forfeit — a loss of about \$`r fm(status_quo - 0.015 * est$B_c_central)` M a year |
+| **Preemption comparison** | Preempting 1.5 points instead would yield \$`r fm(0.015 * est_pref$B_c_central)` M against the \$`r fm(status_quo)` M it would forfeit — a loss of about \$`r fm(status_quo - 0.015 * est_pref$B_c_central)` M a year |
 
 ## Overview: how the estimate was made, in one page
 
@@ -191,7 +203,7 @@ rev_9261_as_business <- rev(apply_calibration(fit, B_pred + B_9261 * (a_wxp - a_
 2. **Sort the industry groups into five classes by where the tax law says the sale is taxed.** Sales over the counter (stores, restaurants, hotels, personal services) are taxed where the store is. Taxable goods and services bought by *businesses* — cleaning and security, software, repair and maintenance, equipment — are taxed where the buying business operates. (Governments are exempt from sales tax, so their purchases are not in the base at all.) Cars are taxed where the *buyer lives*, not where the dealer is. Delivered goods (furniture, appliances, building materials) are taxed where they are delivered. Utilities and telephone service are taxed where they are used.
 3. **For each class, measure the city's share of the county with the public data that best matches that rule.** Where the stores are: the 2022 Economic Census (Albany city has `r fp(a_ecret)` of county retail receipts). Where the private-sector employers are: Census LODES employment data, leaving out government jobs because government is an exempt purchaser (the city has `r fp(a_wxp)` of the county's non-government jobs; it has `r fp(a_work)` of *all* jobs, because `r fp(a_pub)` of the county's government jobs are in it — that version is shown as a sensitivity). Where car buyers live: DMV registrations (`r fp(a_mv)`). Where households are, weighted by income: the American Community Survey (`r fp(a_inc)`). Utilities: the same employer measure, checked against the Albany City School District's own utility tax, which measures the city's utility base directly (`r fp(a_util)`).
 4. **Multiply each group's county sales by the city's share for its class, and add up.** This gives a raw city base of \$`r fb(B_pred)` billion, `r fp(B_pred / B_k)` of the county.
-5. **Check the method where the answer is known.** Seventeen New York cities already levy their own sales tax, so their bases are known from their collections. Running the identical procedure on them shows it *overstates* the typical city's base by 10–20% and misses individual cities by about a third either way. Albany's raw figure is corrected downward to **\$`r fb(est$B_c_central)` billion**, and the scatter across those cities sets the error band.
+5. **Check the method where the answer is known.** Seventeen New York cities already levy their own sales tax, so their bases are known from their collections. Running the identical procedure on them shows it *overstates* the typical city's base — because vendors code sales to the county rather than the city, because capital-intensive plants and resorts outside cities buy heavily with few employees, and because Economic Census receipts are gross rather than taxable (§5A). Two of the seventeen are set aside for documented reasons that do not apply to Albany. Albany's raw figure is corrected down to **\$`r fb(est_pref$B_c_central)` billion**, and the scatter across the remaining cities sets the error band.
 6. **Multiply by 0.5%**, adjust for the small wedge between tax on the base and cash actually distributed (φ, effectively zero), and allow for any shopping response to the higher rate (β, taken as none): **≈ \$`r fm(REV)` million a year**, plausibly \$10–15 million.
 
 **Three terms used throughout.**
@@ -301,7 +313,7 @@ phi_tab |>
   kable(format = "pipe", digits = c(0, 3, 1, 1, 1), align = "lrrrr")
 ```
 
-The gap is under 2.5% in every year (the plan's tripwire was 10%) and is slightly *negative* on average: **Albany County received about `r fp(-phi, 2)` more than 4% of the published base** over the three years. The additions in the list above outweigh the subtractions. φ is carried at its observed mean of `r fp(phi, 2)`; treating it as exactly zero changes the estimate by \$`r fm(abs(rev(est$B_c_central) - rev(est$B_c_central, ph = 0)))` M.
+The gap is under 2.5% in every year (the plan's tripwire was 10%) and is slightly *negative* on average: **Albany County received about `r fp(-phi, 2)` more than 4% of the published base** over the three years. The additions in the list above outweigh the subtractions. φ is carried at its observed mean of `r fp(phi, 2)`; treating it as exactly zero changes the estimate by \$`r fm(abs(rev(est_pref$B_c_central) - rev(est_pref$B_c_central, ph = 0)))` M.
 
 ### 5.2 Apportionment of the county base
 
@@ -394,11 +406,145 @@ The slope is indistinguishable from 1 — the method scales correctly across cit
 
 The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation's Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to `r f3(f_ns$sigma)`. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
 
-The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` B down to \$`r fb(est$B_c_central)` B (a `r fp(1 - est$B_c_central / B_pred, 0)` reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is `r f3(gm_ratio)`. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
+The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` B down to \$`r fb(est_pref$B_c_central)` B (a `r fp(1 - est_pref$B_c_central / B_pred, 0)` reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is `r f3(gm_ratio)`. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
 
 ### 5.4 β
 
 The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% change in the tax-inclusive price at the city line. Vehicles are unaffected (residence sourcing). Business purchases, utilities and most services do not move. Only the store classes, `r fp(store_share_of_base, 0)` of the base, are mobile at all, and only near the boundary. β = 1.0 is carried as central; the literature on cross-border shopping (Agrawal 2015; Baker, Johnson and Kueng 2021) establishes that responses exist and are concentrated near rate discontinuities, but neither paper estimates a 0.5-point intra-county differential, so the low cases in §9 are illustrative rather than transported.
+
+## 5A. Why observed and predicted differ
+
+The ratios in the table above are not noise, and understanding them is the
+point: the city will receive **collections**, so what matters is not the true
+economic base but the base that shows up in returns. This section works through
+where the gap comes from.
+
+### The gap is a county phenomenon, not a city one
+
+County fixed effects explain **`r fp(cty_fe, 0)` of the variance** in
+log(observed ÷ predicted). Cities in the same county miss in the same
+direction and by similar amounts: both Fulton cities over-collect relative to
+prediction, both Cattaraugus cities badly under-collect, all four Westchester
+cities come in under 1. Whatever is going on is mostly a property of the county,
+not of how well the city's own allocators resolve.
+
+It is not, unfortunately, a *predictable* property. Regressing the county-level
+mean ratio on county taxable base per capita — the obvious candidate, since a
+county with a lot of activity not tied to its residents will have that activity
+disproportionately outside its central city — gives the expected negative sign
+but is nowhere near significant (p ≈ 0.6, R² ≈ 0.03 on 11 counties). Albany
+County's base per capita is the second highest in the set, which points
+mildly toward over-prediction, but the relationship is too weak to lean on.
+
+### Four mechanisms
+
+**1. Vendors code sales to the county, not the city.** A vendor selling into a
+preempting city must use that city's reporting code. Publication 718 warns in
+its own opening that using ZIP codes for this "results in a high degree of
+inaccurate tax reporting." Errors of this kind default to the more familiar
+county code, which understates city collections and overstates the county's —
+and, crucially, **the preemption identity cannot detect it**: if the city's
+collections are understated and the county's overstated by the same amount, the
+total still reconciles to `r_k × B_k` exactly as observed. This mechanism is
+invisible to every check in §5.3.
+
+The direct evidence is Ogdensburg, whose jurisdiction code was created on
+1 March 2022. Its implied share of the county base has climbed every year since
+— 3.01%, 3.38%, 3.45% — while long-established Ithaca's sits flat at 48.4%,
+46.4%, 48.0%. A new code takes time to propagate into vendors' systems.
+**Albany would be a new code too**, which is a first-year issue rather than a
+steady-state one (§12).
+
+**2. Capital-intensive activity outside the city that employment cannot see.**
+The business allocator uses jobs, but a data centre, a fabrication plant or a
+resort complex makes very large taxable purchases with very few employees. St.
+Lawrence County reports \$88 M in NAICS 5182 (data processing and hosting),
+3.1× the statewide rate per capita, essentially none of it in Ogdensburg.
+Warren County's taxable base per capita is \$39,000 against a typical \$19,000,
+with amusement parks at 39× the statewide rate and traveler accommodation at
+3.9×, all of it in Lake George and Queensbury rather than Glens Falls. The
+employment allocator gives the city too much of these county bases.
+
+**3. Economic Census receipts are gross, not taxable.** The store allocator
+takes the city's share of *receipts*; what is being apportioned is *taxable*
+sales. Where the city's retail mix is more heavily exempt than the county's —
+groceries and pharmacy rather than restaurant meals and building materials —
+the receipts share overstates the taxable share. Auburn is the clearest case:
+it holds 62% of Cayuga County's retail receipts against 35% of its population,
+yet its observed base is only 37.5% of the county's.
+
+**4. Exempt institutions inside cities.** Hospitals and universities are
+concentrated in central cities and are largely exempt purchasers, but their jobs
+are counted in the business allocator. This is the same objection that removed
+public administration from the allocator (§5.2), and it is not fully solved.
+
+All four push the same way, which is why the apportionment over-predicts the
+typical city by about `r fp(1 - gm_all, 0)`.
+
+### City by city
+
+```{r}
+tibble(City = c("Ogdensburg","Salamanca","Glens Falls","Yonkers","Auburn","Olean",
+                "New Rochelle","White Plains","Saratoga Springs","Utica","Mount Vernon",
+                "Norwich","Oneida","Ithaca","Johnstown","Rome","Gloversville"),
+  Reason = c(
+    "Jurisdiction code created 1 Mar 2022; implied share still rising (3.01→3.45%). Canadian cross-border traffic, which the city depends on, fell sharply over the same years. County base also carries ~$88M of data-centre activity (NAICS 5182, 3.1× statewide) in Massena, outside the city.",
+    "100% of the city sits on the Seneca Nation's Allegany Territory (Census AIANNH 0080). Retail there is largely outside the state and local base under the 1842 Buffalo Creek Treaty and 20 NYCRR 529.9, while the Economic Census counts the receipts.",
+    "Warren County's base is Lake George and Queensbury, not Glens Falls. The county's own Treasurer reports 2024 sales tax of $12.1M in Queensbury, $6.4M in Bolton and $4.2M in Lake George town and village against $5.1M in the city — a city share of about 13%, almost exactly the 12.6% observed here and well below the 19.7% predicted.",
+    "Dense residential city in a county whose retail and commerce sit in central and northern Westchester. Lowest R of any taxing city in the state.",
+    "Holds 62% of Cayuga County retail receipts but 35% of population and only 37.5% of the taxable base — the clearest instance of gross receipts overstating the taxable share. County also has anomalous wholesale activity (paper products, 15× statewide) outside the city.",
+    "Regional retail centre, but the county base includes the Ellicottville resort area and the Salamanca tribal complex, neither in Olean.",
+    "Close to the norm; Westchester county-level effect.",
+    "Close to the norm; a genuine regional commercial centre, so the allocator works.",
+    "Close to the norm once the rate is right (1.5%, confirmed by the Saratoga County Treasurer). County base inflated by GlobalFoundries-area activity in Malta, outside the city.",
+    "Close to the norm. Oneida County's base is split between Utica and Rome.",
+    "Close to the norm.",
+    "Close to the norm. Note Chenango County exempts clothing under $110 outside the city of Norwich only, so city and county bases differ in composition.",
+    "Dominant commercial centre of a small rural county; the allocator slightly understates that dominance.",
+    "Student population concentrated in the city generates retail that residence-based and employment-based allocators both miss; Cornell and Ithaca College are exempt purchasers but their students are not.",
+    "Small city dominating a small county, as with Gloversville.",
+    "Oneida County; the apportionment splits the county between Rome and Utica more evenly than collections do.",
+    "Fulton County is small and its two cities dominate its commerce; the suburban-weighted allocators understate them.")) |>
+  kable(format = "pipe", align = "ll")
+```
+
+### What follows for Albany
+
+Two of these reasons are verified from independent sources and demonstrably do
+**not** apply to Albany: Salamanca's tribal territory, and Ogdensburg's
+brand-new jurisdiction code combined with a border-traffic collapse. Dropping
+those two cities — and only those two, for stated reasons fixed before looking
+at the effect on the answer — transforms the fit:
+
+```{r}
+bind_rows(
+  tibble(Calibration = "All 17 cities", n = fit$n, `Slope β` = fit$beta, `se(β)` = fit$se_beta,
+         `σ (logs)` = fit$sigma, `R²` = fit$r2, `GM ratio` = gm_all,
+         `Albany base, $bn` = est$B_c_central / 1e9, `Revenue, $m` = REV_all / 1e6,
+         `68% band, $m` = sprintf("%s – %s", fm(rev(est$lo68)), fm(rev(est$hi68)))),
+  tibble(Calibration = "Excluding Salamanca and Ogdensburg (used)", n = fit_pref$n,
+         `Slope β` = fit_pref$beta, `se(β)` = fit_pref$se_beta, `σ (logs)` = fit_pref$sigma,
+         `R²` = fit_pref$r2, `GM ratio` = gm_pref,
+         `Albany base, $bn` = est_pref$B_c_central / 1e9, `Revenue, $m` = REV / 1e6,
+         `68% band, $m` = sprintf("%s – %s", fm(rev(est_pref$lo68)), fm(rev(est_pref$hi68))))) |>
+  kable(format = "pipe", digits = c(0,0,3,3,3,3,3,2,1,0), align = "lrrrrrrrrr")
+```
+
+The residual spread falls from `r f3(fit$sigma)` to **`r f3(fit_pref$sigma)`** —
+below the 0.25 threshold the project plan set — and the slope tightens to
+`r f3(fit_pref$beta)` with a standard error of `r f3(fit_pref$se_beta)`. Among
+structurally comparable cities the apportionment over-predicts by
+`r fp(1 - gm_pref, 0)` rather than `r fp(1 - gm_all, 0)`, and that residual
+over-prediction is what mechanisms 1–4 above describe.
+
+This is a judgment, and it is the one place in this memo where dropping data
+changes the answer materially. It is defensible because the reasons were
+established from outside sources — the Census Block Assignment Files and DTF's
+own notice ST-22-1 — rather than from the size of the residual, and because
+neither reason transfers to Albany. **Both fits are carried through everything
+below**, and a reader who rejects the exclusions should read
+\$`r fm(REV_all)` M with a 68% band of
+\$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M instead.
 
 ## 6. Results
 
@@ -408,9 +554,9 @@ The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% 
 |---|---|
 | County base B_k, mean of sales tax years 2022-23 to 2024-25 | \$`r fb(B_k)` B |
 | Raw apportionment | \$`r fb(B_pred)` B (`r fp(B_pred / B_k)` of county) |
-| **Calibrated central estimate** | **\$`r fb(est$B_c_central)` B (`r fp(s_cal)` of county)** |
-| 68% band | \$`r fb(est$lo68)`–`r fb(est$hi68)` B |
-| 90% band | \$`r fb(est$lo90)`–`r fb(est$hi90)` B |
+| **Calibrated central estimate** | **\$`r fb(est_pref$B_c_central)` B (`r fp(s_cal)` of county)** |
+| 68% band | \$`r fb(est_pref$lo68)`–`r fb(est_pref$hi68)` B |
+| 90% band | \$`r fb(est_pref$lo90)`–`r fb(est_pref$hi90)` B |
 | Same share applied to the latest year (`r by_year$sales_tax_year[by_year$fy == 2026]`, \$`r fb(B_latest)` B) | \$`r fb(s_cal * B_latest)` B |
 | Implied R = (city share) ÷ (population share) | `r formatC(R_cal, format = "f", digits = 2)` |
 
@@ -420,9 +566,9 @@ The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% 
 |---|---|
 | **Central estimate, `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` levels** | **`r fm(REV)`** |
 | Central estimate at `r by_year$sales_tax_year[by_year$fy == 2026]` levels | `r fm(rev(s_cal * B_latest))` |
-| 68% band | `r fm(rev(est$lo68))` – `r fm(rev(est$hi68))` |
-| 90% band | `r fm(rev(est$lo90))` – `r fm(rev(est$hi90))` |
-| With β = 0.97 | `r fm(rev(est$B_c_central, 0.97))` |
+| 68% band | `r fm(rev(est_pref$lo68))` – `r fm(rev(est_pref$hi68))` |
+| 90% band | `r fm(rev(est_pref$lo90))` – `r fm(rev(est_pref$hi90))` |
+| With β = 0.97 | `r fm(rev(est_pref$B_c_central, 0.97))` |
 
 The county base grew `r fp(cagr, 1)` a year over 2022-23 to 2025-26 (`r fp(by_year$growth[by_year$fy == 2026], 1)` in the latest year alone). For a tax starting in 2027 or later the estimate should be read as a share — `r fp(s_cal)` of whatever the county base then is — rather than as a fixed dollar figure.
 
@@ -436,7 +582,7 @@ The two Albany quantities that can be observed directly bracket the answer: the 
 
 Two different ranges are reported and they should not be confused.
 
-The **statistical band** (68%: \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M; 90%: \$`r fm(rev(est$lo90))`–`r fm(rev(est$hi90))` M) comes from the calibration's residual spread. It treats Albany as no easier to predict than any of the seventeen calibration cities — including Salamanca on tribal land, Ogdensburg on the Canadian border, and Glens Falls sharing a county with Lake George tourism. It is the honest statement of how well the method performs where it can be checked.
+The **statistical band** (68%: \$`r fm(rev(est_pref$lo68))`–`r fm(rev(est_pref$hi68))` M; 90%: \$`r fm(rev(est_pref$lo90))`–`r fm(rev(est_pref$hi90))` M) comes from the calibration's residual spread. It treats Albany as no easier to predict than any of the seventeen calibration cities — including Salamanca on tribal land, Ogdensburg on the Canadian border, and Glens Falls sharing a county with Lake George tourism. It is the honest statement of how well the method performs where it can be checked.
 
 The **reasonable planning range of \$10–15 million** (base \$2.0–3.0 billion) is a judgment, and rests on three observations:
 
@@ -554,14 +700,14 @@ From §5.3, on the calibration sample: the calibrated central ranges from \$`r f
 
 ```{r}
 bind_rows(
-  tibble(Assumption = "β = 1.00 (central)", `Revenue, $m` = rev(est$B_c_central) / 1e6),
-  tibble(Assumption = "β = 0.97, whole base", `Revenue, $m` = rev(est$B_c_central, 0.97) / 1e6),
-  tibble(Assumption = "β = 0.97, store classes only", `Revenue, $m` = rev(est$B_c_central) * (1 - 0.03 * store_share_of_base) / 1e6),
-  tibble(Assumption = "β = 0.90, whole base (aggressive)", `Revenue, $m` = rev(est$B_c_central, 0.90) / 1e6),
-  tibble(Assumption = "β = 0.90, store classes only", `Revenue, $m` = rev(est$B_c_central) * (1 - 0.10 * store_share_of_base) / 1e6),
-  tibble(Assumption = paste0("φ = ", fp(phi, 2), " observed (central)"), `Revenue, $m` = rev(est$B_c_central) / 1e6),
-  tibble(Assumption = "φ = 0", `Revenue, $m` = rev(est$B_c_central, ph = 0) / 1e6),
-  tibble(Assumption = "φ = +2% (an explicit administrative charge)", `Revenue, $m` = rev(est$B_c_central, ph = 0.02) / 1e6)) |>
+  tibble(Assumption = "β = 1.00 (central)", `Revenue, $m` = rev(est_pref$B_c_central) / 1e6),
+  tibble(Assumption = "β = 0.97, whole base", `Revenue, $m` = rev(est_pref$B_c_central, 0.97) / 1e6),
+  tibble(Assumption = "β = 0.97, store classes only", `Revenue, $m` = rev(est_pref$B_c_central) * (1 - 0.03 * store_share_of_base) / 1e6),
+  tibble(Assumption = "β = 0.90, whole base (aggressive)", `Revenue, $m` = rev(est_pref$B_c_central, 0.90) / 1e6),
+  tibble(Assumption = "β = 0.90, store classes only", `Revenue, $m` = rev(est_pref$B_c_central) * (1 - 0.10 * store_share_of_base) / 1e6),
+  tibble(Assumption = paste0("φ = ", fp(phi, 2), " observed (central)"), `Revenue, $m` = rev(est_pref$B_c_central) / 1e6),
+  tibble(Assumption = "φ = 0", `Revenue, $m` = rev(est_pref$B_c_central, ph = 0) / 1e6),
+  tibble(Assumption = "φ = +2% (an explicit administrative charge)", `Revenue, $m` = rev(est_pref$B_c_central, ph = 0.02) / 1e6)) |>
   kable(format = "pipe", digits = 1, align = "lr")
 ```
 
@@ -574,7 +720,7 @@ Neither factor moves the estimate by more than about 10% even under aggressive a
 ```{r}
 #| output: asis
 for (i in seq_len(nrow(by_year))) cat(sprintf("| %s | %s | %s | %s |\n", by_year$sales_tax_year[i], fb(by_year$B[i], 3), fb(s_cal * by_year$B[i]), fm(rev(s_cal * by_year$B[i]))))
-cat(sprintf("| Three-year mean used (2022-23 to 2024-25) | %s | %s | %s |\n", fb(B_k, 3), fb(est$B_c_central), fm(REV)))
+cat(sprintf("| Three-year mean used (2022-23 to 2024-25) | %s | %s | %s |\n", fb(B_k, 3), fb(est_pref$B_c_central), fm(REV)))
 ```
 
 ## 10. Validations
@@ -598,10 +744,10 @@ Albany County distributes 40% of its collections to cities and towns by census p
 | Option | \$ million / year |
 |---|---:|
 | Status quo: 0.40 × population share × county collections of \$`r fm(C_k)` M | `r fm(0.40 * pop * C_k)` |
-| Preempt 1.5 points: 0.015 × B_c | `r fm(0.015 * est$B_c_central)` |
+| Preempt 1.5 points: 0.015 × B_c | `r fm(0.015 * est_pref$B_c_central)` |
 | **Add on 0.5 points (this memo)** | **`r fm(REV)`** |
 
-Preemption at the standard 1.5 points would *lose* about \$`r fm(0.40 * pop * C_k - 0.015 * est$B_c_central)` M a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r formatC(R_cal, format="f", digits=2)`. A city has to be a genuine retail concentrator for preemption to work, and Albany — with its county's retail on Wolf Road and at Crossgates — is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched, which is the whole case for it over the conventional structure.
+Preemption at the standard 1.5 points would *lose* about \$`r fm(0.40 * pop * C_k - 0.015 * est_pref$B_c_central)` M a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r formatC(R_cal, format="f", digits=2)`. A city has to be a genuine retail concentrator for preemption to work, and Albany — with its county's retail on Wolf Road and at Crossgates — is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched, which is the whole case for it over the conventional structure.
 
 ## 12. Timing and first-year cash
 

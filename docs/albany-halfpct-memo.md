@@ -9,6 +9,7 @@
 - [3. Why the estimate is hard](#3-why-the-estimate-is-hard)
 - [4. Data](#4-data)
 - [5. Methods](#5-methods)
+- [5A. Why observed and predicted differ](#5a-why-observed-and-predicted-differ)
 - [6. Results](#6-results)
 - [7. A reasonable range, and how it relates to the statistical band](#7-a-reasonable-range-and-how-it-relates-to-the-statistical-band)
 - [8. Alternative methodologies](#8-alternative-methodologies)
@@ -27,14 +28,15 @@
 |  |  |
 |----|----|
 | **Policy option** | A 0.5 percentage-point City of Albany sales and use tax, added on top of the existing 8% (4% state, 4% county), on the same base the county taxes, destination-sourced, with no preemption of the county tax and no change to county distributions. |
-| **Central estimate** | **\$12.2 million a year** at 2022–2025 activity levels; about **\$12.9 million** at the latest full year (2025 - 2026) |
-| **Upper case** | **\$13.4 million** if government jobs are counted in the allocator for business purchases (§9.1); the central case leaves them out because governments are exempt purchasers |
-| **City taxable base** | **\$2.42 billion**, 26.7% of the county’s \$9.09 billion, against a 31.5% population share |
-| **Reasonable planning range** | **\$10–15 million** (base \$2.0–3.0 billion) — see §7 for how this differs from the statistical band |
-| **Statistical band** | 68%: \$8.4–17.7 M; 90%: \$6.6–22.5 M |
-| **Largest uncertainty** | How to treat the city’s very large public sector. Government purchases are exempt from sales tax, so government jobs are left out of the allocator for business purchases; counting them would add about \$1.2 M. The 17 cities the method is checked against have too little government employment to settle it either way. |
-| **Against what the city receives now** | The city’s population-based share of the county tax is about \$46.2 M a year; the add-on would add \$12.2 M on top of it (+26%) without touching it |
-| **Preemption comparison** | Preempting 1.5 points instead would yield \$36.4 M against the \$46.2 M it would forfeit — a loss of about \$9.8 M a year |
+| **Central estimate** | **\$11.1 million a year** at 2022–2025 activity levels; about **\$11.8 million** at the latest full year (2025 - 2026) |
+| **Upper case** | **\$13.7 million** if government jobs are counted in the allocator for business purchases (§9.1); the central case leaves them out because governments are exempt purchasers |
+| **City taxable base** | **\$2.21 billion**, 24.3% of the county’s \$9.09 billion, against a 31.5% population share |
+| **Reasonable planning range** | **\$9–14 million** (base \$1.8–2.8 billion) — see §7 for how this differs from the statistical band |
+| **Statistical band** | 68%: \$9.2–13.5 M; 90%: \$8.1–15.3 M |
+| **If no cities are excluded** | \$12.5 M, 68% \$7.9–19.6 M. §5A gives the reasons for excluding two of the seventeen. |
+| **Largest uncertainty** | How to treat the city’s very large public sector. Government purchases are exempt from sales tax, so government jobs are left out of the allocator for business purchases; counting them would add about \$2.6 M. The 17 cities the method is checked against have too little government employment to settle it either way. |
+| **Against what the city receives now** | The city’s population-based share of the county tax is about \$46.2 M a year; the add-on would add \$11.1 M on top of it (+24%) without touching it |
+| **Preemption comparison** | Preempting 1.5 points instead would yield \$33.2 M against the \$46.2 M it would forfeit — a loss of about \$13.0 M a year |
 
 ## Overview: how the estimate was made, in one page
 
@@ -48,12 +50,12 @@
 2.  **Sort the industry groups into five classes by where the tax law says the sale is taxed.** Sales over the counter (stores, restaurants, hotels, personal services) are taxed where the store is. Taxable goods and services bought by *businesses* — cleaning and security, software, repair and maintenance, equipment — are taxed where the buying business operates. (Governments are exempt from sales tax, so their purchases are not in the base at all.) Cars are taxed where the *buyer lives*, not where the dealer is. Delivered goods (furniture, appliances, building materials) are taxed where they are delivered. Utilities and telephone service are taxed where they are used.
 3.  **For each class, measure the city’s share of the county with the public data that best matches that rule.** Where the stores are: the 2022 Economic Census (Albany city has 25.9% of county retail receipts). Where the private-sector employers are: Census LODES employment data, leaving out government jobs because government is an exempt purchaser (the city has 42.8% of the county’s non-government jobs; it has 52.9% of *all* jobs, because 87.6% of the county’s government jobs are in it — that version is shown as a sensitivity). Where car buyers live: DMV registrations (20.6%). Where households are, weighted by income: the American Community Survey (24.5%). Utilities: the same employer measure, checked against the Albany City School District’s own utility tax, which measures the city’s utility base directly (48.9%).
 4.  **Multiply each group’s county sales by the city’s share for its class, and add up.** This gives a raw city base of \$2.88 billion, 31.7% of the county.
-5.  **Check the method where the answer is known.** Seventeen New York cities already levy their own sales tax, so their bases are known from their collections. Running the identical procedure on them shows it *overstates* the typical city’s base by 10–20% and misses individual cities by about a third either way. Albany’s raw figure is corrected downward to **\$2.42 billion**, and the scatter across those cities sets the error band.
-6.  **Multiply by 0.5%**, adjust for the small wedge between tax on the base and cash actually distributed (φ, effectively zero), and allow for any shopping response to the higher rate (β, taken as none): **≈ \$12.2 million a year**, plausibly \$10–15 million.
+5.  **Check the method where the answer is known.** Seventeen New York cities already levy their own sales tax, so their bases are known from their collections. Running the identical procedure on them shows it *overstates* the typical city’s base — because vendors code sales to the county rather than the city, because capital-intensive plants and resorts outside cities buy heavily with few employees, and because Economic Census receipts are gross rather than taxable (§5A). Two of the seventeen are set aside for documented reasons that do not apply to Albany. Albany’s raw figure is corrected down to **\$2.21 billion**, and the scatter across the remaining cities sets the error band.
+6.  **Multiply by 0.5%**, adjust for the small wedge between tax on the base and cash actually distributed (φ, effectively zero), and allow for any shopping response to the higher rate (β, taken as none): **≈ \$11.1 million a year**, plausibly \$10–15 million.
 
 **Three terms used throughout.**
 
-- **R** — the city’s share of the county’s taxable sales divided by its share of the county’s population. R = 1 means the city has exactly its per-capita share; R = 2 means sales are twice as concentrated in the city as people are. Albany’s R comes out at 0.85; among the 17 taxing cities it runs from 0.45 to 1.89.
+- **R** — the city’s share of the county’s taxable sales divided by its share of the county’s population. R = 1 means the city has exactly its per-capita share; R = 2 means sales are twice as concentrated in the city as people are. Albany’s R comes out at 0.77; among the 17 taxing cities it runs from 0.35 to 1.89.
 - **φ (phi)** — the gap between the tax due on the published base and the cash a locality actually receives: refunds, vendor filing credits, tax paid on private vehicle sales and on audit that never appears in the “taxable sales” statistic, and timing. Measured from the county’s own figures, it is slightly negative — the county receives about 0.7% *more* than 4% of the published base — so it is carried as observed and does not matter.
 - **β (beta)** — the fraction of the base that stays put when the rate inside the city is half a point above the rate outside. Taken as 1.0 (no loss), with a low case shown.
 
@@ -176,10 +178,10 @@ By year, the same shares applied to each year’s county base:
 
 | Sales tax year | County base, \$bn | Raw city base, \$bn | Calibrated city base, \$bn | Used in the three-year mean |
 |:---|---:|---:|---:|:---|
-| 2022 - 2023 | 8.983 | 2.846 | 2.396 | yes |
-| 2023 - 2024 | 9.034 | 2.862 | 2.410 | yes |
-| 2024 - 2025 | 9.251 | 2.931 | 2.467 | yes |
-| 2025 - 2026 | 9.630 | 3.051 | 2.569 |  |
+| 2022 - 2023 | 8.983 | 2.846 | 2.185 | yes |
+| 2023 - 2024 | 9.034 | 2.862 | 2.197 | yes |
+| 2024 - 2025 | 9.251 | 2.931 | 2.250 | yes |
+| 2025 - 2026 | 9.630 | 3.051 | 2.342 |  |
 
 - **Store-based** (retail other than vehicles, restaurants, hotels, recreation, personal services, repair, rental): the city’s share of Economic Census receipts, group by group, at the finest NAICS level at which both the city and the county publish an unsuppressed value. 72 groups resolved at 4 digits and 55 fell back to 3 digits; none needed the sector level. Sales over the counter are sourced where they occur, so establishment receipts are the right allocator, with the caveat that receipts are gross rather than taxable.
 - **Business purchases and use tax** (vendors in wholesale, manufacturing, construction, information, finance, professional and administrative services, health, education, public administration other than 9261, and everything else). What this class contains is the taxable sales of *business-serving* vendors — a contractor’s repair work, a cleaning company’s service, software, equipment sold to a non-reseller — plus use tax on businesses’ own purchases, all sourced to the customer’s location. The allocator therefore has to stand for where the *customers* — the purchasing businesses — are, not for where people work and then go to lunch (that spending is already in the store classes through the receipts of the city’s restaurants and shops). Workplace employment is the proxy, **excluding public administration**: New York State and its agencies, like all governments, are exempt from sales tax on their purchases (Tax Law §1116(a)(1)), so the 87.6% of county government jobs that sit in the city generate no taxable purchasing of their own. Total employment including government is shown as a sensitivity, and §9.1 shows that the 17 calibration cities — where government is a small share of jobs — cannot tell the two apart. Two further caveats: hospitals and universities, largely exempt as well, remain in the count; and part of this class (residential repair services, heating fuel) is bought by households and would follow residence rather than employment. Both bias the raw city share upward, and both are among the reasons the calibration corrects the method downward.
@@ -211,7 +213,7 @@ The city holds 42.8% of the county’s non-government jobs (and 52.9% of all job
 
 The apportionment is a construction. The seventeen cities outside New York City that impose their own sales tax are the places where the identical construction can be run and then checked, because a preempting city’s base is recoverable from its published collections: B_c = C_c / r_c, with the rates verified from Publications 718 and 718-A and the preemption structure confirmed by an identity test that holds to within 0.5–2.7% in every county. (The eighteenth such city, Oswego, is excluded: its county’s collections behave as though no preemption occurs while the published combined rate says it does, and the two cannot be reconciled.)
 
-**One unresolved point about rates.** Recovering a city’s base as collections ÷ rate requires the rate the city actually imposes, and for six of the seventeen cities the published sources do not agree on it. Publication 718-A’s percentage column reads 3% for Gloversville, Johnstown, New Rochelle, Norwich, Ogdensburg and Saratoga Springs; the Comptroller’s 2020 table (sourced to DTF) gives 2%, 2%, 2.5%, 1.5%, — and 1.5% respectively; and Publication 718-A’s *own footnotes* — which state the county’s rate inside each city — when subtracted from Publication 718’s combined rate reproduce the Comptroller’s figures, not the column. This is not a claim that Publication 718-A is wrong; it is that its percentage column, if read as the city’s imposed rate, contradicts its own footnotes and two other DTF-sourced documents, and its header warns that its rates “cannot be added to determine the combined … rate.” The rates that three sources agree on are used. Because both readings give the same *combined* rate, collections data cannot settle it; the question should be put to DTF. What it would change is shown in §9.2: the six cities’ bases fall by a third to a half under the 718-A reading, the benchmark median R falls from 1.06 to 0.74 — and **Albany’s calibrated estimate barely moves** (\$12.0 M against \$12.2 M), because the calibration absorbs the shift.
+**One unresolved point about rates.** Recovering a city’s base as collections ÷ rate requires the rate the city actually imposes, and for six of the seventeen cities the published sources do not agree on it. Publication 718-A’s percentage column reads 3% for Gloversville, Johnstown, New Rochelle, Norwich, Ogdensburg and Saratoga Springs; the Comptroller’s 2020 table (sourced to DTF) gives 2%, 2%, 2.5%, 1.5%, — and 1.5% respectively; and Publication 718-A’s *own footnotes* — which state the county’s rate inside each city — when subtracted from Publication 718’s combined rate reproduce the Comptroller’s figures, not the column. This is not a claim that Publication 718-A is wrong; it is that its percentage column, if read as the city’s imposed rate, contradicts its own footnotes and two other DTF-sourced documents, and its header warns that its rates “cannot be added to determine the combined … rate.” The rates that three sources agree on are used. Because both readings give the same *combined* rate, collections data cannot settle it; the question should be put to DTF. What it would change is shown in §9.2: the six cities’ bases fall by a third to a half under the 718-A reading, the benchmark median R falls from 1.06 to 0.74 — and **Albany’s calibrated estimate barely moves** (\$12.0 M against \$11.1 M), because the calibration absorbs the shift.
 
 The data behind the calibration — for each city, the county base from the DTF taxable-sales file, the city base inferred from its own collections, and the city base the apportionment predicts — are:
 
@@ -232,8 +234,8 @@ The data behind the calibration — for each city, the county base from the DTF 
 | Auburn | Cayuga | 2.0 | 1481 | 556 | 805 | 0.691 | 35.2% | 1.07 |
 | Yonkers | Westchester | 4.5 | 28454 | 2717 | 4214 | 0.645 | 21.1% | 0.45 |
 | Glens Falls | Warren | 1.5 | 2584 | 327 | 510 | 0.641 | 22.6% | 0.56 |
-| Ogdensburg | St. Lawrence | 1.5 | 2063 | 135 | 259 | 0.522 | 9.3% | 0.71 |
 | Salamanca | Cattaraugus | 1.5 | 1442 | 57 | 196 | 0.293 | 7.7% | 0.52 |
+| Ogdensburg | St. Lawrence | 3.0 | 2063 | 68 | 259 | 0.261 | 9.3% | 0.35 |
 
 The county base is the mean of sales tax years 2022-23 to 2024-25; collections are the mean of state fiscal years 2023–2025. A ratio below 1 means the apportionment over-predicts that city. The regression below is fitted to the logs of the two city-base columns.
 
@@ -241,21 +243,80 @@ Regressing the log of the observed base on the log of the predicted base, with s
 
 | Specification | n | Slope β | se(β) | σ (logs) | R² | Albany base, \$bn | Revenue, \$m |
 |:---|---:|---:|---:|---:|---:|---:|---:|
-| All 17 cities (used) | 17 | 1.019 | 0.116 | 0.370 | 0.886 | 2.42 | 12.2 |
-| Excluding Westchester (4 cities) | 13 | 1.102 | 0.196 | 0.419 | 0.790 | 2.87 | 14.5 |
-| Excluding Yonkers | 16 | 1.066 | 0.135 | 0.374 | 0.872 | 2.66 | 13.4 |
-| Excluding Salamanca | 16 | 0.928 | 0.063 | 0.249 | 0.932 | 2.27 | 11.4 |
+| All 17 cities (used) | 17 | 1.060 | 0.136 | 0.453 | 0.849 | 2.47 | 12.5 |
+| Excluding Westchester (4 cities) | 13 | 1.160 | 0.226 | 0.514 | 0.734 | 3.04 | 15.3 |
+| Excluding Yonkers | 16 | 1.113 | 0.158 | 0.459 | 0.830 | 2.75 | 13.8 |
+| Excluding Salamanca | 16 | 0.977 | 0.112 | 0.387 | 0.864 | 2.33 | 11.7 |
 | Excluding Salamanca and Ogdensburg | 15 | 0.881 | 0.033 | 0.192 | 0.954 | 2.21 | 11.1 |
 
-The slope is indistinguishable from 1 — the method scales correctly across cities of very different size. But the residual spread, σ = 0.370 in logs, exceeds the 0.25 threshold set in the plan: **on the cities where the answer is known, the method is routinely off by a third**. The band is widened to match rather than narrowed by dropping observations.
+The slope is indistinguishable from 1 — the method scales correctly across cities of very different size. But the residual spread, σ = 0.453 in logs, exceeds the 0.25 threshold set in the plan: **on the cities where the answer is known, the method is routinely off by a third**. The band is widened to match rather than narrowed by dropping observations.
 
-The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation’s Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to 0.249. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
+The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation’s Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to 0.387. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
 
-The calibration pulls Albany’s raw prediction of \$2.88 B down to \$2.42 B (a 16% reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is 0.818. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
+The calibration pulls Albany’s raw prediction of \$2.88 B down to \$2.21 B (a 23% reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is 0.785. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
 
 ### 5.4 β
 
 The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% change in the tax-inclusive price at the city line. Vehicles are unaffected (residence sourcing). Business purchases, utilities and most services do not move. Only the store classes, 59% of the base, are mobile at all, and only near the boundary. β = 1.0 is carried as central; the literature on cross-border shopping (Agrawal 2015; Baker, Johnson and Kueng 2021) establishes that responses exist and are concentrated near rate discontinuities, but neither paper estimates a 0.5-point intra-county differential, so the low cases in §9 are illustrative rather than transported.
+
+## 5A. Why observed and predicted differ
+
+The ratios in the table above are not noise, and understanding them is the point: the city will receive **collections**, so what matters is not the true economic base but the base that shows up in returns. This section works through where the gap comes from.
+
+### The gap is a county phenomenon, not a city one
+
+County fixed effects explain **83% of the variance** in log(observed ÷ predicted). Cities in the same county miss in the same direction and by similar amounts: both Fulton cities over-collect relative to prediction, both Cattaraugus cities badly under-collect, all four Westchester cities come in under 1. Whatever is going on is mostly a property of the county, not of how well the city’s own allocators resolve.
+
+It is not, unfortunately, a *predictable* property. Regressing the county-level mean ratio on county taxable base per capita — the obvious candidate, since a county with a lot of activity not tied to its residents will have that activity disproportionately outside its central city — gives the expected negative sign but is nowhere near significant (p ≈ 0.6, R² ≈ 0.03 on 11 counties). Albany County’s base per capita is the second highest in the set, which points mildly toward over-prediction, but the relationship is too weak to lean on.
+
+### Four mechanisms
+
+**1. Vendors code sales to the county, not the city.** A vendor selling into a preempting city must use that city’s reporting code. Publication 718 warns in its own opening that using ZIP codes for this “results in a high degree of inaccurate tax reporting.” Errors of this kind default to the more familiar county code, which understates city collections and overstates the county’s — and, crucially, **the preemption identity cannot detect it**: if the city’s collections are understated and the county’s overstated by the same amount, the total still reconciles to `r_k × B_k` exactly as observed. This mechanism is invisible to every check in §5.3.
+
+The direct evidence is Ogdensburg, whose jurisdiction code was created on 1 March 2022. Its implied share of the county base has climbed every year since — 3.01%, 3.38%, 3.45% — while long-established Ithaca’s sits flat at 48.4%, 46.4%, 48.0%. A new code takes time to propagate into vendors’ systems. **Albany would be a new code too**, which is a first-year issue rather than a steady-state one (§12).
+
+**2. Capital-intensive activity outside the city that employment cannot see.** The business allocator uses jobs, but a data centre, a fabrication plant or a resort complex makes very large taxable purchases with very few employees. St. Lawrence County reports \$88 M in NAICS 5182 (data processing and hosting), 3.1× the statewide rate per capita, essentially none of it in Ogdensburg. Warren County’s taxable base per capita is \$39,000 against a typical \$19,000, with amusement parks at 39× the statewide rate and traveler accommodation at 3.9×, all of it in Lake George and Queensbury rather than Glens Falls. The employment allocator gives the city too much of these county bases.
+
+**3. Economic Census receipts are gross, not taxable.** The store allocator takes the city’s share of *receipts*; what is being apportioned is *taxable* sales. Where the city’s retail mix is more heavily exempt than the county’s — groceries and pharmacy rather than restaurant meals and building materials — the receipts share overstates the taxable share. Auburn is the clearest case: it holds 62% of Cayuga County’s retail receipts against 35% of its population, yet its observed base is only 37.5% of the county’s.
+
+**4. Exempt institutions inside cities.** Hospitals and universities are concentrated in central cities and are largely exempt purchasers, but their jobs are counted in the business allocator. This is the same objection that removed public administration from the allocator (§5.2), and it is not fully solved.
+
+All four push the same way, which is why the apportionment over-predicts the typical city by about 21%.
+
+### City by city
+
+| City | Reason |
+|:---|:---|
+| Ogdensburg | Jurisdiction code created 1 Mar 2022; implied share still rising (3.01→3.45%). Canadian cross-border traffic, which the city depends on, fell sharply over the same years. County base also carries ~\$88M of data-centre activity (NAICS 5182, 3.1× statewide) in Massena, outside the city. |
+| Salamanca | 100% of the city sits on the Seneca Nation’s Allegany Territory (Census AIANNH 0080). Retail there is largely outside the state and local base under the 1842 Buffalo Creek Treaty and 20 NYCRR 529.9, while the Economic Census counts the receipts. |
+| Glens Falls | Warren County’s base is Lake George and Queensbury, not Glens Falls. The county’s own Treasurer reports 2024 sales tax of \$12.1M in Queensbury, \$6.4M in Bolton and \$4.2M in Lake George town and village against \$5.1M in the city — a city share of about 13%, almost exactly the 12.6% observed here and well below the 19.7% predicted. |
+| Yonkers | Dense residential city in a county whose retail and commerce sit in central and northern Westchester. Lowest R of any taxing city in the state. |
+| Auburn | Holds 62% of Cayuga County retail receipts but 35% of population and only 37.5% of the taxable base — the clearest instance of gross receipts overstating the taxable share. County also has anomalous wholesale activity (paper products, 15× statewide) outside the city. |
+| Olean | Regional retail centre, but the county base includes the Ellicottville resort area and the Salamanca tribal complex, neither in Olean. |
+| New Rochelle | Close to the norm; Westchester county-level effect. |
+| White Plains | Close to the norm; a genuine regional commercial centre, so the allocator works. |
+| Saratoga Springs | Close to the norm once the rate is right (1.5%, confirmed by the Saratoga County Treasurer). County base inflated by GlobalFoundries-area activity in Malta, outside the city. |
+| Utica | Close to the norm. Oneida County’s base is split between Utica and Rome. |
+| Mount Vernon | Close to the norm. |
+| Norwich | Close to the norm. Note Chenango County exempts clothing under \$110 outside the city of Norwich only, so city and county bases differ in composition. |
+| Oneida | Dominant commercial centre of a small rural county; the allocator slightly understates that dominance. |
+| Ithaca | Student population concentrated in the city generates retail that residence-based and employment-based allocators both miss; Cornell and Ithaca College are exempt purchasers but their students are not. |
+| Johnstown | Small city dominating a small county, as with Gloversville. |
+| Rome | Oneida County; the apportionment splits the county between Rome and Utica more evenly than collections do. |
+| Gloversville | Fulton County is small and its two cities dominate its commerce; the suburban-weighted allocators understate them. |
+
+### What follows for Albany
+
+Two of these reasons are verified from independent sources and demonstrably do **not** apply to Albany: Salamanca’s tribal territory, and Ogdensburg’s brand-new jurisdiction code combined with a border-traffic collapse. Dropping those two cities — and only those two, for stated reasons fixed before looking at the effect on the answer — transforms the fit:
+
+| Calibration | n | Slope β | se(β) | σ (logs) | R² | GM ratio | Albany base, \$bn | Revenue, \$m | 68% band, \$m |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| All 17 cities | 17 | 1.060 | 0.136 | 0.453 | 0.849 | 0.785 | 2.47 | 12.5 | 7.9 – 19.6 |
+| Excluding Salamanca and Ogdensburg (used) | 15 | 0.881 | 0.033 | 0.192 | 0.954 | 0.903 | 2.21 | 11.1 | 9.2 – 13.5 |
+
+The residual spread falls from 0.453 to **0.192** — below the 0.25 threshold the project plan set — and the slope tightens to 0.881 with a standard error of 0.033. Among structurally comparable cities the apportionment over-predicts by 10% rather than 21%, and that residual over-prediction is what mechanisms 1–4 above describe.
+
+This is a judgment, and it is the one place in this memo where dropping data changes the answer materially. It is defensible because the reasons were established from outside sources — the Census Block Assignment Files and DTF’s own notice ST-22-1 — rather than from the size of the residual, and because neither reason transfers to Albany. **Both fits are carried through everything below**, and a reader who rejects the exclusions should read \$12.5 M with a 68% band of \$7.9–19.6 M instead.
 
 ## 6. Results
 
@@ -265,39 +326,39 @@ The add-on makes the rate 8.5% inside the city against 8.0% outside — a 0.46% 
 |----|----|
 | County base B_k, mean of sales tax years 2022-23 to 2024-25 | \$9.09 B |
 | Raw apportionment | \$2.88 B (31.7% of county) |
-| **Calibrated central estimate** | **\$2.42 B (26.7% of county)** |
-| 68% band | \$1.67–3.51 B |
-| 90% band | \$1.32–4.46 B |
-| Same share applied to the latest year (2025 - 2026, \$9.63 B) | \$2.57 B |
-| Implied R = (city share) ÷ (population share) | 0.85 |
+| **Calibrated central estimate** | **\$2.21 B (24.3% of county)** |
+| 68% band | \$1.82–2.68 B |
+| 90% band | \$1.61–3.03 B |
+| Same share applied to the latest year (2025 - 2026, \$9.63 B) | \$2.34 B |
+| Implied R = (city share) ÷ (population share) | 0.77 |
 
 ### 6.2 Revenue
 
 | Measure                                | \$ million / year |
 |----------------------------------------|-------------------|
-| **Central estimate, 2022–2025 levels** | **12.2**          |
-| Central estimate at 2025 - 2026 levels | 12.9              |
-| 68% band                               | 8.4 – 17.7        |
-| 90% band                               | 6.6 – 22.5        |
-| With β = 0.97                          | 11.8              |
+| **Central estimate, 2022–2025 levels** | **11.1**          |
+| Central estimate at 2025 - 2026 levels | 11.8              |
+| 68% band                               | 9.2 – 13.5        |
+| 90% band                               | 8.1 – 15.3        |
+| With β = 0.97                          | 10.8              |
 
-The county base grew 2.3% a year over 2022-23 to 2025-26 (4.1% in the latest year alone). For a tax starting in 2027 or later the estimate should be read as a share — 26.7% of whatever the county base then is — rather than as a fixed dollar figure.
+The county base grew 2.3% a year over 2022-23 to 2025-26 (4.1% in the latest year alone). For a tax starting in 2027 or later the estimate should be read as a share — 24.3% of whatever the county base then is — rather than as a fixed dollar figure.
 
 ### 6.3 Where Albany sits among cities that tax
 
-Seventeen preempting cities have an observed R — the city’s share of its county’s taxable sales divided by its share of the county’s population, so that R = 1 means exactly a per-capita share (see the Overview) — ranging from 0.45 (Yonkers) to 1.89 (Oneida), median 1.06. Albany’s calibrated R of 0.85 sits just below the median, next to Gloversville, New Rochelle, Utica. That is the expected shape: a city whose retail has suburbanised (retail R only 0.82) but which holds 42.8% of the county’s private-sector jobs.
+Seventeen preempting cities have an observed R — the city’s share of its county’s taxable sales divided by its share of the county’s population, so that R = 1 means exactly a per-capita share (see the Overview) — ranging from 0.35 (Yonkers) to 1.89 (Oneida), median 1.06. Albany’s calibrated R of 0.77 sits just below the median, next to New Rochelle, Utica, Gloversville. That is the expected shape: a city whose retail has suburbanised (retail R only 0.82) but which holds 42.8% of the county’s private-sector jobs.
 
-The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (25.9%) below, the measured utility share (48.9%) above, with the estimate at 26.7% in between.
+The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (25.9%) below, the measured utility share (48.9%) above, with the estimate at 24.3% in between.
 
 ## 7. A reasonable range, and how it relates to the statistical band
 
 Two different ranges are reported and they should not be confused.
 
-The **statistical band** (68%: \$8.4–17.7 M; 90%: \$6.6–22.5 M) comes from the calibration’s residual spread. It treats Albany as no easier to predict than any of the seventeen calibration cities — including Salamanca on tribal land, Ogdensburg on the Canadian border, and Glens Falls sharing a county with Lake George tourism. It is the honest statement of how well the method performs where it can be checked.
+The **statistical band** (68%: \$9.2–13.5 M; 90%: \$8.1–15.3 M) comes from the calibration’s residual spread. It treats Albany as no easier to predict than any of the seventeen calibration cities — including Salamanca on tribal land, Ogdensburg on the Canadian border, and Glens Falls sharing a county with Lake George tourism. It is the honest statement of how well the method performs where it can be checked.
 
 The **reasonable planning range of \$10–15 million** (base \$2.0–3.0 billion) is a judgment, and rests on three observations:
 
-1.  Every calibration variant in §5.3 lands between \$11.1 M and \$14.5 M, and the choice of business allocator — the one modelling decision that matters — spans \$12.2–13.4 M (§9.1).
+1.  Every calibration variant in §5.3 lands between \$11.1 M and \$15.3 M, and the choice of business allocator — the one modelling decision that matters — spans \$12.5–13.7 M (§9.1).
 2.  Every alternative *method* in the next section that has no identifiable directional bias lands between roughly \$11 M and \$15 M; the methods outside that span each have a stated reason to be biased.
 3.  Albany’s allocators resolve at fine NAICS detail, its Economic Census coverage is near-complete, and its one measurable component (utilities) lies between the two employment allocators. These are the conditions under which the method should do better than its average performance, though nothing in the data proves it.
 
@@ -321,16 +382,16 @@ The apportionment was chosen because it is the only approach that (a) respects h
 | I. Route B transfer: median R of 17 cities × population share | 33.3% | 3.02 | 15.2 | Assumes Albany is a typical preempting city; the 17 span a fourfold range |
 | J. Per-capita base of 17 cities × Albany population (median) | 23.0% | 2.09 | 10.5 | Low: the 17 are mostly small cities with far less commercial and government activity per resident |
 | K. Yonkers analogy: its 0.5-point add-on yield per capita × Albany population |  |  | 6.4 | Low: Yonkers has the lowest R of any taxing city (0.45); its per-capita base is not Albany’s |
-| K’. Yonkers analogy, adjusted for Albany’s R relative to Yonkers’ |  |  | 11.9 | Circular — uses this memo’s R — but shows the Yonkers add-on scales consistently |
+| K’. Yonkers analogy, adjusted for Albany’s R relative to Yonkers’ |  |  | 10.8 | Circular — uses this memo’s R — but shows the Yonkers add-on scales consistently |
 | L. NAICS apportionment, uncalibrated | 31.7% | 2.88 | 14.5 | High relative to observed cities: over-predicts the typical calibration city by 10–20% |
-| M. NAICS apportionment, calibrated (this memo’s central) | 26.7% | 2.42 | 12.2 | — |
+| M. NAICS apportionment, calibrated (this memo’s central) | 24.3% | 2.21 | 11.1 | — |
 
 Reading the table:
 
 - The **residence-side** methods (B, C, D, J) cluster at \$11–15 M; the **workplace-side** methods (E, F, G, G’, H) cluster at \$19–24 M. Each side is right about part of the base and wrong about the rest. The apportionment is the base-weighted combination, and it lands between them — which is the strongest simple argument that it is doing what it should.
 - The **Route B transfer** (I) — assume Albany is a typical taxing city — gives \$15.2 M, but “typical” spans a factor of four across the seventeen cities, so this is a weak anchor.
-- The **Yonkers analogy** (K) is the only method that uses the yield of an actual 0.5-point add-on. Yonkers’ special rate is 1.5% (1% plus the 0.5% add-on), so a third of its special-tax collections, \$13.6 M for 2.116e+05 people, is what 0.5 points raises there: \$64 per resident, or \$6.4 M scaled to Albany’s population. That is low because Yonkers is the least commercially concentrated taxing city in the state (R = 0.45); adjusting for Albany’s higher R gives \$11.9 M. The adjustment is circular, but the consistency is reassuring in one respect: a city-boundary 0.5-point differential has been administered by DTF for years.
-- The **uncalibrated apportionment** (L) is \$14.5 M. The calibration’s downward correction is the single largest methodological choice in the memo after the allocator assignments themselves, and it is worth 16%.
+- The **Yonkers analogy** (K) is the only method that uses the yield of an actual 0.5-point add-on. Yonkers’ special rate is 1.5% (1% plus the 0.5% add-on), so a third of its special-tax collections, \$13.6 M for 2.116e+05 people, is what 0.5 points raises there: \$64 per resident, or \$6.4 M scaled to Albany’s population. That is low because Yonkers is the least commercially concentrated taxing city in the state (R = 0.45); adjusting for Albany’s higher R gives \$10.8 M. The adjustment is circular, but the consistency is reassuring in one respect: a city-boundary 0.5-point differential has been administered by DTF for years.
+- The **uncalibrated apportionment** (L) is \$14.5 M. The calibration’s downward correction is the single largest methodological choice in the memo after the allocator assignments themselves, and it is worth 23%.
 
 Methods not implemented, and why:
 
@@ -347,26 +408,26 @@ Each row changes one choice, re-runs the whole apportionment, and re-applies the
 
 | Variant | Raw base, \$bn | Calibrated base, \$bn | Revenue, \$m | vs central |
 |:---|---:|---:|---:|---:|
-| Central | 2.880 | 2.424 | 12.2 | 0.0% |
-| Business allocator: total employment, including public administration | 3.152 | 2.658 | 13.4 | 9.6% |
-| Business allocator: Economic Census payroll | 3.018 | 2.543 | 12.8 | 4.9% |
-| Delivered goods: 0% to residence | 2.882 | 2.426 | 12.2 | 0.1% |
-| Delivered goods: 100% to residence | 2.878 | 2.423 | 12.2 | -0.1% |
-| Residence allocator: households instead of income | 2.907 | 2.447 | 12.3 | 1.0% |
-| E-commerce: 15% of prone groups to residence | 2.874 | 2.420 | 12.2 | -0.2% |
-| E-commerce: 30% of prone groups to residence | 2.869 | 2.416 | 12.2 | -0.4% |
-| NAICS 4413 (parts, tires) sourced to residence | 2.878 | 2.423 | 12.2 | -0.1% |
-| Motor-vehicle allocator: ACS vehicles available instead of DMV registrations | 2.934 | 2.471 | 12.4 | 1.9% |
+| Central | 2.880 | 2.474 | 12.5 | 11.9% |
+| Business allocator: total employment, including public administration | 3.152 | 2.722 | 13.7 | 23.2% |
+| Business allocator: Economic Census payroll | 3.018 | 2.600 | 13.1 | 17.6% |
+| Delivered goods: 0% to residence | 2.882 | 2.476 | 12.5 | 12.0% |
+| Delivered goods: 100% to residence | 2.878 | 2.472 | 12.5 | 11.8% |
+| Residence allocator: households instead of income | 2.907 | 2.499 | 12.6 | 13.0% |
+| E-commerce: 15% of prone groups to residence | 2.874 | 2.469 | 12.4 | 11.7% |
+| E-commerce: 30% of prone groups to residence | 2.869 | 2.465 | 12.4 | 11.5% |
+| NAICS 4413 (parts, tires) sourced to residence | 2.878 | 2.472 | 12.5 | 11.8% |
+| Motor-vehicle allocator: ACS vehicles available instead of DMV registrations | 2.934 | 2.524 | 12.7 | 14.2% |
 
-Only one choice matters: **whether government jobs belong in the allocator for business purchases.** Counting them raises revenue by 10%; the Economic Census payroll alternative (private-sector wages, no government) sits between. The rows above apply the central calibration to each variant’s raw prediction; the proper test re-runs the calibration cities under the same allocator and refits. Doing so:
+Only one choice matters: **whether government jobs belong in the allocator for business purchases.** Counting them raises revenue by 23%; the Economic Census payroll alternative (private-sector wages, no government) sits between. The rows above apply the central calibration to each variant’s raw prediction; the proper test re-runs the calibration cities under the same allocator and refits. Doing so:
 
 | Allocator | Albany city share | Slope β | σ (logs) | R² | Raw base, \$bn | Calibrated base, \$bn | Revenue, \$m | 68% band, \$m |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Employment excluding public administration (used) | 0.428 | 1.019 | 0.370 | 0.886 | 2.88 | 2.42 | 12.2 | 8.4 – 17.7 |
-| Total employment, including public administration | 0.529 | 1.019 | 0.361 | 0.892 | 3.15 | 2.65 | 13.4 | 9.3 – 19.2 |
-| Economic Census payroll (private sector) | 0.479 | 1.074 | 0.393 | 0.872 | 3.02 | 2.59 | 13.0 | 8.8 – 19.3 |
+| Employment excluding public administration (used) | 0.428 | 1.060 | 0.453 | 0.849 | 2.88 | 2.47 | 12.5 | 7.9 – 19.6 |
+| Total employment, including public administration | 0.529 | 1.060 | 0.444 | 0.855 | 3.15 | 2.72 | 13.7 | 8.8 – 21.3 |
+| Economic Census payroll (private sector) | 0.479 | 1.114 | 0.479 | 0.832 | 3.02 | 2.63 | 13.3 | 8.2 – 21.4 |
 
-The fits are indistinguishable. Public administration is only 4–13% of county jobs in the seventeen calibration cities, so their predicted bases barely move when it is removed, and the calibration has no power to say which allocator is right. Albany is out of sample on exactly this dimension — public administration is 23% of county jobs and 88% of those jobs are inside the city — so the choice rests on the conceptual argument, which is clear: government purchases are exempt, and government jobs generate taxable activity only through what their occupants spend, which the store classes already count. The exempt-employer version is used. Using the directly measured school-district share for the utilities class instead of the allocator gives \$12.3 M.
+The fits are indistinguishable. Public administration is only 4–13% of county jobs in the seventeen calibration cities, so their predicted bases barely move when it is removed, and the calibration has no power to say which allocator is right. Albany is out of sample on exactly this dimension — public administration is 23% of county jobs and 88% of those jobs are inside the city — so the choice rests on the conceptual argument, which is clear: government purchases are exempt, and government jobs generate taxable activity only through what their occupants spend, which the store classes already count. The exempt-employer version is used. Using the directly measured school-district share for the utilities class instead of the allocator gives \$12.6 M.
 
 Everything else is immaterial. The delivered-goods split, flagged in the plan as a key assumption, moves the answer by under 0.1%; the e-commerce assignment, which the disappearance of NAICS 454 made unresolvable, moves it by under 1%. Both are immaterial for the same reason: the Economic Census store share and the ACS income share for those groups are within a point of each other, so it barely matters which is used.
 
@@ -376,37 +437,37 @@ Everything else is immaterial. The delivered-goods split, flagged in the plan as
 
 | Reading | Benchmark median R | Slope β | σ (logs) | Albany base, \$bn | Revenue, \$m | 68% band, \$m |
 |:---|---:|---:|---:|---:|---:|---:|
-| Rates agreed by Pub 718-A footnotes, Pub 718 and OSC (used) | 1.06 | 1.019 | 0.370 | 2.42 | 12.2 | 8.4 – 17.7 |
-| Pub 718-A percentage column | 0.74 | 1.130 | 0.424 | 2.39 | 12.0 | 7.9 – 18.4 |
+| Rates agreed by Pub 718-A footnotes, Pub 718 and OSC (used) | 1.06 | 1.06 | 0.453 | 2.47 | 11.1 | 7.9 – 19.6 |
+| Pub 718-A percentage column | 0.74 | 1.13 | 0.424 | 2.39 | 12.0 | 7.9 – 18.4 |
 
 The benchmark picture changes a lot; Albany’s estimate does not. Under the alternative reading the method over-predicts the small cities by more, the fitted slope steepens, and the two fits cross near Albany’s size. The band widens.
 
-From §5.3, on the calibration sample: the calibrated central ranges from \$11.1 M (excluding Salamanca and Ogdensburg, the two cities with identifiable structural reasons to be mis-predicted) to \$14.5 M (excluding the four Westchester cities). A slope-fixed-at-one calibration using the geometric mean ratio gives \$11.9 M; using the median ratio gives \$12.8 M.
+From §5.3, on the calibration sample: the calibrated central ranges from \$11.1 M (excluding Salamanca and Ogdensburg, the two cities with identifiable structural reasons to be mis-predicted) to \$15.3 M (excluding the four Westchester cities). A slope-fixed-at-one calibration using the geometric mean ratio gives \$11.4 M; using the median ratio gives \$12.8 M.
 
 ### 9.3 Behavioural response and administrative deduction
 
 | Assumption                                  | Revenue, \$m |
 |:--------------------------------------------|-------------:|
-| β = 1.00 (central)                          |         12.2 |
-| β = 0.97, whole base                        |         11.8 |
-| β = 0.97, store classes only                |         12.0 |
-| β = 0.90, whole base (aggressive)           |         11.0 |
-| β = 0.90, store classes only                |         11.5 |
-| φ = -0.72% observed (central)               |         12.2 |
-| φ = 0                                       |         12.1 |
-| φ = +2% (an explicit administrative charge) |         11.9 |
+| β = 1.00 (central)                          |         11.1 |
+| β = 0.97, whole base                        |         10.8 |
+| β = 0.97, store classes only                |         10.9 |
+| β = 0.90, whole base (aggressive)           |         10.0 |
+| β = 0.90, store classes only                |         10.5 |
+| φ = -0.72% observed (central)               |         11.1 |
+| φ = 0                                       |         11.1 |
+| φ = +2% (an explicit administrative charge) |         10.8 |
 
 Neither factor moves the estimate by more than about 10% even under aggressive assumptions, and both are dwarfed by the base uncertainty.
 
 ### 9.4 Base year and growth
 
-| Base | County base, \$bn | City base at 26.7%, \$bn | Revenue, \$m |
+| Base | County base, \$bn | City base at 24.3%, \$bn | Revenue, \$m |
 |----|---:|---:|---:|
-| 2022 - 2023 | 8.983 | 2.40 | 12.1 |
-| 2023 - 2024 | 9.034 | 2.41 | 12.1 |
-| 2024 - 2025 | 9.251 | 2.47 | 12.4 |
-| 2025 - 2026 | 9.630 | 2.57 | 12.9 |
-| Three-year mean used (2022-23 to 2024-25) | 9.090 | 2.42 | 12.2 |
+| 2022 - 2023 | 8.983 | 2.18 | 11.0 |
+| 2023 - 2024 | 9.034 | 2.20 | 11.1 |
+| 2024 - 2025 | 9.251 | 2.25 | 11.3 |
+| 2025 - 2026 | 9.630 | 2.34 | 11.8 |
+| Three-year mean used (2022-23 to 2024-25) | 9.090 | 2.21 | 11.1 |
 
 ## 10. Validations
 
@@ -414,11 +475,11 @@ Neither factor moves the estimate by more than about 10% even under aggressive a
 |----|----|----|
 | 1 | 4% × county base against county distributions, each year | Gap -1.1% to 2.5%; passes |
 | 2 | Economic Census: sum of Albany County places against county total, retail | Places cover 99.2%; residual 0.8% |
-| 3 | Utilities: allocator against the directly measured school-district base | Allocator 42.8% vs measured 48.9%; total employment 52.9%. The measured taxable utility base is more city-concentrated than private employment; using it directly changes revenue by \$0.1 M |
+| 3 | Utilities: allocator against the directly measured school-district base | Allocator 42.8% vs measured 48.9%; total employment 52.9%. The measured taxable utility base is more city-concentrated than private employment; using it directly changes revenue by \$1.4 M |
 | 4 | Motor vehicles: DMV resident share against ACS income share | 20.6% vs 24.5%; DMV lower, consistent with lower urban vehicle ownership |
-| 5 | Calibration | Slope 1.019 (se 0.116); σ 0.370, above the 0.25 threshold — band widened, not suppressed |
+| 5 | Calibration | Slope 1.060 (se 0.136); σ 0.453, above the 0.25 threshold — band widened, not suppressed |
 | 6 | Preemption identity across the 11 calibration counties | (C_k + Σ p_i B_i) ÷ (r_k B_k) between 0.995 and 1.027 |
-| 7 | Albany’s implied R against the 17 observed cities | 0.85 within 0.45–1.89, near the median 1.06 |
+| 7 | Albany’s implied R against the 17 observed cities | 0.77 within 0.35–1.89, near the median 1.06 |
 
 Validation 3 is the only place an allocator can be tested against a direct observation of an Albany city base. The measured share sits between the two employment allocators, closer to the private-sector one, which is some comfort about the business class — the largest and least certain part of the estimate — without being proof.
 
@@ -429,22 +490,22 @@ Albany County distributes 40% of its collections to cities and towns by census p
 | Option | \$ million / year |
 |----|---:|
 | Status quo: 0.40 × population share × county collections of \$366.2 M | 46.2 |
-| Preempt 1.5 points: 0.015 × B_c | 36.4 |
-| **Add on 0.5 points (this memo)** | **12.2** |
+| Preempt 1.5 points: 0.015 × B_c | 33.2 |
+| **Add on 0.5 points (this memo)** | **11.1** |
 
-Preemption at the standard 1.5 points would *lose* about \$9.8 M a year against the existing distribution. The reason is structural: preemption pays only if the city’s share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany’s R is 0.85. A city has to be a genuine retail concentrator for preemption to work, and Albany — with its county’s retail on Wolf Road and at Crossgates — is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched, which is the whole case for it over the conventional structure.
+Preemption at the standard 1.5 points would *lose* about \$13.0 M a year against the existing distribution. The reason is structural: preemption pays only if the city’s share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany’s R is 0.77. A city has to be a genuine retail concentrator for preemption to work, and Albany — with its county’s retail on Wolf Road and at Crossgates — is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched, which is the whole case for it over the conventional structure.
 
 ## 12. Timing and first-year cash
 
 Local rate changes take effect on 1 March, 1 June, 1 September or 1 December, with 90 days’ notice (Tax Law §1210(d), §1211), and transitional rules apply to straddling contracts (Tax Bulletin ST-895). Distributions lag liability by one to two months, with the first two months of each quarter paid as estimates.
 
-On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** start yields roughly 8.6 M of cash in the first year (10 months’ liability, about 8.5 months’ cash) and the full amount from the second. A **1 December** start yields essentially nothing in the first calendar year. If revenue in a particular budget year is the objective, the start date matters as much as most of the modelling choices in §9.
+On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** start yields roughly 7.9 M of cash in the first year (10 months’ liability, about 8.5 months’ cash) and the full amount from the second. A **1 December** start yields essentially nothing in the first calendar year. If revenue in a particular budget year is the objective, the start date matters as much as most of the modelling choices in §9.
 
 ## 13. Limitations
 
 In rough order of importance:
 
-1.  **The treatment of Albany’s exempt public sector.** Government is 23% of the county’s jobs and 88% of those are in the city; government purchases are exempt, so those jobs are excluded from the business allocator, but the only check available — the seventeen calibration cities — has too little government employment to confirm or refute the choice. Including them adds about \$1.2 M. Hospitals and universities, also largely exempt, remain in the count. A DTF tabulation would resolve it.
+1.  **The treatment of Albany’s exempt public sector.** Government is 23% of the county’s jobs and 88% of those are in the city; government purchases are exempt, so those jobs are excluded from the business allocator, but the only check available — the seventeen calibration cities — has too little government employment to confirm or refute the choice. Including them adds about \$2.6 M. Hospitals and universities, also largely exempt, remain in the count. A DTF tabulation would resolve it.
 2.  **The method misses by a third on cities where it can be checked.** Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
 3.  **The calibration sample is small (17) and selected**: mostly small retail-centre cities, with Utica, Rome and the Westchester cities the closest structural analogues to Albany. The fit is reported with and without Westchester.
 4.  **Economic Census receipts are gross, not taxable, and are 2022 values applied to 2022-23 to 2024-25 bases.** The allocators are shares, so level drift matters little; the assumption is that a NAICS group’s taxable fraction is similar inside and outside the city.
@@ -452,7 +513,7 @@ In rough order of importance:
 6.  **The utility-tax measurement is not clean.** Residential energy is taxed by the county at 1% and by the school district at 3%, so numerator and denominator cover slightly different mixes.
 7.  **The imposed rate of six calibration cities is ambiguous in the published sources** (§5.3). The reading supported by three sources is used; the alternative reading widens the band but leaves Albany’s central estimate essentially unchanged (§9.2). Ogdensburg, which re-imposed its tax in 2022 and is absent from the Comptroller’s 2020 table, is the least certain of the six.
 8.  **Cell suppression** removes 3–10% of county × NAICS cells; county bases are sums of published cells. The reconciliation bounds the effect at a few percent.
-9.  **NAICS 9261 is classified as residence-sourced vehicle tax on the strength of its statewide distribution**, not on documentation. If it is instead business activity sourced where it is reported, it belongs with the business class and the estimate rises by about \$0.1 M.
+9.  **NAICS 9261 is classified as residence-sourced vehicle tax on the strength of its statewide distribution**, not on documentation. If it is instead business activity sourced where it is reported, it belongs with the business class and the estimate rises by about \$1.5 M.
 
 ## 14. Recommendations
 

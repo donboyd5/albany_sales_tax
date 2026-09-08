@@ -109,12 +109,26 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 
 ## Phase 3 headline
 
-Revenue approximately **$12.2 M/year** (central allocator: employment excluding
-public administration; 9261 in the motor-vehicle class), 68% band $8.4-17.7 M,
-90% band $6.6-22.5 M; upper case $13.4 M with government jobs counted;
-reasonable planning range $10-15 M, budget figure $12 M. B_c calibrated =
-$2.42 B, implied R = 0.85. Calibration slope 1.02 but sigma = 0.37 in logs,
-above the 0.25 tripwire, so the band is deliberately wide. The 17 calibration
-cities have too little government employment to distinguish the two business
-allocators, so the choice rests on the exemption argument. See
-docs/albany-halfpct-memo.md.
+Revenue approximately **$11.1 M/year**, 68% band $9.2-13.5 M, 90% $8.1-15.3 M;
+planning range $9-14 M, budget figure $11 M. B_c calibrated = $2.21 B, R = 0.77.
+
+Calibration: the preferred fit drops Salamanca (100% on Seneca Nation Allegany
+Territory, Census AIANNH 0080) and Ogdensburg (jurisdiction code created 1 Mar
+2022, implied share still ramping 3.01->3.45%; border-traffic collapse) --
+CALIB_EXCLUDE in R/05_calibrate.R. Both have verified reasons that do not
+transfer to Albany. n=15, beta 0.881 (se 0.033), sigma 0.192, R2 0.954. All-17
+fit gives $12.5 M with sigma 0.453 and is reported alongside.
+
+County fixed effects explain 83% of the variance in log(obs/pred) but are not
+predictable from county characteristics. Four mechanisms make the apportionment
+overstate a city's base: vendors coding sales to the county rather than the
+city (invisible to the preemption identity); capital-intensive plants/resorts
+outside cities that employment cannot see; Economic Census receipts being gross
+rather than taxable; exempt hospitals and universities inside cities.
+
+Rate correction 2026-09-08: Ogdensburg is 3.0%, not 1.5% -- the city code
+imposes 3% under s.1210(a), preempting the county's base 3%, with St. Lawrence
+retaining only its non-preemptable additional 1% (s.1224). Saratoga Springs
+confirmed at 1.5% by the Saratoga County Treasurer.
+
+See docs/albany-halfpct-memo.md.
