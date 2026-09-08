@@ -253,8 +253,9 @@ the county and city remain the same"). Its base is therefore \$71 M, not
 was right.
 
 **Yonkers.** Pub 718 gives 8⅞% inside the city against 8⅜% outside — a
-**+0.5 point differential**, the only one in the state, and the only published
-New York instance of the exact policy being estimated for Albany. The city
+**+0.5 point differential**, the only one in the state — the economic analog
+for Albany's proposed differential, but not a legal precedent for it, because
+Yonkers' extra half point sits on top of full preemption (see the memo, §1). The city
 takes the county's full 4% and imposes 4.5%. Its two distribution rows stand in
 an exact 2.000 ratio (3.0% regular + 1.5% special), so its base is identical
 whether computed as total ÷ 4.5% or regular ÷ 3.0% — Yonkers is immune to the

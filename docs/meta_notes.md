@@ -120,6 +120,16 @@ Westchester each contribute more than one city, and §5A shows county effects
 explain 83% of the residual variance — so within-county observations are very
 far from independent. Unclustered SEs would be badly overconfident.
 
+**Yonkers: analog for what, exactly.** Earlier drafts called Yonkers "the exact
+policy being estimated for Albany". Wrong in one sense: Yonkers preempts the
+county entirely and then adds 1½% by special act; Albany would keep its
+distribution share and add 0.5% on the general base, which has no New York
+precedent this analysis could find. Right in the other: Yonkers is the only
+place in the state where the combined rate steps up 0.5 points at a city line,
+so it is the analog for administration and for β. The documents now say which.
+The memo's §11 preemption comparison is the substantive answer to "why not use
+§1224" — for Albany, preemption loses money.
+
 **Why 4413 (auto parts, tires) is store-based but 4411/4412 are not.** §1214
 residence-sourcing applies to vehicles *required to be registered*. Tyres are
 counter sales. Worth \$65 M; in the sensitivity table.
@@ -191,7 +201,7 @@ number that contradicts the setup chunk, suspect this first.
 | Albany County rate 4%, no clothing exemption | Pub 718, Pub 718-A, Pub 718-C | Certain |
 | DTF county base covers the whole county incl. preempting cities | Preemption identity, 11 counties, 0.995–1.027 | Very high |
 | p_c = r_c for all cities but Yonkers | Pub 718 publishes equal combined rates inside and outside | Very high |
-| Yonkers is a genuine 0.5-point add-on | Pub 718: 8⅞% inside vs 8⅜% outside; MCTD applies county-wide | Certain |
+| Yonkers has a combined rate 0.5 points above its county's | Pub 718: 8⅞% inside vs 8⅜% outside; MCTD applies county-wide | Certain — but it is an *economic* analog (a differential at a city line), not a legal precedent: the half point sits on top of full preemption. No NY city keeps its county distribution share and levies a general-base add-on. Narrow-base layered city taxes (Niagara Falls, Lockport, Long Beach, Newburgh, Port Jervis, and the ACSD utility tax) do exist without preemption. |
 | ACSD tax covers telecom as well as utilities | TSB-M-90(6)S, read in full | Certain |
 | Salamanca 100% on tribal territory | 2020 Census Block Assignment Files, AIANNH 0080 | Certain (the *tax* consequence is inference from 20 NYCRR 529.9) |
 | Ogdensburg rate 3.0% | City code via ecode360; corroborated by §1224 reasoning and DTF ST-22-1 | High |

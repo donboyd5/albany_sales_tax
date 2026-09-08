@@ -159,7 +159,9 @@ year — see the main report's §5A.
 city against 8⅜% in the rest of Westchester. The city takes the county's full
 4% and imposes 4.5% — a **0.5-point add-on above full preemption**. It is the
 only published New York example of a city rate sitting above its county's, and
-therefore the closest existing analogue to the policy this project is costing.
+therefore the closest existing analogue to the *rate differential* this project
+is costing — though not a legal precedent for Albany's structure, since Yonkers'
+extra half point sits on top of full preemption of the county rate.
 Its two distribution rows stand in an exact 2.000 ratio (3.0% regular plus 1.5%
 special), so its base is the same whether computed from the total at 4.5% or the
 regular row at 3.0% — the one city whose base is immune to the rate question
