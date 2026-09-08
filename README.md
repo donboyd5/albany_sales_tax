@@ -79,6 +79,8 @@ analysis/memo.qmd   the write-up: policy option, goals, data, method, results, a
 analysis/route-b.qmd            17-city reduced-form benchmark
 analysis/city-halfpct-revenue.qmd   the technical estimate
 docs/albany-halfpct-memo.md     the memo, rendered to Markdown (generated -- edit analysis/memo.qmd)
+docs/meta_notes.md              notes for a reviewer: judgment calls, corrections made, dead ends, verification status
+docs/data-layouts.md            verified schema of every dataset, and where it differed from what was assumed
 ```
 
 ## Ground rules

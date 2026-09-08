@@ -27,6 +27,9 @@ fm <- function(x, d = 1) formatC(x / 1e6, format = "f", digits = d, big.mark = "
 fb <- function(x, d = 2) formatC(x / 1e9, format = "f", digits = d)
 fp <- function(x, d = 1) paste0(formatC(100 * x, format = "f", digits = d), "%")
 f3 <- function(x) formatC(x, format = "f", digits = 3)
+## a one-sigma move in logs, expressed as percentages up and down
+sd_up <- function(sg) paste0("+", formatC(100 * (exp(sg) - 1), format = "f", digits = 0), "%")
+sd_dn <- function(sg) paste0("-", formatC(100 * (1 - exp(-sg)), format = "f", digits = 0), "%")
 
 
 ALB <- list("Albany city, New York", "3601000", "36001", "ALBANY", "ALBANY")
@@ -125,7 +128,9 @@ variants <- tribble(
 B_util_meas <- sum(ifelse(appo$sourcing_class == "utilities", appo$B_kg * a_util, appo$B_cg), na.rm = TRUE)
 ## the three business allocators with the calibration re-fitted under each
 alloc_fits <- bind_rows(lapply(c("lodes_ex_pubadmin", "lodes", "ec_payroll"), function(ba) {
-  cal_v <- build_calibration_variant(business_allocator = ba); f_v <- fit_calibration(cal_v)
+  cal_v <- build_calibration_variant(business_allocator = ba) |>
+             filter(!city %in% names(CALIB_EXCLUDE))
+  f_v <- fit_calibration(cal_v)
   Bp_v  <- do.call(apportion_variant, c(ALB, list(business_allocator = ba))); e_v <- apply_calibration(f_v, Bp_v)
   tibble(Allocator = c(lodes_ex_pubadmin = "Employment excluding public administration (used)",
                        lodes = "Total employment, including public administration",
@@ -138,7 +143,7 @@ alloc_fits <- bind_rows(lapply(c("lodes_ex_pubadmin", "lodes", "ec_payroll"), fu
 }))
 sens <- variants |> rowwise() |>
   mutate(B_pred_v = do.call(apportion_variant, c(ALB, args)),
-         B_cal_v = apply_calibration(fit, B_pred_v)$B_c_central,
+         B_cal_v = apply_calibration(fit_pref, B_pred_v)$B_c_central,
          Rev = rev(B_cal_v)) |> ungroup()
 
 ## alternatives
@@ -170,7 +175,7 @@ a_mv_area <- sum(da$n * da$wa) / sum(da$n)
 status_quo <- 0.40 * pop * C_k
 ## if 9261 were business activity rather than DMV-collected vehicle tax
 B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
-rev_9261_as_business <- rev(apply_calibration(fit, B_pred + B_9261 * (a_wxp - a_mv))$B_c_central)
+rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv))$B_c_central)
 
 ```
 
@@ -182,12 +187,11 @@ rev_9261_as_business <- rev(apply_calibration(fit, B_pred + B_9261 * (a_wxp - a_
 |---|---|
 | **Policy option** | A 0.5 percentage-point City of Albany sales and use tax, added on top of the existing 8% (4% state, 4% county), on the same base the county taxes, destination-sourced, with no preemption of the county tax and no change to county distributions. |
 | **Central estimate** | **\$`r fm(REV)` million a year** at `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` activity levels; about **\$`r fm(rev(s_cal * B_latest))` million** at the latest full year (`r by_year$sales_tax_year[by_year$fy == 2026]`) |
-| **Upper case** | **\$`r fm(alloc_fits[["Revenue, $m"]][2] * 1e6)` million** if government jobs are counted in the allocator for business purchases (§9.1); the central case leaves them out because governments are exempt purchasers |
 | **City taxable base** | **\$`r fb(est_pref$B_c_central)` billion**, `r fp(s_cal)` of the county's \$`r fb(B_k)` billion, against a `r fp(pop)` population share |
 | **Reasonable planning range** | **\$9–14 million** (base \$1.8–2.8 billion) — see §7 for how this differs from the statistical band |
 | **Statistical band** | 68%: \$`r fm(rev(est_pref$lo68))`–`r fm(rev(est_pref$hi68))` M; 90%: \$`r fm(rev(est_pref$lo90))`–`r fm(rev(est_pref$hi90))` M |
 | **If no cities are excluded** | \$`r fm(REV_all)` M, 68% \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` M. §5A gives the reasons for excluding two of the seventeen. |
-| **Largest uncertainty** | How to treat the city's very large public sector. Government purchases are exempt from sales tax, so government jobs are left out of the allocator for business purchases; counting them would add about \$`r fm(sens$Rev[2] - REV)` M. The 17 cities the method is checked against have too little government employment to settle it either way. |
+| **Largest uncertainty** | The county-level gap between apportioned and collected bases (§5A), which the band reflects. Modelling choices are second order: the largest, the business allocator, moves the answer by \$`r fm(abs(sens$Rev[2] - REV))` M. |
 | **Against what the city receives now** | The city's population-based share of the county tax is about \$`r fm(status_quo)` M a year; the add-on would add \$`r fm(REV)` M on top of it (+`r fp(REV / status_quo, 0)`) without touching it |
 | **Preemption comparison** | Preempting 1.5 points instead would yield \$`r fm(0.015 * est_pref$B_c_central)` M against the \$`r fm(status_quo)` M it would forfeit — a loss of about \$`r fm(status_quo - 0.015 * est_pref$B_c_central)` M a year |
 
@@ -402,11 +406,11 @@ cv |> transmute(Specification, n, `Slope β` = beta, `se(β)` = se, `σ (logs)` 
   kable(format = "pipe", digits = c(0, 0, 3, 3, 3, 3, 2, 1), align = "lrrrrrrr")
 ```
 
-The slope is indistinguishable from 1 — the method scales correctly across cities of very different size. But the residual spread, σ = `r f3(fit$sigma)` in logs, exceeds the 0.25 threshold set in the plan: **on the cities where the answer is known, the method is routinely off by a third**. The band is widened to match rather than narrowed by dropping observations.
+The slope is indistinguishable from 1 — the method scales correctly across cities of very different size, which is the reassuring part. The residual spread across all seventeen is σ = `r f3(fit$sigma)` in logs. Because the fit is multiplicative, a one-σ miss is **`r sd_up(fit$sigma)` on the high side and `r sd_dn(fit$sigma)` on the low side** — the two are not symmetric, and quoting a single percentage understates the upside. That is well beyond the 0.25 threshold the project plan set as a tripwire.
 
-The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation's Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to `r f3(f_ns$sigma)`. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
+Two of the seventeen residuals have verifiable structural causes that do not apply to Albany, and §5A works through them along with every other city. Setting those two aside brings σ to `r f3(fit_pref$sigma)`, a one-σ miss of `r sd_up(fit_pref$sigma)` / `r sd_dn(fit_pref$sigma)`, and that is the fit used. Both are reported throughout.
 
-The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` B down to \$`r fb(est_pref$B_c_central)` B (a `r fp(1 - est_pref$B_c_central / B_pred, 0)` reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is `r f3(gm_ratio)`. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
+The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` B down to \$`r fb(est_pref$B_c_central)` B (a `r fp(1 - est_pref$B_c_central / B_pred, 0)` reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is `r f3(gm_pref)` among the fifteen and `r f3(gm_all)` across all seventeen. §5A sets out the four mechanisms behind that, all of which apply to Albany, so the correction is taken.
 
 ### 5.4 β
 
@@ -667,13 +671,43 @@ sens |> transmute(Variant, `Raw base, $bn` = B_pred_v / 1e9, `Calibrated base, $
   kable(format = "pipe", digits = c(0, 3, 3, 1, 0), align = "lrrrr")
 ```
 
-Only one choice matters: **whether government jobs belong in the allocator for business purchases.** Counting them raises revenue by `r fp(sens$Rev[2]/REV - 1, 0)`; the Economic Census payroll alternative (private-sector wages, no government) sits between. The rows above apply the central calibration to each variant's raw prediction; the proper test re-runs the calibration cities under the same allocator and refits. Doing so:
+The one choice that moves the answer at all is the business allocator, and it
+is worth being precise about what is and is not a live option there.
+
+**Counting government jobs is not a plausible specification.** The business
+class is the taxable sales of business-serving vendors, sourced to the
+customer's location. Government purchases are exempt (Tax Law §1116(a)(1)), so
+they are not in that base at all. Using government employment to distribute it
+means using a measure of *exempt* activity to apportion *taxable* purchases.
+The row appears in the table because it was the project plan's original choice
+and because the difference is worth quantifying — \$`r fm(abs(sens$Rev[2] - REV))` M —
+not because the higher figure is a defensible alternative estimate.
+
+The only real argument for putting any weight on government employment is
+second-order: private landlords leasing to the State, and contractors serving
+it, do make taxable purchases, and their activity scales with government
+employment. That channel is real but small, and it cannot justify the full
+`r fp(a_work - a_wxp, 0)`-point difference between the two employment shares.
+
+Re-running the calibration under each allocator, so that the calibration cities
+and Albany are treated identically:
 
 ```{r}
 alloc_fits |> kable(format = "pipe", digits = c(0, 3, 3, 3, 3, 2, 2, 1, 0), align = "lrrrrrrrr")
 ```
 
-The fits are indistinguishable. Public administration is only 4–13% of county jobs in the seventeen calibration cities, so their predicted bases barely move when it is removed, and the calibration has no power to say which allocator is right. Albany is out of sample on exactly this dimension — public administration is `r fp(pub_pct, 0)` of county jobs and `r fp(a_pub, 0)` of those jobs are inside the city — so the choice rests on the conceptual argument, which is clear: government purchases are exempt, and government jobs generate taxable activity only through what their occupants spend, which the store classes already count. The exempt-employer version is used. Using the directly measured school-district share for the utilities class instead of the allocator gives \$`r fm(rev(apply_calibration(fit, B_util_meas)$B_c_central))` M.
+The fits are statistically indistinguishable, and that is itself informative:
+public administration is only 4–13% of county jobs in the calibration cities, so
+their predicted bases barely move when it is removed and the calibration has no
+power to adjudicate. Albany is far out of sample on this dimension — public
+administration is `r fp(pub_pct, 0)` of county jobs and `r fp(a_pub, 0)` of
+those are inside the city — so the choice rests on the exemption argument
+above rather than on evidence. The Economic Census payroll row is a genuine
+alternative (private-sector wages rather than private-sector headcount) and
+lands between the two, which is mild support for the specification used.
+
+Using the directly measured school-district share for the utilities class
+instead of the allocator gives \$`r fm(rev(apply_calibration(fit_pref, B_util_meas)$B_c_central))` M.
 
 Everything else is immaterial. The delivered-goods split, flagged in the plan as a key assumption, moves the answer by under 0.1%; the e-commerce assignment, which the disappearance of NAICS 454 made unresolvable, moves it by under 1%. Both are immaterial for the same reason: the Economic Census store share and the ACS income share for those groups are within a point of each other, so it barely matters which is used.
 
@@ -759,8 +793,8 @@ On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** star
 
 In rough order of importance:
 
-1. **The treatment of Albany's exempt public sector.** Government is `r fp(pub_pct, 0)` of the county's jobs and `r fp(a_pub, 0)` of those are in the city; government purchases are exempt, so those jobs are excluded from the business allocator, but the only check available — the seventeen calibration cities — has too little government employment to confirm or refute the choice. Including them adds about \$`r fm(sens$Rev[2] - REV)` M. Hospitals and universities, also largely exempt, remain in the count. A DTF tabulation would resolve it.
-2. **The method misses by a third on cities where it can be checked.** Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
+1. **Exempt institutions inside the city.** Government purchases are exempt and government jobs are excluded from the business allocator accordingly, but hospitals and universities — also largely exempt purchasers — remain in the count, and Albany has many of both. This biases the city's business share upward, in the same direction as the county effect in §5A, and is one reason the calibration corrects downward. It is not separately quantified because LODES cannot distinguish an exempt hospital from a taxable employer within a sector.
+2. **The method still misses by `r sd_up(fit_pref$sigma)` / `r sd_dn(fit_pref$sigma)` at one σ on the cities where it can be checked**, after the two structural exclusions, and by `r sd_up(fit$sigma)` / `r sd_dn(fit$sigma)` without them. Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
 3. **The calibration sample is small (17) and selected**: mostly small retail-centre cities, with Utica, Rome and the Westchester cities the closest structural analogues to Albany. The fit is reported with and without Westchester.
 4. **Economic Census receipts are gross, not taxable, and are 2022 values applied to 2022-23 to 2024-25 bases.** The allocators are shares, so level drift matters little; the assumption is that a NAICS group's taxable fraction is similar inside and outside the city.
 5. **Remote sales are not published by delivery jurisdiction**, and NAICS 2022 makes e-commerce unidentifiable in the DTF data. Shown to be immaterial for Albany, but it is an assumption.

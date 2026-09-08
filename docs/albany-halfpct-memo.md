@@ -29,12 +29,11 @@
 |----|----|
 | **Policy option** | A 0.5 percentage-point City of Albany sales and use tax, added on top of the existing 8% (4% state, 4% county), on the same base the county taxes, destination-sourced, with no preemption of the county tax and no change to county distributions. |
 | **Central estimate** | **\$11.1 million a year** at 2022–2025 activity levels; about **\$11.8 million** at the latest full year (2025 - 2026) |
-| **Upper case** | **\$13.7 million** if government jobs are counted in the allocator for business purchases (§9.1); the central case leaves them out because governments are exempt purchasers |
 | **City taxable base** | **\$2.21 billion**, 24.3% of the county’s \$9.09 billion, against a 31.5% population share |
 | **Reasonable planning range** | **\$9–14 million** (base \$1.8–2.8 billion) — see §7 for how this differs from the statistical band |
 | **Statistical band** | 68%: \$9.2–13.5 M; 90%: \$8.1–15.3 M |
 | **If no cities are excluded** | \$12.5 M, 68% \$7.9–19.6 M. §5A gives the reasons for excluding two of the seventeen. |
-| **Largest uncertainty** | How to treat the city’s very large public sector. Government purchases are exempt from sales tax, so government jobs are left out of the allocator for business purchases; counting them would add about \$2.6 M. The 17 cities the method is checked against have too little government employment to settle it either way. |
+| **Largest uncertainty** | The county-level gap between apportioned and collected bases (§5A), which the band reflects. Modelling choices are second order: the largest, the business allocator, moves the answer by \$0.9 M. |
 | **Against what the city receives now** | The city’s population-based share of the county tax is about \$46.2 M a year; the add-on would add \$11.1 M on top of it (+24%) without touching it |
 | **Preemption comparison** | Preempting 1.5 points instead would yield \$33.2 M against the \$46.2 M it would forfeit — a loss of about \$13.0 M a year |
 
@@ -249,11 +248,11 @@ Regressing the log of the observed base on the log of the predicted base, with s
 | Excluding Salamanca | 16 | 0.977 | 0.112 | 0.387 | 0.864 | 2.33 | 11.7 |
 | Excluding Salamanca and Ogdensburg | 15 | 0.881 | 0.033 | 0.192 | 0.954 | 2.21 | 11.1 |
 
-The slope is indistinguishable from 1 — the method scales correctly across cities of very different size. But the residual spread, σ = 0.453 in logs, exceeds the 0.25 threshold set in the plan: **on the cities where the answer is known, the method is routinely off by a third**. The band is widened to match rather than narrowed by dropping observations.
+The slope is indistinguishable from 1 — the method scales correctly across cities of very different size, which is the reassuring part. The residual spread across all seventeen is σ = 0.453 in logs. Because the fit is multiplicative, a one-σ miss is **+57% on the high side and -36% on the low side** — the two are not symmetric, and quoting a single percentage understates the upside. That is well beyond the 0.25 threshold the project plan set as a tripwire.
 
-The one large residual with a verifiable structural cause is Salamanca, over-predicted by a factor of three. The 2020 Block Assignment Files place 100% of its population on AIANNH area 0080, the Seneca Nation’s Allegany Territory, where much retail is outside the state tax base but inside the Economic Census. Dropping it cuts σ to 0.387. It is kept in the headline fit anyway, because excluding an observation after seeing that it is inconvenient is how error bands are made to look better than the method deserves; the variant is reported for the reader.
+Two of the seventeen residuals have verifiable structural causes that do not apply to Albany, and §5A works through them along with every other city. Setting those two aside brings σ to 0.192, a one-σ miss of +21% / -17%, and that is the fit used. Both are reported throughout.
 
-The calibration pulls Albany’s raw prediction of \$2.88 B down to \$2.21 B (a 23% reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is 0.785. The plausible mechanism is that Economic Census receipts are gross rather than taxable and that employment over-attributes taxable purchasing to office-heavy cities relative to counties with manufacturing and construction. Both would apply to Albany, so the correction is taken.
+The calibration pulls Albany’s raw prediction of \$2.88 B down to \$2.21 B (a 23% reduction), because the method over-predicts the observed base for most calibration cities — the geometric-mean observed/predicted ratio is 0.903 among the fifteen and 0.785 across all seventeen. §5A sets out the four mechanisms behind that, all of which apply to Albany, so the correction is taken.
 
 ### 5.4 β
 
@@ -358,7 +357,7 @@ The **statistical band** (68%: \$9.2–13.5 M; 90%: \$8.1–15.3 M) comes from t
 
 The **reasonable planning range of \$10–15 million** (base \$2.0–3.0 billion) is a judgment, and rests on three observations:
 
-1.  Every calibration variant in §5.3 lands between \$11.1 M and \$15.3 M, and the choice of business allocator — the one modelling decision that matters — spans \$12.5–13.7 M (§9.1).
+1.  Every calibration variant in §5.3 lands between \$11.1 M and \$15.3 M, and the choice of business allocator — the one modelling decision that matters — spans \$11.1–12.0 M (§9.1).
 2.  Every alternative *method* in the next section that has no identifiable directional bias lands between roughly \$11 M and \$15 M; the methods outside that span each have a stated reason to be biased.
 3.  Albany’s allocators resolve at fine NAICS detail, its Economic Census coverage is near-complete, and its one measurable component (utilities) lies between the two employment allocators. These are the conditions under which the method should do better than its average performance, though nothing in the data proves it.
 
@@ -408,26 +407,34 @@ Each row changes one choice, re-runs the whole apportionment, and re-applies the
 
 | Variant | Raw base, \$bn | Calibrated base, \$bn | Revenue, \$m | vs central |
 |:---|---:|---:|---:|---:|
-| Central | 2.880 | 2.474 | 12.5 | 11.9% |
-| Business allocator: total employment, including public administration | 3.152 | 2.722 | 13.7 | 23.2% |
-| Business allocator: Economic Census payroll | 3.018 | 2.600 | 13.1 | 17.6% |
-| Delivered goods: 0% to residence | 2.882 | 2.476 | 12.5 | 12.0% |
-| Delivered goods: 100% to residence | 2.878 | 2.472 | 12.5 | 11.8% |
-| Residence allocator: households instead of income | 2.907 | 2.499 | 12.6 | 13.0% |
-| E-commerce: 15% of prone groups to residence | 2.874 | 2.469 | 12.4 | 11.7% |
-| E-commerce: 30% of prone groups to residence | 2.869 | 2.465 | 12.4 | 11.5% |
-| NAICS 4413 (parts, tires) sourced to residence | 2.878 | 2.472 | 12.5 | 11.8% |
-| Motor-vehicle allocator: ACS vehicles available instead of DMV registrations | 2.934 | 2.524 | 12.7 | 14.2% |
+| Central | 2.880 | 2.210 | 11.1 | 0.0% |
+| Business allocator: total employment, including public administration | 3.152 | 2.394 | 12.1 | 8.3% |
+| Business allocator: Economic Census payroll | 3.018 | 2.304 | 11.6 | 4.2% |
+| Delivered goods: 0% to residence | 2.882 | 2.212 | 11.1 | 0.1% |
+| Delivered goods: 100% to residence | 2.878 | 2.209 | 11.1 | -0.1% |
+| Residence allocator: households instead of income | 2.907 | 2.229 | 11.2 | 0.8% |
+| E-commerce: 15% of prone groups to residence | 2.874 | 2.207 | 11.1 | -0.2% |
+| E-commerce: 30% of prone groups to residence | 2.869 | 2.204 | 11.1 | -0.3% |
+| NAICS 4413 (parts, tires) sourced to residence | 2.878 | 2.209 | 11.1 | -0.1% |
+| Motor-vehicle allocator: ACS vehicles available instead of DMV registrations | 2.934 | 2.247 | 11.3 | 1.7% |
 
-Only one choice matters: **whether government jobs belong in the allocator for business purchases.** Counting them raises revenue by 23%; the Economic Census payroll alternative (private-sector wages, no government) sits between. The rows above apply the central calibration to each variant’s raw prediction; the proper test re-runs the calibration cities under the same allocator and refits. Doing so:
+The one choice that moves the answer at all is the business allocator, and it is worth being precise about what is and is not a live option there.
+
+**Counting government jobs is not a plausible specification.** The business class is the taxable sales of business-serving vendors, sourced to the customer’s location. Government purchases are exempt (Tax Law §1116(a)(1)), so they are not in that base at all. Using government employment to distribute it means using a measure of *exempt* activity to apportion *taxable* purchases. The row appears in the table because it was the project plan’s original choice and because the difference is worth quantifying — \$0.9 M — not because the higher figure is a defensible alternative estimate.
+
+The only real argument for putting any weight on government employment is second-order: private landlords leasing to the State, and contractors serving it, do make taxable purchases, and their activity scales with government employment. That channel is real but small, and it cannot justify the full 10%-point difference between the two employment shares.
+
+Re-running the calibration under each allocator, so that the calibration cities and Albany are treated identically:
 
 | Allocator | Albany city share | Slope β | σ (logs) | R² | Raw base, \$bn | Calibrated base, \$bn | Revenue, \$m | 68% band, \$m |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Employment excluding public administration (used) | 0.428 | 1.060 | 0.453 | 0.849 | 2.88 | 2.47 | 12.5 | 7.9 – 19.6 |
-| Total employment, including public administration | 0.529 | 1.060 | 0.444 | 0.855 | 3.15 | 2.72 | 13.7 | 8.8 – 21.3 |
-| Economic Census payroll (private sector) | 0.479 | 1.114 | 0.479 | 0.832 | 3.02 | 2.63 | 13.3 | 8.2 – 21.4 |
+| Employment excluding public administration (used) | 0.428 | 0.881 | 0.192 | 0.954 | 2.88 | 2.21 | 11.1 | 9.2 – 13.5 |
+| Total employment, including public administration | 0.529 | 0.882 | 0.186 | 0.957 | 3.15 | 2.39 | 12.0 | 10.0 – 14.5 |
+| Economic Census payroll (private sector) | 0.479 | 0.925 | 0.222 | 0.939 | 3.02 | 2.33 | 11.8 | 9.4 – 14.7 |
 
-The fits are indistinguishable. Public administration is only 4–13% of county jobs in the seventeen calibration cities, so their predicted bases barely move when it is removed, and the calibration has no power to say which allocator is right. Albany is out of sample on exactly this dimension — public administration is 23% of county jobs and 88% of those jobs are inside the city — so the choice rests on the conceptual argument, which is clear: government purchases are exempt, and government jobs generate taxable activity only through what their occupants spend, which the store classes already count. The exempt-employer version is used. Using the directly measured school-district share for the utilities class instead of the allocator gives \$12.6 M.
+The fits are statistically indistinguishable, and that is itself informative: public administration is only 4–13% of county jobs in the calibration cities, so their predicted bases barely move when it is removed and the calibration has no power to adjudicate. Albany is far out of sample on this dimension — public administration is 23% of county jobs and 88% of those are inside the city — so the choice rests on the exemption argument above rather than on evidence. The Economic Census payroll row is a genuine alternative (private-sector wages rather than private-sector headcount) and lands between the two, which is mild support for the specification used.
+
+Using the directly measured school-district share for the utilities class instead of the allocator gives \$11.2 M.
 
 Everything else is immaterial. The delivered-goods split, flagged in the plan as a key assumption, moves the answer by under 0.1%; the e-commerce assignment, which the disappearance of NAICS 454 made unresolvable, moves it by under 1%. Both are immaterial for the same reason: the Economic Census store share and the ACS income share for those groups are within a point of each other, so it barely matters which is used.
 
@@ -505,15 +512,15 @@ On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** star
 
 In rough order of importance:
 
-1.  **The treatment of Albany’s exempt public sector.** Government is 23% of the county’s jobs and 88% of those are in the city; government purchases are exempt, so those jobs are excluded from the business allocator, but the only check available — the seventeen calibration cities — has too little government employment to confirm or refute the choice. Including them adds about \$2.6 M. Hospitals and universities, also largely exempt, remain in the count. A DTF tabulation would resolve it.
-2.  **The method misses by a third on cities where it can be checked.** Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
+1.  **Exempt institutions inside the city.** Government purchases are exempt and government jobs are excluded from the business allocator accordingly, but hospitals and universities — also largely exempt purchasers — remain in the count, and Albany has many of both. This biases the city’s business share upward, in the same direction as the county effect in §5A, and is one reason the calibration corrects downward. It is not separately quantified because LODES cannot distinguish an exempt hospital from a taxable employer within a sector.
+2.  **The method still misses by +21% / -17% at one σ on the cities where it can be checked**, after the two structural exclusions, and by +57% / -36% without them. Albany may be an easier case — large, fine NAICS detail, near-complete Economic Census coverage — but nothing proves it.
 3.  **The calibration sample is small (17) and selected**: mostly small retail-centre cities, with Utica, Rome and the Westchester cities the closest structural analogues to Albany. The fit is reported with and without Westchester.
 4.  **Economic Census receipts are gross, not taxable, and are 2022 values applied to 2022-23 to 2024-25 bases.** The allocators are shares, so level drift matters little; the assumption is that a NAICS group’s taxable fraction is similar inside and outside the city.
 5.  **Remote sales are not published by delivery jurisdiction**, and NAICS 2022 makes e-commerce unidentifiable in the DTF data. Shown to be immaterial for Albany, but it is an assumption.
 6.  **The utility-tax measurement is not clean.** Residential energy is taxed by the county at 1% and by the school district at 3%, so numerator and denominator cover slightly different mixes.
 7.  **The imposed rate of six calibration cities is ambiguous in the published sources** (§5.3). The reading supported by three sources is used; the alternative reading widens the band but leaves Albany’s central estimate essentially unchanged (§9.2). Ogdensburg, which re-imposed its tax in 2022 and is absent from the Comptroller’s 2020 table, is the least certain of the six.
 8.  **Cell suppression** removes 3–10% of county × NAICS cells; county bases are sums of published cells. The reconciliation bounds the effect at a few percent.
-9.  **NAICS 9261 is classified as residence-sourced vehicle tax on the strength of its statewide distribution**, not on documentation. If it is instead business activity sourced where it is reported, it belongs with the business class and the estimate rises by about \$1.5 M.
+9.  **NAICS 9261 is classified as residence-sourced vehicle tax on the strength of its statewide distribution**, not on documentation. If it is instead business activity sourced where it is reported, it belongs with the business class and the estimate rises by about \$0.1 M.
 
 ## 14. Recommendations
 

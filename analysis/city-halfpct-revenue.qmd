@@ -533,7 +533,7 @@ variants <- tribble(
 sens <- variants |>
   rowwise() |>
   mutate(B_pred_v = do.call(apportion_variant, c(ALB, args)),
-         B_cal_v  = apply_calibration(fit, B_pred_v)$B_c_central,
+         B_cal_v  = apply_calibration(fit_pref, B_pred_v)$B_c_central,
          Rev      = rev_of(B_cal_v)) |>
   ungroup()
 
@@ -559,11 +559,14 @@ same reason: reassigning receipts from a `r PC(0.2594)` allocator to a
 `r PC(resid_share("01000","001","agginc"))` allocator barely changes anything.
 **The unresolvable data problem turned out to be immaterial.**
 
-What does matter is the **business allocator**. Counting government jobs raises
-the estimate by `r sprintf("%.0f", 100*(sens$Rev[2]/REV-1))`%. Government is an
-exempt purchaser, so the central case leaves those jobs out; but the calibration
-cities have too little government employment to test the choice, so it rests on
-the conceptual argument rather than on evidence. Using the school district's
+What does matter is the **business allocator**, and only one option there is
+defensible. Counting government jobs raises the estimate by
+`r sprintf("%.0f", 100*(sens$Rev[2]/REV-1))`%, but government purchases are
+exempt (Tax Law §1116(a)(1)), so using government employment to apportion
+taxable business purchases means distributing a taxable base by a measure of
+exempt activity. The row is reported because it was the project plan's original
+choice, not as a credible alternative. The calibration cities have too little
+government employment to test it either way. Using the school district's
 directly measured share for the utilities class instead of the allocator changes
 the estimate by well under 1%.
 
@@ -647,10 +650,14 @@ Honest ranking of what the reader should worry about.
    `r sprintf("%.0f", 100*(sens$Rev[2]/REV-1))`%, and the calibration cannot
    adjudicate. Hospitals and universities, largely exempt too, remain in the
    count. This is the largest real uncertainty.
-2. **The calibration spread itself.** σ = `r sprintf("%.3f", fit$sigma)` says the
-   method misses by a third on cities where the truth is known. Albany may be an
-   easier case than Salamanca or Ogdensburg — it is large, and its allocators
-   resolve at fine NAICS detail — but nothing in the data proves that.
+2. **The calibration spread itself.** σ = `r sprintf("%.3f", fit_pref$sigma)` on
+   the preferred fit means a one-σ miss of
+   `r sprintf("%.0f", 100*(exp(fit_pref$sigma)-1))`% up or
+   `r sprintf("%.0f", 100*(1-exp(-fit_pref$sigma)))`% down on cities where the
+   truth is known (`r sprintf("%.0f", 100*(exp(fit$sigma)-1))`% /
+   `r sprintf("%.0f", 100*(1-exp(-fit$sigma)))`% across all seventeen). Albany may
+   be an easier case than Salamanca or Ogdensburg — it is large, and its
+   allocators resolve at fine NAICS detail — but nothing in the data proves that.
 3. **Economic Census vintage and basis.** EC 2022 is a single-year snapshot
    applied to `r min(ANALYSIS_FYS)-1`–`r max(ANALYSIS_FYS)` bases. Because the
    allocators are shares, level drift matters much less than composition drift.
