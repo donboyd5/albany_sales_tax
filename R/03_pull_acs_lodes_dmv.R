@@ -254,3 +254,34 @@ cbp_zip_estab <- cache_pull(
       filter(substr(zip, 1, 3) %in% c("120", "121", "122", "123"))
   }) |>
   mutate(ESTAB = as.numeric(ESTAB), year = as.integer(year))
+
+
+## --- Assessment rolls (ORPTS, Open NY 7vem-aaz7), 2025, summarized on the
+## server by county x municipality x roll section x property class for Albany
+## County and the calibration counties. Full market value is ORPTS's
+## equalized figure; county_taxable_value is the taxable assessment. Roll
+## section 1 is ordinary taxable property, 3 state-owned land, 8 wholly
+## exempt. Never downloaded whole (4.7 million parcels).
+ROLL_URL <- "https://data.ny.gov/Government-Finance/Property-Assessment-Data-from-Local-Assessment-Rol/7vem-aaz7"
+ROLL_YEAR <- 2025L
+ROLL_COUNTIES <- c("Albany", "Cattaraugus", "Cayuga", "Chenango", "Fulton", "Madison", "Oneida",
+                   "St Lawrence", "Saratoga", "Tompkins", "Warren", "Westchester")
+roll_by_class <- cache_pull(
+  sprintf("orpts_roll_%d_by_muni_class.csv", ROLL_YEAR), ROLL_URL,
+  function() {
+    socrata_get("7vem-aaz7", list(
+      select = paste("roll_year, county_name, municipality_name, municipality_code, roll_section,",
+                     "property_class, property_class_description,",
+                     "sum(full_market_value) as fmv, sum(county_taxable_value) as ctv,",
+                     "sum(assessment_total) as av, count(*) as n"),
+      where  = sprintf("roll_year=%d and county_name in (%s)", ROLL_YEAR,
+                       paste0('"', ROLL_COUNTIES, '"', collapse = ",")),
+      group  = paste("roll_year, county_name, municipality_name, municipality_code, roll_section,",
+                     "property_class, property_class_description"),
+      order  = "county_name, municipality_code, roll_section, property_class",
+      limit  = 200000L))
+  }) |>
+  mutate(across(c(fmv, ctv, av, n), as.numeric), roll_section = as.integer(roll_section),
+         property_class = as.integer(property_class),
+         ## ORPTS municipality codes: the third and fourth digits are below 20 for cities
+         is_city = as.integer(substr(municipality_code, 3, 4)) < 20)

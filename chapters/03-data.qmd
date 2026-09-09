@@ -12,19 +12,20 @@ Every dataset was accessed programmatically, its column list verified against li
 | Source | What it provides | Period used |
 |---|---|---|
 | Tax Department: taxable sales by county and industry | The county base; the denominator of every share | Sales tax years 2022–23 to 2024–25 (average); 2025–26 for growth |
-| Tax Department: sales tax distributions | The administrative wedge; the school district's utility base; the seventeen cities' bases | State fiscal years 2023–2025 |
+| Tax Department: sales tax distributions | Cash paid to each jurisdiction: used for the reconciliation residual, for the school district's utility collections, and for the seventeen cities' collections, from which a base is *estimated* as collections ÷ rate | State fiscal years 2023–2025 |
 | Tax Department publications 718, 718-A, 718-C, 718-R, 838; memorandum TSB-M-90(6)S; Comptroller 2020 | Rates, sourcing rules, sharing formulas | Current |
 | 2022 Economic Census | Where the stores and businesses are (receipts, payroll, establishments by place) | 2022 |
 | Census job-location data (LODES) | Where the jobs are, by industry and place | 2023 |
 | American Community Survey | Where households and their income are; vehicles available | 2019–2023 |
 | DMV registrations, with 2020 Census block and ZIP files | Where car owners live | Current registrations, model years 2024 and later |
 | 2020 Census | Population shares | 2020 |
+| Assessment rolls (ORPTS) | Exempt property by type; taxable commercial and industrial property as a sharing rule | 2025 |
 
 ## New York State Department of Taxation and Finance
 
 **Taxable Sales and Purchases, quarterly** (Open NY dataset `ny73-2j3u`). The Tax Department's Office of Tax Policy Analysis compiles, from roughly 250,000 quarterly and 300,000 annual sales tax returns, the dollar amount of taxable sales *and* taxable purchases (use tax) reported by vendors, by the taxing jurisdiction the sale is sourced to and by the vendor's four-digit industry code (NAICS). It is published quarterly from sales tax year 2013–14 and is the source of the county base. Used here: Albany County and the eleven counties of the calibration cities, all `r nrow(appo)` industry groups, the three sales tax years 2022–23 through 2024–25 (final for 2023–24, preliminary after). Four things to know:
 
-- The jurisdictions are the state, the transit district, New York City and the 57 other counties, plus cities with their own tax. **The City of Albany does not appear**, which is why its base must be estimated.
+- The jurisdictions are the state, the transit district, New York City and the 57 other counties: 60 in all. **No city appears, taxing or not.** That is why Albany's base must be estimated, and also why the taxing cities' bases must be inferred from their collections rather than read from this table. Vendors do report their sales on city jurisdiction lines, so the Department holds city figures; it does not publish them. A tabulation from the Department would allow the apportionment to be tested directly against reported city taxable sales, which would be a far better test than the one in @sec-calibration.
 - The industry is the *vendor's*, not the buyer's. A wholesaler's taxable sales are listed under wholesale trade whoever bought them. This matters a great deal for @sec-apportionment.
 - One government group (NAICS 9261, \$8.5 billion statewide) appears to be the tax the DMV collects on private vehicle sales rather than government vendor activity; see @sec-motor-vehicles.
 - The industry codes switch from the 2017 to the 2022 edition of NAICS at 2022–23 without restating earlier years, and the 2022 edition has no separate e-commerce category. Individual county-by-industry cells are withheld for confidentiality (about 3.6% of Albany's), so every county total here is a sum of *published* cells.
@@ -56,6 +57,8 @@ Every dataset was accessed programmatically, its column list verified against li
 ## Other sources
 
 **NYS DMV, Vehicle, Snowmobile and Boat Registrations** (Open NY `w4pv-hbkt`). Every active registration in the state, about 12.5 million rows, with the registrant's county, postal city and ZIP code, vehicle class and model year. Accessed only through server-side summarizing queries (counts by county, ZIP and state, vehicles only, model years 2024 and later), never downloaded whole. The `city` field is the *postal* city, not the municipality: ZIP 12205 is labelled "ALBANY" but is largely the town of Colonie. That is why registrations are assigned to the city through the block-population weights and never by the city name. `r fp(R$oos_share)` of Albany County registrations carry out-of-state ZIP codes (leasing and fleet companies) and are dropped from both numerator and denominator. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
+
+**Assessment rolls** (Open NY dataset `7vem-aaz7`, *Property Assessment Data from Local Assessment Rolls*). Every parcel on the final 2025 assessment rolls of the state's cities and towns outside New York City, with its property class, full market value as equalized by the Office of Real Property Tax Services, taxable value, and roll section (ordinary taxable, state-owned, wholly exempt). Accessed only through server-side summaries by county, municipality, roll section and property class for Albany County and the calibration counties, never downloaded whole (4.7 million parcels). Used for the exempt-property analysis and the assessed-value sharing rule in @sec-exempt. Westchester municipalities do not carry a usable full market value in the dataset. <https://data.ny.gov/Government-Finance/Property-Assessment-Data-from-Local-Assessment-Rol/7vem-aaz7>
 
 **Office of the State Comptroller, *Understanding Local Government Sales Tax in New York State: 2020 Update*.** Figure 2 gives each taxing city's rate; Appendix C summarizes every county's sharing arrangement with its municipalities, including Albany County's (60% retained, 40% distributed to cities and towns by census population). <https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
 

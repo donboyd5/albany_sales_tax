@@ -28,6 +28,8 @@ New York State Department of Taxation and Finance. (1990). *TSB-M-90(6)S: The Al
 
 New York State Department of Taxation and Finance. (2014). *Tax Bulletin ST-895: Transitional provisions for sales tax rate changes*. <https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/transitional_provisions.htm>
 
+New York State Department of Taxation and Finance, Office of Real Property Tax Services. (2026). *Property assessment data from local assessment rolls* [Data set]. <https://data.ny.gov/Government-Finance/Property-Assessment-Data-from-Local-Assessment-Rol/7vem-aaz7>
+
 New York State Department of Motor Vehicles. (2026). *Vehicle, snowmobile, and boat registrations* [Data set]. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
 
 N.Y. Tax Law §§ 1116, 1210, 1211, 1214, 1223, 1224, 1262. Consolidated text as published at New York Public Law: <https://newyork.public.law/laws/n.y._tax_law_section_1210>, <https://newyork.public.law/laws/n.y._tax_law_section_1223>, <https://newyork.public.law/laws/n.y._tax_law_section_1224>, <https://newyork.public.law/laws/n.y._tax_law_section_1262>.

@@ -225,3 +225,14 @@ exception in 1223. No existing city has an additional rate without a base
 rate. Technical appendix removed; county tables moved to
 appendices/county-tables.qmd. Chapter 2 now separates potential revenue
 (0.005 x B_c x beta) from anticipated cash (x (1 - phi)).
+
+## Exempt organizations and the assessment rolls (2026-09-09)
+
+ORPTS rolls (7vem-aaz7, aggregated) show the city holds 95% of the county's
+exempt government buildings, 77% of college property, 94% of hospitals, 40%
+of religious; 53% of all property value in the city is exempt vs 14% in the
+rest of the county. Assessed-value business allocator (city share of taxable
+commercial + industrial FMV) = 22.5%; calibrated on 11 non-Westchester
+cities (Westchester FMV unusable) gives $11.1 M. In the planning envelope.
+REMINDER: ny73-2j3u has NO city rows (60 jurisdictions); city bases are
+inferred from collections; never write that city taxable sales are published.

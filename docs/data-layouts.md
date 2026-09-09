@@ -599,3 +599,30 @@ cities, 13% for Ogdensburg (new code), 9% Norwich, 8% Glens Falls.
 
 "Best-supported" calibration subset (`TRUST_CITIES`): rate agreed by every
 source and swing under 10%, excluding the two structural exclusions.
+
+
+---
+
+## 14. ORPTS assessment rolls — Socrata `7vem-aaz7` (verified 2026-09-09)
+
+<https://data.ny.gov/Government-Finance/Property-Assessment-Data-from-Local-Assessment-Rol/7vem-aaz7>
+103 columns; 4.7 M parcels; latest `roll_year` 2025. Key fields: `county_name`,
+`municipality_name`, `municipality_code` (six digits; third-fourth digits below
+20 are cities, e.g. Albany 010100, Cohoes 010300, Watervliet 011800; towns
+012000+), `roll_section` (1 ordinary taxable, 3 state-owned land, 5/6/7
+special franchise etc., 8 wholly exempt), `property_class` (ORPTS 3-digit),
+`property_class_description`, `full_market_value` (equalized), `assessment_total`,
+`county_taxable_value`, ten exemption code/amount slots. Pulled only as
+server-side aggregates (`roll_by_class` in R/03) for the 12 analysis counties.
+
+SURPRISE 14a: `full_market_value` is zero or implausible for most Westchester
+municipalities (Mount Vernon, Rye, Greenburgh, Harrison, Ossining, Yorktown 0;
+White Plains $0.79 B on 14,044 parcels), so no full-value measure exists for
+the four Westchester calibration cities; the assessed-value allocator returns
+NA for them. Other counties' fmv/av ratios are sensible (Tompkins 1.00, Albany
+1.50, Oneida 2.50).
+
+Albany city 2025: roll section 1 commercial (4xx) $2.28 B FMV, industrial
+$0.05 B; roll section 8 $7.0 B of community-service property (652 office
+buildings $3.19 B = state offices, 613 colleges $1.27 B, 641 hospitals $0.65 B,
+612 schools $0.35 B, 620 religious $0.29 B).

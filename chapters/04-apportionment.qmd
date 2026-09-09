@@ -213,12 +213,12 @@ Each row of @tbl-busalts replaces the business sharing rule with a different mea
 #| label: tbl-busalts
 #| tbl-cap: "Alternative sharing rules for sales to businesses, each with the calibration re-fitted on the same fifteen cities. Revenue is the calibrated central estimate."
 af |> filter(class == "business") |>
-  transmute(`Sharing rule for the business class` = label,
+  transmute(`Sharing rule for the business class` = label, `Cities in fit` = n,
             `Albany city share of class` = ifelse(is.na(albany_share), "", fp(albany_share)),
             `Raw city base, $ billion` = B_pred / 1e9, `Calibrated city base, $ billion` = B_cal / 1e9,
             `Revenue, $ million` = rev / 1e6, `68% range, $ million` = sprintf("%s – %s", fm(lo68), fm(hi68)),
             `Fit: typical miss (σ)` = sigma) |>
-  kb(digits = c(0, 0, 2, 2, 1, 0, 3), align = "lrrrrrr")
+  kb(digits = c(0, 0, 0, 2, 2, 1, 0, 3), align = "lrrrrrrr")
 ```
 
 Counting government jobs (`r fp(share_of("lodes"))`) gives \$`r fm(rev_of("lodes"))` million, but it is not a defensible specification: it distributes taxable purchases by a measure of *exempt* activity, and it is shown only to size the difference. The payroll rule gives \$`r fm(rev_of("ec_payroll"))` million. The three rules that respond to the doubts above all come in lower: business locations \$`r fm(rev_of("ec_estab"))` million, jobs excluding exempt institutions \$`r fm(rev_of("lodes_ex_exempt"))` million, the customer-type split \$`r fm(rev_of("by_customer"))` million. Sharing the whole class by household income, a floor that treats every business purchase as if it were made where people live, gives \$`r fm(rev_of("residence"))` million.
@@ -243,7 +243,34 @@ R$xcity |>
 
 Albany's gap of `r formatC(100 * R$alb_gap, format = "f", digits = 1)` points is within the range of the calibration cities (Johnstown, Auburn, Glens Falls, Olean and Saratoga Springs all have gaps of the same size or larger), and its education-and-health share of `r fp(R$alb_eduhealth, 0)` is not unusual either (Utica's is `r fp(R$xcity$eduhealth_city[R$xcity$city == "Utica"], 0)`). Johnstown, with the largest gap, is *under*-predicted; Auburn and Glens Falls, with gaps like Albany's, are over-predicted. Fifteen cities cannot settle the question; a test this small would miss a real effect of moderate size, so this is absence of evidence rather than evidence of absence. What can be said is that the cities give no sign that a jobs-heavy city is systematically over-predicted beyond what the calibration already removes.
 
-Where Albany *is* out of sample is government: public administration is `r fp(R$pub_pct, 0)` of county jobs here against 4–13% in the calibration counties, and `r fp(R$a_pub, 0)` of it is in the city. That is why government is removed from the rule on principle rather than on evidence: the calibration cities cannot test it. The same limit applies to the re-fitted alternatives in @tbl-busalts: a rule that overstates every city by the same proportion is absorbed by the calibration, so only the part of a rule's error that is *specific to Albany* survives into those figures, and the spread among them understates the uncertainty on the one dimension where Albany differs from every calibration city. The cheapest independent evidence would be the city's share of the county's taxable commercial assessed value, which leaves exempt property out automatically (@sec-limitations).
+Where Albany *is* out of sample is government: public administration is `r fp(R$pub_pct, 0)` of county jobs here against 4–13% in the calibration counties, and `r fp(R$a_pub, 0)` of it is in the city. That is why government is removed from the rule on principle rather than on evidence: the calibration cities cannot test it. The same limit applies to the re-fitted alternatives in @tbl-busalts: a rule that overstates every city by the same proportion is absorbed by the calibration, so only the part of a rule's error that is *specific to Albany* survives into those figures, and the spread among them understates the uncertainty on the one dimension where Albany differs from every calibration city. The one independent measure that leaves exempt property out automatically, the city's share of the county's taxable commercial and industrial property value, is examined in @sec-exempt.
+
+## Exempt organizations, and a check from the assessment rolls {#sec-exempt}
+
+Government is not the only exempt purchaser in the city. Religious organizations, colleges, hospitals, private schools and most other nonprofits pay no sales tax on what they buy (Tax Law §1116(a)(4)), and Albany has many of them. The jobs rule handles this unevenly: government jobs are removed, education and health care are counted but bounded (@sec-business-rule), and religious and civic organizations sit inside "other services" where they cannot be separated. A different source can see all of them at once. The assessment rolls record every parcel in the county, its full market value, and whether it is taxable or exempt, so they show both where the exempt institutions are and where the *taxable* business property is.
+
+```{r}
+#| label: tbl-exempt
+#| tbl-cap: "Wholly exempt property and state-owned land in Albany County by type, 2025 assessment rolls, full market value, and the city's share of each."
+R$exempt_tab |>
+  transmute(`Type of exempt property` = grp, `County, $ billion` = fmv_county / 1e9, `City of Albany, $ billion` = fmv_city / 1e9,
+            `City share` = fp(city_share, 0), `Parcels in city` = n_city) |>
+  kb(digits = c(0, 2, 2, 0, 0), align = "lrrrr", format.args = list(big.mark = ","))
+```
+
+Exempt property is `r fp(R$exempt_share_city, 0)` of all property value in the city against `r fp(R$exempt_share_rest, 0)` in the rest of the county, and the city holds most of the county's government buildings, colleges and hospitals. Those institutions employ a large share of the city's private-sector workers (@tbl-jobssector) and buy almost nothing taxable.
+
+The same rolls give a sharing rule that leaves every one of them out: the city's share of the county's **taxable commercial and industrial property** at full market value.
+
+```{r}
+#| label: tbl-taxable
+#| tbl-cap: "Taxable property in Albany County by type, 2025 assessment rolls, full market value, and the city's share."
+R$taxable_tab |>
+  transmute(`Type of taxable property` = grp, `County, $ billion` = county / 1e9, `City of Albany, $ billion` = city / 1e9, `City share` = fp(city_share, 0)) |>
+  kb(digits = c(0, 2, 2, 0), align = "lrrr")
+```
+
+The city has `r fp(R$a_assessed)` of the county's taxable commercial and industrial property, against `r fp(R$a_wxp)` of its private jobs and `r fp(R$a_exx)` of its private jobs outside government, education and health. That is the independent measure both reviewers asked for, and it comes in well below even the exempt-institution bound, close to the city's share of household income (`r fp(R$a_inc)`). The reason is visible in @tbl-exempt: much of what looks like business activity in the city, the state office buildings, the campuses, the hospitals, is exempt property, and once it is set aside the city's share of the county's taxable business property is not much above its share of people. Used as the business sharing rule and carried through the calibration, it gives \$`r fm(af$rev[af$key == "assessed"])` million (@tbl-busalts). One limitation: the four Westchester cities do not carry a usable full market value in the state's dataset, so that variant is calibrated on the `r af$n[af$key == "assessed"]` other cities; the share form has already been shown to be robust to dropping them (@sec-fits). Property value is not the same thing as taxable purchasing, and a warehouse and an office tower of equal value buy very different amounts, but as a measure that automatically excludes every exempt owner it is the best available.
 
 ## The store sharing rule: receipts, payroll or locations? {#sec-store-rule}
 
@@ -294,4 +321,4 @@ One more group belongs here. NAICS 9261, "Administration of Economic Programs," 
 
 The city's `r fp(R$a_wxp)` of the county's private jobs is a real number, and the city really is where the county's institutions and offices are. But the jobs are disproportionately in exempt institutions and in offices that buy little per employee, while the suburbs have the factories, warehouses, contractors' yards and big stores that buy a lot. Every adjustment that responds to that (excluding exempt institutions, counting business locations instead of jobs, following household-facing sales to households) lowers the city's share of the class, to between `r fp(R$a_exx)` and `r fp(R$a_bus_split)`. On the other side, the one thing that can be measured directly for Albany, the taxable utility base, is more concentrated in the city than the rule says, and the calibration already removes a `r fp(1 - est_pref$B_c_central / B_pred, 0)` overstatement that includes this effect for the typical city.
 
-In sum, `r fp(R$a_wxp)` is at the high end of a defensible range for the class, that the calibrated revenue under the plausible alternatives runs from \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` to \$`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million, and that the planning range in @sec-results is built to cover it. The cheapest way to do better is an independent measure that leaves out exempt property automatically: the city's share of the county's *taxable commercial assessed value* from the assessment rolls, which @sec-limitations recommends pulling. The definitive way is a tabulation of taxable sales inside the city limits from the Tax Department's return-level data.
+In sum, `r fp(R$a_wxp)` is at the high end of a defensible range for the class, that the calibrated revenue under the plausible alternatives runs from \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` to \$`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million, and that the planning range in @sec-results is built to cover it. The independent measure that leaves out exempt property automatically, the city's share of the county's taxable commercial and industrial property value from the assessment rolls, gives `r fp(R$a_assessed)` (@sec-exempt). The definitive way to do better is a tabulation of taxable sales inside the city limits from the Tax Department's return-level data.

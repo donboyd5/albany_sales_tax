@@ -237,7 +237,7 @@ albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
 ##   dtf_juris      e.g. "ALBANY"
 ##   dmv_county     e.g. "ALBANY"
 BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll", "lodes_ex_exempt",
-                         "ec_estab", "residence")
+                         "ec_estab", "residence", "assessed")
 
 apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
@@ -264,7 +264,8 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
     lodes             = work_share(place_fips, county_fips5),
     ec_payroll        = ec_payroll_share(ec_place_name, county_fips3),
     ec_estab          = ec_estab_share(ec_place_name, county_fips3),
-    residence         = resid_share(place_fips5, county_fips3, resid_var))
+    residence         = resid_share(place_fips5, county_fips3, resid_var),
+    assessed          = assessed_share(ec_place_name, county_fips5))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
   a_mv    <- mv_share(place_fips, dmv_county)
 
@@ -301,7 +302,8 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
           ec_payroll = "EC payroll",
           lodes_ex_exempt = "LODES employment excl. govt, education, health",
           ec_estab = "EC establishments",
-          residence = "ACS household income (residence)")[business_allocator],
+          residence = "ACS household income (residence)",
+          assessed = "Taxable commercial and industrial full market value (assessment rolls)")[business_allocator],
         sourcing_class == "motor_vehicle"              ~ "DMV resident registrations",
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
@@ -311,9 +313,12 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
       B_cg = B_kg * a_g)
 }
 
-## Total predicted city base.
+## Total predicted city base. NA if any class's sharing rule is unavailable
+## for this city (e.g. the assessed-value rule in Westchester), so that the
+## city drops out of that variant's calibration instead of losing a class.
 predicted_base <- function(...) {
   d <- apportion_city(...)
+  if (any(is.na(d$a_g) & d$B_kg > 0)) return(NA_real_)
   sum(d$B_cg, na.rm = TRUE)
 }
 
@@ -411,6 +416,7 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
                                      ct == "mixed"     ~ 0.5 * a_g + 0.5 * a_resid,
                                      TRUE              ~ a_g))
   }
+  if (any(is.na(d$a_g) & d$B_kg > 0)) return(NA_real_)
   sum(d$B_kg * d$a_g, na.rm = TRUE)
 }
 
@@ -554,4 +560,37 @@ ec_estab_share <- function(ec_place_name, county_fips3) {
   j <- inner_join(p, k, by = "NAICS2022")
   if (nrow(j) == 0 || sum(j$k) == 0) return(NA_real_)
   sum(j$p) / sum(j$k)
+}
+
+
+## =========================================================================
+## 7. Assessed-value business allocator
+## =========================================================================
+## The city's share of the county's TAXABLE commercial and industrial property
+## at full market value (ORPTS assessment rolls, roll section 1, property
+## classes 400-499 and 700-799). Exempt property -- state offices, colleges,
+## hospitals, schools, churches -- is in roll section 8 and drops out
+## automatically, which is exactly the weakness of the jobs rule. Westchester
+## municipalities do not carry a usable full market value in the dataset, so
+## the four Westchester cities return NA and are left out of that variant's
+## calibration.
+roll_county_name <- function(county_fips5) {
+  nm <- read_csv(file.path(PATHS$raw, "census_pl2020_county_ny.csv"), col_types = cols(.default = "c")) |>
+    transmute(fips5 = paste0(state, county), name = sub(" County, New York", "", NAME))
+  x <- nm$name[nm$fips5 == county_fips5]
+  if (length(x) != 1) return(NA_character_)
+  sub("^St\\. ", "St ", x)
+}
+assessed_share <- function(ec_place_name, county_fips5) {
+  city <- sub(" city, New York$", "", ec_place_name)
+  cty  <- roll_county_name(county_fips5)
+  if (is.na(cty) || cty == "Westchester") return(NA_real_)
+  d <- roll_by_class |> filter(county_name == cty, roll_section == 1,
+                               (property_class >= 400 & property_class < 500) | (property_class >= 700 & property_class < 800))
+  if (nrow(d) == 0 || sum(d$fmv) == 0) return(NA_real_)
+  ## some cities appear as "Rome, Inside" / "Rome, Outside" (inside and outside
+  ## a former district); both belong to the city
+  p <- d |> filter(is_city, sub(", (Inside|Outside)$", "", municipality_name) == city)
+  if (nrow(p) == 0) return(NA_real_)
+  sum(p$fmv) / sum(d$fmv)
 }

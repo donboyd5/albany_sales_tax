@@ -399,3 +399,12 @@ summary table added.
 Not done: hierarchical model (bootstrap judged sufficient at 11 clusters);
 assessed-value allocator (still a recommendation, needs the assessment rolls).
 Site is now published encrypted (StatiCrypt); see CLAUDE.md.
+
+## Exempt organizations and the assessed-value allocator (2026-09-09)
+
+User asked about exempt purchasers beyond government (religious, schools,
+hospitals, state property). Response: pulled the 2025 ORPTS assessment rolls
+(aggregated) for the 12 counties; new chapter-4 section shows exempt property
+by type and the city's share, and adds `business_allocator = "assessed"` (city
+share of county taxable commercial + industrial FMV), calibrated on the
+non-Westchester cities because Westchester FMV is unusable in the dataset.

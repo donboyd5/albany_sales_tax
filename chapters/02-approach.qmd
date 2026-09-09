@@ -26,7 +26,7 @@ Every revenue figure on this site is anticipated cash. One point of bookkeeping 
 
 ## Why the city's taxable sales are hard to know
 
-The Tax Department publishes taxable sales by *taxing jurisdiction*: the state, New York City, the transit district and the 57 other counties, plus each city that has its own tax. Albany County is one; the City of Albany, having no tax, is not. There is no city row in the data, and no tabulation by ZIP code or by vendor address. The base has to be estimated.
+The Tax Department publishes taxable sales by *taxing jurisdiction*: the state, New York City, the transit district and the 57 other counties. No city appears, not even the eighteen that have their own tax. Albany County is in the table; the City of Albany is not. There is no city row in the data, and no tabulation by ZIP code or by vendor address. The base has to be estimated.
 
 One fragment of the city's base *is* observable. The Albany City School District has taxed utilities and telephone service inside the city at 3% since 1990, and its collections are published. Dividing them by 0.03 gives the city's utility-and-telephone base. It turns out to be `r fp(R$a_util)` of the county's, and it is the only measured city-versus-county share of any part of the base. @sec-checks uses it as a check, with a caveat about residential energy.
 

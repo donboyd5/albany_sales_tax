@@ -284,19 +284,21 @@ ALT <- tribble(
   "lodes_ex_exempt", "business", "Private jobs excluding government, education and health", list(business_allocator = "lodes_ex_exempt"),
   "by_customer", "business", "Split by customer type: household-facing groups by residence, mixed half and half", list(business_by_customer = TRUE),
   "residence", "business", "Household income (residence) for the whole class", list(business_allocator = "residence"),
+  "assessed", "business", "Taxable commercial and industrial property, full market value (assessment rolls; Westchester cities unavailable)", list(business_allocator = "assessed"),
   "store_receipts", "store", "Receipts (used)", list(store_allocator = "receipts"),
   "store_payroll", "store", "Payroll", list(store_allocator = "payroll"),
   "store_estab", "store", "Establishments", list(store_allocator = "establishments"))
+R$a_assessed <- a_assessed <- assessed_share("Albany city, New York", "36001")
 alb_share <- c(lodes_ex_pubadmin = a_wxp, lodes = a_work, ec_payroll = a_pay, ec_estab = a_estab,
-               lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc,
+               lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc, assessed = a_assessed,
                store_receipts = NA, store_payroll = NA, store_estab = NA)
 R$alloc_fits <- alloc_fits <- purrr::map_dfr(seq_len(nrow(ALT)), function(i) {
   args <- ALT$args[[i]]
-  cal_v <- do.call(build_calibration_variant, args) |> filter(!city %in% names(CALIB_EXCLUDE))
+  cal_v <- do.call(build_calibration_variant, args) |> filter(!city %in% names(CALIB_EXCLUDE), !is.na(B_c_pred))
   f_v <- fit_calibration(cal_v, "share")
   Bp_v <- do.call(apportion_variant, c(ALB, args)); e_v <- apply_calibration(f_v, Bp_v, B_k)
   tibble(key = ALT$key[i], class = ALT$class[i], label = ALT$label[i], albany_share = unname(alb_share[ALT$key[i]]),
-         beta = f_v$beta, sigma = f_v$sigma,
+         n = f_v$n, beta = f_v$beta, sigma = f_v$sigma,
          B_pred = Bp_v, B_cal = e_v$B_c_central, rev = rev(e_v$B_c_central),
          lo68 = rev(e_v$lo68), hi68 = rev(e_v$hi68))
 })
@@ -512,6 +514,43 @@ R$cbp_drift <- cbp_zip_estab |> filter(zip %in% cty_zips) |>
   group_by(year, sector = NAICS2017) |>
   summarise(county_estab = sum(ESTAB), city_estab = sum(ESTAB * w), .groups = "drop") |>
   mutate(city_share = city_estab / county_estab)
+
+## --- exempt property, from the assessment rolls ---------------------------------------------------
+roll_alb <- roll_by_class |> filter(county_name == "Albany")
+exempt_group <- function(pc, rs) dplyr::case_when(
+  rs == 3 ~ "State-owned land (roll section 3)",
+  pc == 652 | pc == 650 | pc == 651 | pc == 653 ~ "Government offices and buildings",
+  pc == 613 ~ "Colleges and universities",
+  pc == 612 | pc == 614 | pc == 615 ~ "Schools and other education",
+  pc == 641 | pc == 642 ~ "Hospitals and other health facilities",
+  pc == 620 ~ "Religious",
+  pc %in% c(630, 631, 632, 633, 634) ~ "Nonprofit residences, welfare and homes for the aged",
+  pc %in% c(681, 682, 691, 693, 694, 695) ~ "Cultural, recreational and other community services",
+  pc >= 660 & pc < 680 ~ "Protection, roads and public infrastructure",
+  pc >= 800 & pc < 900 ~ "Public services (utilities, transportation)",
+  pc >= 400 & pc < 500 ~ "Commercial property that is exempt (authorities, parking, exempt-owned apartments and offices)",
+  pc >= 200 & pc < 300 ~ "Residential property that is exempt",
+  pc >= 900 ~ "Parks, forests and other public land",
+  pc >= 500 & pc < 600 ~ "Recreation and entertainment (exempt)",
+  pc >= 300 & pc < 400 ~ "Vacant land (exempt)",
+  pc >= 600 & pc < 700 ~ "Other community services",
+  TRUE ~ "Other exempt")
+R$exempt_tab <- roll_alb |> filter(roll_section %in% c(3, 8)) |>
+  mutate(grp = exempt_group(property_class, roll_section), where = ifelse(municipality_name == "Albany" & is_city, "city", "rest")) |>
+  group_by(grp, where) |> summarise(fmv = sum(fmv), n = sum(n), .groups = "drop") |>
+  pivot_wider(names_from = where, values_from = c(fmv, n), values_fill = 0) |>
+  mutate(fmv_county = fmv_city + fmv_rest, city_share = fmv_city / fmv_county) |> arrange(desc(fmv_county))
+R$taxable_tab <- roll_alb |> filter(roll_section == 1) |>
+  mutate(grp = dplyr::case_when(property_class >= 400 & property_class < 500 ~ "Commercial (taxable)",
+                                property_class >= 700 & property_class < 800 ~ "Industrial (taxable)",
+                                property_class >= 200 & property_class < 300 ~ "Residential (taxable)",
+                                TRUE ~ "Other taxable"),
+         where = ifelse(municipality_name == "Albany" & is_city, "city", "rest")) |>
+  group_by(grp, where) |> summarise(fmv = sum(fmv), .groups = "drop") |>
+  pivot_wider(names_from = where, values_from = fmv, values_fill = 0) |>
+  mutate(county = city + rest, city_share = city / county) |> arrange(desc(county))
+R$exempt_share_city <- with(roll_alb |> filter(municipality_name == "Albany", is_city), sum(fmv[roll_section %in% c(3, 8)]) / sum(fmv))
+R$exempt_share_rest <- with(roll_alb |> filter(!(municipality_name == "Albany" & is_city)), sum(fmv[roll_section %in% c(3, 8)]) / sum(fmv))
 
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)
