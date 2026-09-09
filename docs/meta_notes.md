@@ -339,3 +339,17 @@ cross-county comparison keyed to Pub 718-R shows utilities per person roughly
 doubling in counties that tax residential energy. Albany County does not, so
 its row excludes it. See docs/data-layouts.md §12a and the apportionment
 chapter's "Does the county figure include residential energy?" section.
+
+## Reframing the calibration (2026-09-09, third pass)
+
+The reviewer objected to treating collections ÷ rate as the truth. Response:
+(1) tested the inference on all 57 counties where both sides are published
+(median 1.005, 97% within 5%); (2) added per-city year-to-year stability;
+(3) added a fit on the best-supported cities (rate agreed by every source,
+stable share) reported alongside; (4) the planning range now also includes
+the uncalibrated apportionment and the best-supported fit; (5) the results
+chapter reports two anchors (apportioned and calibrated) and says neither is
+the truth. Central estimate unchanged. Language pass: "site" not "book";
+"sourced" not "taxed" for sourcing; filler removed. Chapter 1 corrected:
+Yonkers preempts the full 4% and adds 1.5 points, so "every city preempts and
+the combined rate does not rise" was wrong for Yonkers.

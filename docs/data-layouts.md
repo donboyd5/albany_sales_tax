@@ -572,3 +572,30 @@ residential energy; the ACSD measurement (which includes it at 3%) is an
 upper bound of the comparable share. The old memo sentence that the county
 figure was "commercial because the county does not tax it" was right in
 effect but for an incompletely stated reason; the reasoning is now recorded.
+
+
+---
+
+## 13. Collections ÷ rate against reported taxable sales, all counties (2026-09-09)
+
+Reviewer's point: the city base inferred as collections ÷ rate is itself an
+estimate (rate errors, partial-year rates, base definitions, audits and
+delinquencies, corrected distributions). Tested where both quantities are
+published: 57 counties × FY2023–2025 (`R/06_results.R`, `county_test`), with
+county rates transcribed from Pub 718 (2/25) into
+`data/crosswalk/county_rates_pub718.csv` (combined rate less 4% state, less
+3/8% MCTD in the seven MCTD counties) and preempted city amounts added back.
+
+Result: median ratio 1.005, SD 0.021, 97% of county-years within 5% of 1, all
+within 10%; median year-to-year swing 2.5 points. Low outliers are the
+counties taxing residential energy at a rate below their general rate
+(Suffolk 0.954, Franklin 0.975, Tioga 0.982), consistent with §12a; Niagara
+(0.936) is unexplained. Oswego reconciles at 1.017 with `p_c = 0` for the
+city (the earlier finding that county collections equal 4% of the whole
+county base, i.e. the city tax is additive in the data).
+
+City shares (`city_stability`): swing across FY2023–25 under 6% for most
+cities, 13% for Ogdensburg (new code), 9% Norwich, 8% Glens Falls.
+
+"Best-supported" calibration subset (`TRUST_CITIES`): rate agreed by every
+source and swing under 10%, excluding the two structural exclusions.

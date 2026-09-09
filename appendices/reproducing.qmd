@@ -1,6 +1,6 @@
-# Reproducing this book {#sec-reproducing}
+# Reproducing this site {#sec-reproducing}
 
-Everything in this book is computed from cached public data by R code in the repository at <https://github.com/donboyd5/albany_sales_tax>. Nothing is typed in by hand except two lookup tables in `data/crosswalk/`, each row of which cites its source.
+Everything in this site is computed from cached public data by R code in the repository at <https://github.com/donboyd5/albany_sales_tax>. Nothing is typed in by hand except two lookup tables in `data/crosswalk/`, each row of which cites its source.
 
 ## Steps
 
@@ -12,13 +12,13 @@ Everything in this book is computed from cached public data by R code in the rep
 make pulls
 ```
 
-4. Compute every result the book reports and save them to `data/processed/results.rds`:
+4. Compute every result the site reports and save them to `data/processed/results.rds`:
 
 ```bash
 make results
 ```
 
-5. Render the book:
+5. Render the site:
 
 ```bash
 make render
@@ -34,9 +34,9 @@ make render
 | `R/03_pull_acs_lodes_dmv.R` | Population, American Community Survey, job-location data, DMV registrations, block and ZIP files |
 | `R/04_allocate.R` | Sourcing classes, sharing rules, the division of a county base for any city, customer-type tags |
 | `R/05_calibrate.R` | Recovering the seventeen cities' bases; calibration fits and diagnostics |
-| `R/06_results.R` | Computes every number in the book into one results file |
+| `R/06_results.R` | Computes every number on the site into one results file |
 | `R/99_check_urls.R` | Checks that every cited URL still resolves |
-| `chapters/`, `appendices/` | The book's text; each chapter reads the results file |
+| `chapters/`, `appendices/` | The site's text; each chapter reads the results file |
 | `docs/data-layouts.md` | Verified column lists and surprises for every dataset |
 | `docs/meta_notes.md` | Notes for a reviewer: process history, dead ends, what to check |
 

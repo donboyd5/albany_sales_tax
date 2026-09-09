@@ -688,6 +688,19 @@ Honest ranking of what the reader should worry about.
    footnote reasoning rather than a published rate table (see Phase 2). It is
    small and does not drive the fit.
 
+## Collections divided by rate against reported taxable sales, by county
+
+```{r}
+#| label: tbl-county-test-full
+#| tbl-cap: "For each county outside New York City: reported taxable sales, collections (plus amounts preempted by its cities) divided by the county rate, and the ratio; three-year means and the range across FY2023–2025. County rates from Publication 718."
+R6 <- readRDS(here::here("data", "processed", "results.rds"))
+R6$county_test_by_county |>
+  transmute(County = county, `County rate %` = r_k_pub718, `Taxing cities` = n_cities,
+            `Reported base, $ million` = B_k / 1e6, `Collections ÷ rate, $ million` = inferred / 1e6,
+            `Ratio` = ratio, `Lowest year` = ratio_min, `Highest year` = ratio_max) |>
+  knitr::kable(format = "pipe", digits = c(0, 3, 0, 0, 0, 3, 3, 3), align = "lrrrrrrr", format.args = list(big.mark = ","))
+```
+
 ## Residential energy: county-by-county test
 
 Whether the DTF county row contains residential energy, tested by grouping

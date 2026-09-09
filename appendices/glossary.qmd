@@ -4,9 +4,9 @@
 
 **Administrative wedge (φ, phi).** The gap between the tax due on the published taxable sales and the cash a locality actually receives. Measured for Albany County from its own distributions; slightly negative.
 
-**Calibration.** Running the whole estimating method on the seventeen New York cities whose true taxable base is known from their collections, then using what that comparison shows to correct Albany's estimate and to size its error range.
+**Calibration.** Running the whole estimating method on the seventeen New York cities whose taxable base can be inferred from their collections, then using what that comparison shows to correct Albany's estimate and to size its error range. The inferred base is itself an estimate; see the calibration chapter.
 
-**Calibration cities.** The seventeen cities outside New York City with their own sales tax whose base can be recovered from published distributions. Fifteen are used in the preferred fit; Salamanca and Ogdensburg are set aside for documented reasons.
+**Calibration cities.** The seventeen cities outside New York City with their own sales tax whose base can be inferred from published distributions. Fifteen are used in the preferred fit; Salamanca and Ogdensburg are set aside for documented reasons.
 
 **Concentration ratio (R).** The city's share of the county's taxable sales divided by its share of the county's population. R = 1 means a per-person share.
 
@@ -30,7 +30,7 @@
 
 **Shopping response (β, beta).** The fraction of the base that stays put when the rate inside the city is half a point above the rate outside. Taken as 1 (no loss) centrally.
 
-**Sourcing.** The tax-law rules that say which jurisdiction a sale is taxed in: at the store for over-the-counter sales, at the delivery address for delivered goods, at the buyer's residence for vehicles, where performed for services.
+**Sourcing.** The tax-law rules that assign each sale to a jurisdiction: the store for over-the-counter sales, the delivery address for delivered goods, the buyer's residence for vehicles, the place of performance for services.
 
 **State fiscal year.** April through March. The distributions data use it.
 

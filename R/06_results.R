@@ -296,19 +296,64 @@ R$fit_alt <- fit_alt[c("alpha","beta","se_beta","sigma","r2","n")]
 R$est_alt <- apply_calibration(fit_alt, B_pred)
 R$rb_alt  <- summarise_route_b(build_route_b(rate_source = "pub718a_col"))
 
-## --- planning range ---------------------------------------------------------------------------
-## Envelope of (i) the preferred 68% band at the upper end of sigma's 95% CI
-## and (ii) every specification variant: exclusion set x functional form,
-## business sharing rule (the plausible ones, i.e. not the floor and not the
-## government-inclusive rule), and calibration sample. Rounded to $1 M.
-plausible_alloc <- alloc_fits |> filter(!key %in% c("residence", "lodes"))
-spec_revs <- c(rev(unlist(grid[, c("Log-log fit", "Slope fixed at 1", "Median ratio")])),
-               plausible_alloc$rev, cv$rev,
-               rev(est_pref$B_c_central * exp(-R$s_ci["hi"])), rev(est_pref$B_c_central * exp(R$s_ci["hi"])))
-R$PLAN_LO <- round(min(spec_revs) / 1e6); R$PLAN_HI <- round(max(spec_revs) / 1e6)
-R$BUDGET  <- floor(REV / 1e6)
 R$B_9261 <- B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
 R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv))$B_c_central)
+
+## --- how well does collections / rate recover reported taxable sales? -------------------------
+## At the county level both are observed, so the inference used for the 17
+## cities can be tested directly. County rates are transcribed from Pub 718
+## (data/crosswalk/county_rates_pub718.csv); preempted city amounts are added
+## back from the city crosswalk.
+rates_k <- read_csv(file.path(PATHS$crosswalk, "county_rates_pub718.csv"), col_types = cols(.default = "c")) |>
+  transmute(county, r_k_pub718 = as.numeric(county_rate))
+cw_all <- read_crosswalk_cities()
+dist_all <- read_distributions()
+Bk_all <- read_county_base() |> filter(fy %in% ANALYSIS_FYS, !jurisdiction %in% c("NY STATE", "MCTD", "NY CITY")) |>
+  group_by(county = jurisdiction, fy) |> summarise(B_k = sum(B, na.rm = TRUE), .groups = "drop")
+Ck_all <- dist_all |> filter(fy %in% ANALYSIS_FYS, grepl("County Sales and Use Tax$", taxing_jurisdiction)) |>
+  mutate(county = toupper(sub(" County Sales and Use Tax", "", taxing_jurisdiction)),
+         county = ifelse(county == "ST. LAWRENCE", "ST LAWRENCE", county)) |> select(county, fy, C_k = amt)
+pre_all <- cw_all |> tidyr::crossing(fy = ANALYSIS_FYS) |> rowwise() |>
+  mutate(C_c = sum(dist_all$amt[dist_all$fy == fy & grepl(dist_city_pattern, dist_all$taxing_jurisdiction)]),
+         preempted = C_c * p_c / r_c) |> ungroup() |>
+  group_by(county = dtf_jurisdiction, fy) |> summarise(preempted = sum(preempted, na.rm = TRUE), n_cities = n(), .groups = "drop")
+county_test <- Bk_all |> inner_join(Ck_all, by = c("county", "fy")) |> left_join(pre_all, by = c("county", "fy")) |>
+  mutate(preempted = coalesce(preempted, 0), n_cities = coalesce(n_cities, 0L)) |>
+  inner_join(rates_k, by = "county") |>
+  mutate(inferred = (C_k + preempted) / (r_k_pub718 / 100), ratio = inferred / B_k)
+R$county_test <- county_test
+R$county_test_by_county <- county_test |> group_by(county, r_k_pub718, n_cities) |>
+  summarise(B_k = mean(B_k), inferred = mean(inferred), ratio = mean(ratio), ratio_min = min(ratio), ratio_max = max(ratio),
+            swing = max(ratio) - min(ratio), .groups = "drop") |> arrange(ratio)
+R$county_test_summary <- list(
+  n_county_years = nrow(county_test), n_counties = n_distinct(county_test$county),
+  median = median(county_test$ratio), mean = mean(county_test$ratio), sd = sd(county_test$ratio),
+  q05 = unname(quantile(county_test$ratio, 0.05)), q95 = unname(quantile(county_test$ratio, 0.95)),
+  within5 = mean(abs(county_test$ratio - 1) < 0.05), within10 = mean(abs(county_test$ratio - 1) < 0.10),
+  median_swing = median(R$county_test_by_county$swing), max_swing = max(R$county_test_by_county$swing),
+  sd_log = sd(log(county_test$ratio)))
+
+## Year-to-year stability of each city's inferred share of its county base.
+rb_panel <- build_route_b()
+R$city_stability <- rb_panel |> group_by(city, county) |>
+  summarise(s_mean = mean(s), s_min = min(s), s_max = max(s), swing = (max(s) - min(s)) / mean(s), .groups = "drop") |>
+  left_join(cw_all |> transmute(city, rate_note = note,
+                                rate_all_agree = !city %in% c("Gloversville", "Johnstown", "New Rochelle", "Norwich",
+                                                              "Ogdensburg", "Saratoga Springs")), by = "city") |>
+  arrange(desc(swing))
+
+## Calibration restricted to the cities whose inferred base is best supported:
+## rate agreed by every published source (no Pub 718-A conflict), inferred
+## share stable across the three years (swing under 10%), and the two
+## structural exclusions. Reported alongside the preferred fit.
+TRUST_CITIES <- R$city_stability |> filter(rate_all_agree, swing < 0.10, !city %in% names(CALIB_EXCLUDE)) |> pull(city)
+R$TRUST_CITIES <- TRUST_CITIES
+cal_trust <- calib |> filter(city %in% TRUST_CITIES)
+fit_trust <- fit_calibration(cal_trust)
+R$fit_trust <- fit_trust[c("alpha", "beta", "se_beta", "sigma", "r2", "n")]
+R$est_trust <- apply_calibration(fit_trust, B_pred)
+R$REV_trust <- rev(R$est_trust$B_c_central)
+R$REV_raw <- rev(B_pred)
 
 ## --- does the county row include residential energy? cross-county test ------------------------
 ## Pub 718-R lists which counties tax residential energy. If the DTF county
@@ -341,6 +386,21 @@ R$re_summary <- re_test |> group_by(status) |>
   arrange(factor(status, levels = c("County taxes residential energy", "Only a school district or city taxes it",
                                     "No local tax on residential energy")))
 R$re_albany <- re_test |> filter(county == "ALBANY") |> select(elec_pc, util_pc, petrol_pc, total_pc)
+
+## --- planning range ---------------------------------------------------------------------------
+## Envelope of (i) the preferred 68% band at the upper end of sigma's 95% CI
+## and (ii) every specification variant: exclusion set x functional form,
+## business sharing rule (the plausible ones, i.e. not the floor and not the
+## government-inclusive rule), calibration sample including the trusted
+## subset, and the uncalibrated apportionment itself (the reviewer's point
+## that apportioned taxable sales are a legitimate estimate in their own
+## right). Rounded to $1 M.
+plausible_alloc <- alloc_fits |> filter(!key %in% c("residence", "lodes"))
+spec_revs <- c(rev(unlist(grid[, c("Log-log fit", "Slope fixed at 1", "Median ratio")])),
+               plausible_alloc$rev, cv$rev, R$REV_trust, R$REV_raw,
+               rev(est_pref$B_c_central * exp(-R$s_ci["hi"])), rev(est_pref$B_c_central * exp(R$s_ci["hi"])))
+R$PLAN_LO <- round(min(spec_revs) / 1e6); R$PLAN_HI <- round(max(spec_revs) / 1e6)
+R$BUDGET  <- floor(REV / 1e6)
 
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)

@@ -136,7 +136,22 @@ imposes 3% under s.1210(a), preempting the county's base 3%, with St. Lawrence
 retaining only its non-preemptable additional 1% (s.1224). Saratoga Springs
 confirmed at 1.5% by the Saratoga County Treasurer.
 
-## The write-up is a Quarto book (2026-09-09)
+## Calibration is a comparison of two estimates, not a check against truth (2026-09-09)
+
+Collections ÷ rate reproduces reported taxable sales at the county level
+(57 counties, FY2023-25: median 1.005, 97% within 5%; `R$county_test`,
+crosswalk data/crosswalk/county_rates_pub718.csv from Pub 718). City shares
+are stable year to year (`R$city_stability`). A fit on the best-supported
+cities (`R$TRUST_CITIES`: rate agreed by every source, swing < 10%) is
+reported alongside the preferred fit, and the planning range includes the
+uncalibrated apportionment ($14.5 M) and that fit. Do not describe the
+collections-based base as "observed" or "the truth"; say "inferred from
+collections". Yonkers preempts the county's full 4% AND adds 1.5 points, so
+never say every taxing city's combined rate equals its county's.
+
+## The write-up is a Quarto website built with Quarto's book type (2026-09-09)
+
+Call it a site, not a book, in prose.
 
 `_quarto.yml` is `type: book`. Chapters live in `chapters/` (01 policy option,
 02 approach, 03 data, 04 apportionment -- the deep dive on classes, the

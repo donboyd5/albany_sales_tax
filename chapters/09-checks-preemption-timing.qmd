@@ -27,9 +27,9 @@ Albany County distributes 40% of its collections to cities and towns by census p
 |---|---:|
 | Status quo: 0.40 × population share × county collections of \$`r fm(R$C_k)` million | `r fm(R$status_quo)` |
 | Preempt 1.5 points: 1.5% × city base | `r fm(0.015 * est_pref$B_c_central)` |
-| **Add on 0.5 points (this book)** | **`r fm(REV)`** |
+| **Add on 0.5 points (this site)** | **`r fm(REV)`** |
 
-Preempting at the standard 1.5 points would *lose* about \$`r fm(R$PREEMPT_LOSS)` million a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r f2(R_cal)`. A city has to be a genuine retail concentrator for preemption to work, and Albany, with its county's retail on Wolf Road and at Crossgates, is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched. The add-on would add \$`r fm(REV)` million on top of the \$`r fm(R$status_quo)` million the city already receives, an increase of `r fp(REV / R$status_quo, 0)`.
+Preempting at the standard 1.5 points would *lose* about \$`r fm(R$PREEMPT_LOSS)` million a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r f2(R_cal)`. A city has to be a retail concentrator for preemption to work, and Albany, with its county's retail on Wolf Road and at Crossgates, is not one. The add-on avoids the trade-off because it leaves the distribution untouched. The add-on would add \$`r fm(REV)` million on top of the \$`r fm(R$status_quo)` million the city already receives, an increase of `r fp(REV / R$status_quo, 0)`.
 
 ## Timing and first-year cash {#sec-timing}
 

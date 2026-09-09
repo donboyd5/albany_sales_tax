@@ -1,0 +1,58 @@
+county,combined_rate_pub718,mctd,county_rate,reporting_code,note,source
+ALBANY,8.0,FALSE,4,0181,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ALLEGANY,8.5,FALSE,4.5,0221,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+BROOME,8.0,FALSE,4,0321,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CATTARAUGUS,8.0,FALSE,4,0481,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CAYUGA,8.0,FALSE,4,0511,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CHAUTAUQUA,8.0,FALSE,4,0651,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CHEMUNG,8.0,FALSE,4,0711,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CHENANGO,8.0,FALSE,4,0861,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CLINTON,8.0,FALSE,4,0921,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+COLUMBIA,8.0,FALSE,4,1021,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+CORTLAND,8.0,FALSE,4,1131,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+DELAWARE,8.0,FALSE,4,1221,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+DUTCHESS,8.125,TRUE,3.75,1311,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ERIE,8.75,FALSE,4.75,1451,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ESSEX,8.0,FALSE,4,1521,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+FRANKLIN,8.0,FALSE,4,1621,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+FULTON,8.0,FALSE,4,1791,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+GENESEE,8.0,FALSE,4,1811,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+GREENE,8.0,FALSE,4,1911,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+HAMILTON,8.0,FALSE,4,2011,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+HERKIMER,8.25,FALSE,4.25,2121,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+JEFFERSON,8.0,FALSE,4,2221,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+LEWIS,8.0,FALSE,4,2321,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+LIVINGSTON,8.0,FALSE,4,2411,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+MADISON,8.0,FALSE,4,2511,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+MONROE,8.0,FALSE,4,2611,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+MONTGOMERY,8.0,FALSE,4,2781,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+NASSAU,8.625,TRUE,4.25,2811,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+NIAGARA,8.0,FALSE,4,2911,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ONEIDA,8.75,FALSE,4.75,3010,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ONONDAGA,8.0,FALSE,4,3121,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ONTARIO,7.5,FALSE,3.5,3211,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ORANGE,8.125,TRUE,3.75,3321,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ORLEANS,8.0,FALSE,4,3481,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+OSWEGO,8.0,FALSE,4,3501,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+OTSEGO,8.0,FALSE,4,3621,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+PUTNAM,8.375,TRUE,4,3731,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+RENSSELAER,8.0,FALSE,4,3881,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ROCKLAND,8.375,TRUE,4,3921,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ST LAWRENCE,8.0,FALSE,4,4091,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SARATOGA,7.0,FALSE,3,4111,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SCHENECTADY,8.0,FALSE,4,4241,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SCHOHARIE,8.0,FALSE,4,4321,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SCHUYLER,8.0,FALSE,4,4411,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SENECA,8.0,FALSE,4,4511,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+STEUBEN,8.0,FALSE,4,4691,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SUFFOLK,8.75,TRUE,4.375,4711,"combined rate less 4% state less 3/8% MCTD",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+SULLIVAN,8.0,FALSE,4,4821,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+TIOGA,8.0,FALSE,4,4921,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+TOMPKINS,8.0,FALSE,4,5081,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+ULSTER,8.0,FALSE,4,5111,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+WARREN,7.0,FALSE,3,5281,"combined rate less 4% state; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+WASHINGTON,7.0,FALSE,3,5311,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+WAYNE,8.0,FALSE,4,5421,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+WESTCHESTER,8.375,TRUE,4,5581,"combined rate less 4% state less 3/8% MCTD; county row 'except' its taxing city or cities, whose combined rate is the same",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+WYOMING,8.0,FALSE,4,5621,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf
+YATES,8.0,FALSE,4,5721,"combined rate less 4% state",https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf

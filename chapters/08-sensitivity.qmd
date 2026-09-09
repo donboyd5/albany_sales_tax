@@ -79,7 +79,7 @@ bind_rows(
   kb(digits = 1, align = "lr")
 ```
 
-Neither factor moves the estimate by more than about 10% even under aggressive assumptions, and both are dwarfed by the uncertainty in the base.
+Neither factor moves the estimate by more than about 10% even under aggressive assumptions; the uncertainty in the base is much larger.
 
 ## Base year and growth
 
