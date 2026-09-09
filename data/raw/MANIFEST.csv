@@ -3,6 +3,7 @@ data/raw/cbp_zip_estab_retail_food_2021_2023.csv,https://api.census.gov/data/202
 data/raw/census_acs5_2023_county_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:23-0400,783f150021ea49bd2aca87ce4915e1f4620368a8be394644d2a0dd5298647866
 data/raw/census_acs5_2023_place_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:22-0400,5ab9efc878fdccf900b59d4f8208cc221af1965e036f472401fb42c385534ea8
 data/raw/census_acs5_2023_vehicles_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-08T06:18:03-0400,312f9f1c0ee2f4eb60b557e8b7004f19567b84fc9bc5c6a0a95dc3ffbf1785af
+data/raw/census_acs5_2023_workplace_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-09T15:19:59-0400,406ce6f5e5fd61028e4957445c11ab1b44321b15bab67a3958627a2c250438e1
 data/raw/census_baf2020_block_place_ny.csv,https://www2.census.gov/geo/docs/maps-data/data/baf2020/BlockAssign_ST36_NY.zip,2026-09-07T16:34:32-0400,ff26e27e7027ab079ffaf0d126fb56eec66376e938c48dca6b8b883a3d4d3ae2
 data/raw/census_pl2020_block_13counties.csv,https://api.census.gov/data/2020/dec/pl,2026-09-07T16:34:31-0400,66b1fb0511092baf52f7c185ab43eaa79817e5da9edd775fc4234a2f3d8abe5b
 data/raw/census_pl2020_county_ny.csv,https://api.census.gov/data/2020/dec/pl,2026-09-07T15:18:17-0400,64e08bf85453b63af56a80b5188c95952183ea08a3522e7d2fcfcb935d02fb6c

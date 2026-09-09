@@ -59,11 +59,11 @@ cv |> transmute(Sample = Specification, n, `Share form: slope` = beta, `σ` = si
 
 In the share form the answer is steady across samples, from \$`r fm(min(cv$rev))` to \$`r fm(max(cv$rev))` million. The level form ranges more widely, from \$`r fm(min(cv$rev_level))` to \$`r fm(max(cv$rev_level))` million, and its slope moves with the sample: the four Westchester cities carry the size gradient, and dropping them from the full seventeen pushes the level slope above 1 and the estimate to \$`r fm(cv$rev_level[cv$Specification == "Excluding Westchester (4 cities)"])` million, while dropping them from the preferred fifteen leaves the slope at `r f3(cv$beta_level[cv$Specification == "Preferred 15 excluding Westchester (11 cities)"])` and the estimate at \$`r fm(cv$rev_level[cv$Specification == "Preferred 15 excluding Westchester (11 cities)"])` million. The share form is used because it does not carry a county-size gradient into Albany; the level form is the more cautious reading in the sense of giving less revenue, not in the sense of resting on fewer assumptions.
 
-## Shopping response and administrative wedge
+## Shopping response and reconciliation residual
 
 ```{r}
 #| label: tbl-beta
-#| tbl-cap: "Shopping response, and the administrative wedge on the uncalibrated reading."
+#| tbl-cap: "Shopping response, and the reconciliation residual on the apportioned reading."
 b <- est_pref$B_c_central
 bind_rows(
   tibble(Assumption = "No shopping loss (central)", `Revenue, $ million` = rev(b) / 1e6),

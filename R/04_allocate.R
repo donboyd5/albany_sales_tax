@@ -237,7 +237,7 @@ albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
 ##   dtf_juris      e.g. "ALBANY"
 ##   dmv_county     e.g. "ALBANY"
 BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll", "lodes_ex_exempt",
-                         "ec_estab", "residence", "assessed")
+                         "ec_estab", "residence", "assessed", "ec_receipts", "ec_receipts_ex_eduhealth")
 
 apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
@@ -265,7 +265,9 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
     ec_payroll        = ec_payroll_share(ec_place_name, county_fips3),
     ec_estab          = ec_estab_share(ec_place_name, county_fips3),
     residence         = resid_share(place_fips5, county_fips3, resid_var),
-    assessed          = assessed_share(ec_place_name, county_fips5))
+    assessed          = assessed_share(ec_place_name, county_fips5),
+    ec_receipts       = ec_receipts_share(ec_place_name, county_fips3),
+    ec_receipts_ex_eduhealth = ec_receipts_share(ec_place_name, county_fips3, exclude = c("61", "62")))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
   a_mv    <- mv_share(place_fips, dmv_county)
 
@@ -303,7 +305,9 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
           lodes_ex_exempt = "LODES employment excl. govt, education, health",
           ec_estab = "EC establishments",
           residence = "ACS household income (residence)",
-          assessed = "Taxable commercial and industrial full market value (assessment rolls)")[business_allocator],
+          assessed = "Taxable commercial and industrial full market value (assessment rolls)",
+          ec_receipts = "EC receipts, matched private sectors",
+          ec_receipts_ex_eduhealth = "EC receipts, matched private sectors excl. education and health")[business_allocator],
         sourcing_class == "motor_vehicle"              ~ "DMV resident registrations",
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
@@ -593,4 +597,24 @@ assessed_share <- function(ec_place_name, county_fips5) {
   p <- d |> filter(is_city, sub(", (Inside|Outside)$", "", municipality_name) == city)
   if (nrow(p) == 0) return(NA_real_)
   sum(p$fmv) / sum(d$fmv)
+}
+
+
+## Economic Census receipts, matched sectors, as a business allocator: where
+## private-sector OUTPUT is rather than where jobs are. Receipts track
+## purchasing better than headcount for capital-intensive firms, but the
+## Economic Census does not publish place-level figures for construction,
+## wholesale, manufacturing or management of companies, so the matched sectors
+## are the service sectors, and finance and health dominate the dollars.
+ec_receipts_share <- function(ec_place_name, county_fips3, exclude = character()) {
+  is_sector <- function(x) grepl("^[0-9]{2}$|^[0-9]{2}-[0-9]{2}$", x)
+  p <- ec_place_sector |>
+    filter(NAME == ec_place_name, is_sector(NAICS2022), !NAICS2022 %in% exclude, !is.na(RCPTOT)) |>
+    select(NAICS2022, p = RCPTOT)
+  k <- ec_county_sector |>
+    filter(county == county_fips3, is_sector(NAICS2022), !NAICS2022 %in% exclude, !is.na(RCPTOT)) |>
+    select(NAICS2022, k = RCPTOT)
+  j <- inner_join(p, k, by = "NAICS2022")
+  if (nrow(j) == 0 || sum(j$k) == 0) return(NA_real_)
+  sum(j$p) / sum(j$k)
 }

@@ -78,7 +78,8 @@ tibble(Measure = c(
   "Private jobs excluding government, education and health care (LODES 2023)",
   "Private-sector payroll, matched sectors (Economic Census 2022)",
   "Private business locations, matched sectors (Economic Census 2022)",
-  "Receipts, all matched sectors (Economic Census 2022)",
+  "Receipts, all matched service sectors (Economic Census 2022)",
+  "Receipts, matched service sectors excluding education and health (Economic Census 2022)",
   "Retail receipts (Economic Census 2022)",
   "Store receipts as used, weighted by the store classes",
   "Recently registered vehicles, model year 2024 and later (DMV). Used for motor vehicles",
@@ -86,7 +87,7 @@ tibble(Measure = c(
   "Aggregate household income (ACS). Used for the residence half of delivered goods",
   "Households (ACS)",
   "Utility and telephone base measured from the school district tax"),
-  `City share of county` = fp(c(pop, R$a_wxp, R$a_work, R$a_pub, R$a_exx, R$a_pay, R$a_estab, R$a_ecall,
+  `City share of county` = fp(c(pop, R$a_wxp, R$a_work, R$a_pub, R$a_exx, R$a_pay, R$a_estab, R$a_ecall, R$a_ecrec_x,
                                 R$a_ecret, R$a_store, R$a_mv, R$a_veh, R$a_inc, R$a_hh, R$a_util))) |>
   kb(align = "lr")
 ```
@@ -110,6 +111,8 @@ bf |>
   transmute(`Seller industry family` = family_label, `County taxable sales, $ million` = B / 1e6,
             `Share of class` = fp(share_of_class), `Share of whole county base` = fp(share_of_base),
             `Customers, mostly` = customer, `Why` = rationale) |>
+  bind_rows(tibble(`Seller industry family` = "**All families**", `County taxable sales, $ million` = R$B_bus / 1e6,
+                   `Share of class` = "100%", `Share of whole county base` = fp(R$B_bus / B_k), `Customers, mostly` = "", `Why` = "")) |>
   kb(digits = c(0, 0, 0, 0, 0, 0), align = "lrrrll")
 ```
 
@@ -122,6 +125,8 @@ bc |> mutate(customer = factor(customer, levels = c("business", "mixed", "househ
   transmute(`Customers, mostly` = as.character(customer), `Industry groups` = groups,
             `County taxable sales, $ million` = B / 1e6, `Share of class` = fp(share_of_class),
             `Share of whole county base` = fp(share_of_base)) |>
+  bind_rows(tibble(`Customers, mostly` = "**All**", `Industry groups` = sum(bc$groups), `County taxable sales, $ million` = R$B_bus / 1e6,
+                   `Share of class` = "100%", `Share of whole county base` = fp(R$B_bus / B_k))) |>
   kb(digits = c(0, 0, 0, 0, 0), align = "lrrrr")
 ```
 
@@ -154,6 +159,8 @@ By this reading, about `r fp(bc$share_of_class[bc$customer == "business"], 0)` o
 ### What the number is
 
 The rule says the city gets `r fp(R$a_wxp)` of the county's sales to businesses because the city has `r fp(R$a_wxp)` of the county's private-sector jobs: `r fn(cj$private)` of `r fn(kj$private)` in the Census Bureau's 2023 job-location data, after removing `r fn(kj$government)` government jobs (of which `r fn(cj$government)`, `r fp(R$a_pub, 0)`, are in the city).
+
+Is a share that high believable? Two independent sources say yes. The 2022 Economic Census, which counts employees from business records rather than unemployment-insurance filings, gives the city `r fp(R$ec_emp_share)` of the county's employment in the private service sectors it publishes by place (`r fp(R$ec_emp_share_x)` leaving out education and health). And the American Community Survey, which asks households where they work, counts `r fn(R$acs_work_city)` people working in the city out of `r fn(R$acs_work_county)` working anywhere in the county, `r fp(R$acs_work_share)`, against the job data's `r fp(R$a_work)` for all jobs including government. The city really is where about half of the county's jobs are; the question is which of those jobs stand for taxable purchasing.
 
 ### Where the county's jobs are
 
@@ -196,7 +203,7 @@ So the rule gives the city `r fp(R$a_wxp)` because the city is where the county'
 ### Reasons the `r fp(R$a_wxp, 0)` may be too high
 
 1. **Exempt institutions.** Hospitals and universities are counted in the rule but are largely exempt purchasers, exactly the objection that removed government from it. Taking education and health care out as well gives `r fp(R$a_exx)`. That is a floor for this correction rather than an estimate, because both sectors also contain taxable private employers (medical practices, clinics, private schools and training firms).
-2. **Purchases do not scale with headcount.** The suburban sectors above buy more taxable inputs per job. No public source gives taxable purchases per job by industry and place, so this cannot be corrected directly, but two proxies point the same way. The city's share of the county's private *business locations* in the Economic Census is `r fp(R$a_estab)`: each location buys supplies and services whether it has five employees or five thousand, and the city's establishments are larger than the suburbs'. The city's share of private *payroll* is `r fp(R$a_pay)`, higher than its job share, because its jobs are high-wage office and health jobs; payroll is a poor guide to purchases of taxable goods.
+2. **Purchases do not scale with headcount.** The suburban sectors above buy more taxable inputs per job. A firm's *receipts* would track its purchasing better than its headcount, and the Economic Census publishes receipts by place; but only for the service sectors. It publishes no place-level figures for construction, wholesale, manufacturing or company headquarters, the sectors that buy most, and among the sectors it does cover the dollars are dominated by finance and by hospitals, whose receipts are large and whose purchases are largely exempt. A receipts rule is therefore shown in @tbl-busalts, with and without education and health, but it measures the wrong sectors well and the right sectors not at all. No public source gives taxable purchases per job by industry and place, so the concern cannot be corrected directly, but two proxies point the same way. The city's share of the county's private *business locations* in the Economic Census is `r fp(R$a_estab)`: each location buys supplies and services whether it has five employees or five thousand, and the city's establishments are larger than the suburbs'. The city's share of private *payroll* is `r fp(R$a_pay)`, higher than its job share, because its jobs are high-wage office and health jobs; payroll is a poor guide to purchases of taxable goods.
 3. **Part of the class is bought by households.** By the reading in @tbl-buscustomer, `r fp(bc$share_of_class[bc$customer == "household"], 0)` of the class goes mostly to households and `r fp(bc$share_of_class[bc$customer == "mixed"], 0)` is mixed. Following those parts to where households are gives `r fp(R$a_bus_split)` for the class as a whole.
 
 ### Reasons it may not be

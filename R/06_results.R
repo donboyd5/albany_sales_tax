@@ -285,12 +285,17 @@ ALT <- tribble(
   "by_customer", "business", "Split by customer type: household-facing groups by residence, mixed half and half", list(business_by_customer = TRUE),
   "residence", "business", "Household income (residence) for the whole class", list(business_allocator = "residence"),
   "assessed", "business", "Taxable commercial and industrial property, full market value (assessment rolls; Westchester cities unavailable)", list(business_allocator = "assessed"),
+  "ec_receipts", "business", "Private-sector receipts, matched sectors (Economic Census; no construction, wholesale or manufacturing at place level)", list(business_allocator = "ec_receipts"),
+  "ec_receipts_ex_eduhealth", "business", "Private-sector receipts excluding education and health (Economic Census)", list(business_allocator = "ec_receipts_ex_eduhealth"),
   "store_receipts", "store", "Receipts (used)", list(store_allocator = "receipts"),
   "store_payroll", "store", "Payroll", list(store_allocator = "payroll"),
   "store_estab", "store", "Establishments", list(store_allocator = "establishments"))
 R$a_assessed <- a_assessed <- assessed_share("Albany city, New York", "36001")
+R$a_ecrec <- a_ecrec <- ec_receipts_share("Albany city, New York", "001")
+R$a_ecrec_x <- a_ecrec_x <- ec_receipts_share("Albany city, New York", "001", exclude = c("61", "62"))
 alb_share <- c(lodes_ex_pubadmin = a_wxp, lodes = a_work, ec_payroll = a_pay, ec_estab = a_estab,
                lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc, assessed = a_assessed,
+               ec_receipts = a_ecrec, ec_receipts_ex_eduhealth = a_ecrec_x,
                store_receipts = NA, store_payroll = NA, store_estab = NA)
 R$alloc_fits <- alloc_fits <- purrr::map_dfr(seq_len(nrow(ALT)), function(i) {
   args <- ALT$args[[i]]
@@ -551,6 +556,14 @@ R$taxable_tab <- roll_alb |> filter(roll_section == 1) |>
   mutate(county = city + rest, city_share = city / county) |> arrange(desc(county))
 R$exempt_share_city <- with(roll_alb |> filter(municipality_name == "Albany", is_city), sum(fmv[roll_section %in% c(3, 8)]) / sum(fmv))
 R$exempt_share_rest <- with(roll_alb |> filter(!(municipality_name == "Albany" & is_city)), sum(fmv[roll_section %in% c(3, 8)]) / sum(fmv))
+
+## --- independent checks on the city's share of county jobs -----------------------------------------
+e_m <- R$ec_sector |> filter(!is.na(p_emp), !is.na(k_emp))
+R$ec_emp_share   <- sum(e_m$p_emp) / sum(e_m$k_emp)
+R$ec_emp_share_x <- sum(e_m$p_emp[!e_m$NAICS2022 %in% c("61", "62")]) / sum(e_m$k_emp[!e_m$NAICS2022 %in% c("61", "62")])
+R$acs_work_city   <- acs_workplace$workers[acs_workplace$level == "place" & acs_workplace$geo == "01000"]
+R$acs_work_county <- acs_workplace$workers[acs_workplace$level == "county" & acs_workplace$geo == "001"]
+R$acs_work_share  <- R$acs_work_city / R$acs_work_county
 
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)

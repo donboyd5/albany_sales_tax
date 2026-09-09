@@ -1,0 +1,1352 @@
+level,geo,NAME,workers
+place,00155,"Accord CDP, New York",350
+place,00199,"Adams village, New York",740
+place,00232,"Adams Center CDP, New York",451
+place,00276,"Addison village, New York",645
+place,00342,"Afton village, New York",467
+place,00408,"Airmont village, New York",1905
+place,00441,"Akron village, New York",1605
+place,00457,"Akwesasne CDP, New York",979
+place,01000,"Albany city, New York",98900
+place,01011,"Albertson CDP, New York",1043
+place,01033,"Albion village, New York",2217
+place,01088,"Alden village, New York",1331
+place,01154,"Alexander village, New York",197
+place,01187,"Alexandria Bay village, New York",1212
+place,01198,"Alfred village, New York",2339
+place,01286,"Allegany village, New York",666
+place,01440,"Almond village, New York",76
+place,01517,"Altamont village, New York",592
+place,01550,"Altmar CDP, New York",63
+place,01572,"Altona CDP, New York",331
+place,01594,"Amagansett CDP, New York",740
+place,01682,"Amenia CDP, New York",483
+place,01737,"Ames village, New York",0
+place,02044,"Amityville village, New York",6493
+place,02066,"Amsterdam city, New York",7853
+place,02121,"Andes CDP, New York",79
+place,02143,"Andover village, New York",247
+place,02176,"Angelica village, New York",185
+place,02198,"Angola village, New York",493
+place,02220,"Angola on the Lake CDP, New York",487
+place,02286,"Antwerp village, New York",115
+place,02308,"Apalachin CDP, New York",680
+place,02374,"Aquebogue CDP, New York",643
+place,02407,"Arcade village, New York",2121
+place,02506,"Ardsley village, New York",2215
+place,02550,"Argyle village, New York",170
+place,02583,"Arkport village, New York",430
+place,02616,"Arlington CDP, New York",1605
+place,02649,"Armonk CDP, New York",5829
+place,02737,"Asharoken village, New York",123
+place,02902,"Athens village, New York",633
+place,02968,"Atlantic Beach village, New York",290
+place,03001,"Attica village, New York",451
+place,03078,"Auburn city, New York",13174
+place,03188,"Aurora village, New York",841
+place,03254,"Au Sable Forks CDP, New York",64
+place,03320,"Averill Park CDP, New York",818
+place,03331,"Avoca village, New York",353
+place,03353,"Avon village, New York",1808
+place,03408,"Babylon village, New York",6564
+place,04033,"Bainbridge village, New York",444
+place,04055,"Baiting Hollow CDP, New York",365
+place,04143,"Baldwin CDP, New York",6201
+place,04198,"Baldwinsville village, New York",3076
+place,04253,"Ballston Spa village, New York",3419
+place,04286,"Balmville CDP, New York",1601
+place,04388,"Bard College CDP, New York",1643
+place,04396,"Bardonia CDP, New York",1248
+place,04440,"Barker village, New York",306
+place,04528,"Barneveld CDP, New York",105
+place,04550,"Barnum Island CDP, New York",1237
+place,04605,"Barrytown CDP, New York",9
+place,04616,"Barryville CDP, New York",85
+place,04715,"Batavia city, New York",10890
+place,04759,"Bath village, New York",3642
+place,04803,"Baxter Estates village, New York",520
+place,04891,"Bay Park CDP, New York",81
+place,04913,"Bayport CDP, New York",2020
+place,04935,"Bay Shore CDP, New York",17560
+place,05034,"Bayville village, New York",1246
+place,05039,"Baywood CDP, New York",2472
+place,05100,"Beacon city, New York",5398
+place,05188,"Beaver Dam Lake CDP, New York",208
+place,05309,"Bedford CDP, New York",877
+place,05342,"Bedford Hills CDP, New York",1779
+place,05562,"Belfast CDP, New York",200
+place,05639,"Bellerose village, New York",527
+place,05661,"Bellerose Terrace CDP, New York",298
+place,05672,"Belle Terre village, New York",73
+place,05683,"Belleville CDP, New York",158
+place,05738,"Bellmore CDP, New York",5236
+place,05771,"Bellport village, New York",1593
+place,05815,"Belmont village, New York",752
+place,05848,"Bemus Point village, New York",495
+place,06046,"Bergen village, New York",387
+place,06387,"Bethpage CDP, New York",13630
+place,06464,"Big Flats CDP, New York",5730
+place,06574,"Billington Heights CDP, New York",903
+place,06607,"Binghamton city, New York",24392
+place,06644,"Binghamton University CDP, New York",3915
+place,06794,"Black River village, New York",289
+place,06849,"Blasdell village, New York",1236
+place,06860,"Blauvelt CDP, New York",3103
+place,06904,"Bliss CDP, New York",106
+place,06937,"Blodgett Mills CDP, New York",5
+place,06945,"Bloomfield village, New York",660
+place,06959,"Bloomingburg village, New York",172
+place,07025,"Bloomville CDP, New York",56
+place,07069,"Blue Point CDP, New York",1167
+place,07157,"Bohemia CDP, New York",14944
+place,07190,"Bolivar village, New York",432
+place,07245,"Bolton Landing CDP, New York",620
+place,07355,"Boonville village, New York",1183
+place,07960,"Brasher Falls CDP, New York",255
+place,08004,"Breesport CDP, New York",43
+place,08059,"Brewerton CDP, New York",1004
+place,08070,"Brewster village, New York",2096
+place,08081,"Brewster Heights CDP, New York",141
+place,08092,"Brewster Hill CDP, New York",46
+place,08103,"Briarcliff Manor village, New York",2821
+place,08136,"Bridgehampton CDP, New York",2591
+place,08147,"Bridgeport CDP, New York",528
+place,08158,"Bridgeville CDP, New York",216
+place,08169,"Bridgewater CDP, New York",29
+place,08257,"Brighton CDP, New York",24097
+place,08323,"Brightwaters village, New York",1072
+place,08334,"Brinckerhoff CDP, New York",458
+place,08422,"Broadalbin village, New York",375
+place,08466,"Brockport village, New York",5258
+place,08488,"Brocton village, New York",598
+place,08532,"Bronxville village, New York",4842
+place,09000,"Brookhaven CDP, New York",1830
+place,10077,"Brooktondale CDP, New York",101
+place,10132,"Brookville village, New York",2874
+place,10231,"Brownville village, New York",54
+place,10286,"Brushton village, New York",65
+place,10341,"Buchanan village, New York",947
+place,11000,"Buffalo city, New York",155891
+place,11132,"Burdett village, New York",39
+place,11154,"Burke village, New York",35
+place,11220,"Burlington Flats CDP, New York",88
+place,11440,"Busti CDP, New York",24
+place,11550,"Byersville CDP, New York",9
+place,11616,"Cadyville CDP, New York",8
+place,11638,"Cairo CDP, New York",1149
+place,11671,"Calcium CDP, New York",540
+place,11704,"Caledonia village, New York",891
+place,11748,"Callicoon CDP, New York",290
+place,11781,"Calverton CDP, New York",4479
+place,11825,"Cambridge village, New York",1212
+place,11847,"Camden village, New York",1946
+place,11902,"Camillus village, New York",616
+place,11935,"Campbell CDP, New York",456
+place,12111,"Canajoharie village, New York",864
+place,12144,"Canandaigua city, New York",9450
+place,12177,"Canaseraga village, New York",51
+place,12188,"Canastota village, New York",1350
+place,12210,"Candor village, New York",211
+place,12254,"Canisteo village, New York",706
+place,12331,"Canton village, New York",5706
+place,12353,"Cape Vincent village, New York",211
+place,12402,"Captree CDP, New York",0
+place,12419,"Carle Place CDP, New York",3896
+place,12518,"Carmel CDP, New York",3199
+place,12584,"Caroga Lake CDP, New York",167
+place,12683,"Carthage village, New York",1521
+place,12749,"Cassadaga village, New York",167
+place,12771,"Castile village, New York",119
+place,12870,"Castleton-on-Hudson village, New York",370
+place,12881,"Castorland village, New York",71
+place,12958,"Cato village, New York",390
+place,13002,"Catskill village, New York",2949
+place,13024,"Cattaraugus village, New York",537
+place,13068,"Cayuga village, New York",60
+place,13079,"Cayuga Heights village, New York",1159
+place,13145,"Cazenovia village, New York",1993
+place,13233,"Cedarhurst village, New York",2990
+place,13288,"Celoron village, New York",627
+place,13299,"Cementon CDP, New York",75
+place,13376,"Centereach CDP, New York",8898
+place,13420,"Center Moriches CDP, New York",2591
+place,13442,"Centerport CDP, New York",1048
+place,13530,"Central Bridge CDP, New York",47
+place,13552,"Central Islip CDP, New York",9943
+place,13585,"Central Square village, New York",1593
+place,13618,"Centre Island village, New York",98
+place,13662,"Chadwicks CDP, New York",184
+place,13739,"Champlain village, New York",669
+place,13805,"Chappaqua CDP, New York",2055
+place,13981,"Chateaugay village, New York",304
+place,14003,"Chatham village, New York",1349
+place,14036,"Chaumont village, New York",282
+place,14058,"Chautauqua CDP, New York",333
+place,14102,"Chazy CDP, New York",148
+place,15000,"Cheektowaga CDP, New York",41212
+place,15060,"Chelsea Cove CDP, New York",144
+place,15121,"Chenango Bridge CDP, New York",404
+place,15187,"Cherry Creek CDP, New York",52
+place,15242,"Cherry Valley village, New York",109
+place,15297,"Chester village, New York",2886
+place,15363,"Chestertown CDP, New York",402
+place,15400,"Chestnut Ridge village, New York",3802
+place,15561,"Chittenango village, New York",1273
+place,15638,"Churchville village, New York",753
+place,15814,"Clarence CDP, New York",1153
+place,15836,"Clarence Center CDP, New York",510
+place,15902,"Clark Mills CDP, New York",96
+place,15946,"Clarkson CDP, New York",1024
+place,16050,"Claverack-Red Mills CDP, New York",217
+place,16089,"Clayton village, New York",998
+place,16111,"Clayville village, New York",416
+place,16188,"Cleveland village, New York",84
+place,16298,"Clifton Gardens CDP, New York",309
+place,16322,"Clifton Knolls-Mill Creek CDP, New York",701
+place,16375,"Clifton Springs village, New York",2001
+place,16419,"Clinton village, New York",1187
+place,16452,"Clintondale CDP, New York",436
+place,16573,"Clyde village, New York",1016
+place,16628,"Cobleskill village, New York",2945
+place,16727,"Cohocton village, New York",220
+place,16749,"Cohoes city, New York",3690
+place,16815,"Cold Brook village, New York",36
+place,16936,"Cold Spring village, New York",1300
+place,16958,"Cold Spring Harbor CDP, New York",1262
+place,17332,"Colonie village, New York",6929
+place,17398,"Colton CDP, New York",215
+place,17530,"Commack CDP, New York",17739
+place,17607,"Conesus CDP, New York",171
+place,17622,"Conesus Lake CDP, New York",412
+place,17739,"Congers CDP, New York",3006
+place,17882,"Constableville village, New York",64
+place,17893,"Constantia CDP, New York",233
+place,18036,"Coopers Plains CDP, New York",41
+place,18047,"Cooperstown village, New York",5155
+place,18091,"Copake CDP, New York",129
+place,18113,"Copake Falls CDP, New York",3
+place,18124,"Copake Lake CDP, New York",98
+place,18135,"Copenhagen village, New York",203
+place,18146,"Copiague CDP, New York",5530
+place,18157,"Coram CDP, New York",8372
+place,18201,"Corfu village, New York",197
+place,18212,"Corinth village, New York",1050
+place,18256,"Corning city, New York",10585
+place,18333,"Cornwall-on-Hudson village, New York",572
+place,18388,"Cortland city, New York",9057
+place,18443,"Cortland West CDP, New York",1386
+place,18542,"Country Knolls CDP, New York",1854
+place,18597,"Cove Neck village, New York",87
+place,18718,"Coxsackie village, New York",1594
+place,18762,"Cragsmoor CDP, New York",211
+place,18817,"Cranberry Lake CDP, New York",49
+place,18993,"Crest View Heights CDP, New York",357
+place,19070,"Croghan village, New York",208
+place,19092,"Crompond CDP, New York",805
+place,19213,"Croton-on-Hudson village, New York",3924
+place,19229,"Crown Heights CDP, New York",1830
+place,19290,"Crugers CDP, New York",379
+place,19308,"Crystal Beach CDP, New York",49
+place,19356,"Cuba village, New York",1157
+place,19408,"Cumberland Head CDP, New York",200
+place,19411,"Cumminsville CDP, New York",295
+place,19466,"Cutchogue CDP, New York",1275
+place,19510,"Cuylerville CDP, New York",24
+place,19587,"Dalton CDP, New York",92
+place,19609,"Danby CDP, New York",134
+place,19642,"Dannemora village, New York",1531
+place,19664,"Dansville village, New York",2573
+place,19774,"Davenport Center CDP, New York",52
+place,19972,"Deer Park CDP, New York",14407
+place,19994,"Deferiet village, New York",14
+place,20049,"DeKalb Junction CDP, New York",80
+place,20082,"Delanson village, New York",179
+place,20115,"Delevan village, New York",369
+place,20126,"Delhi village, New York",2871
+place,20302,"Depauville CDP, New York",14
+place,20313,"Depew village, New York",9126
+place,20346,"Deposit village, New York",664
+place,20379,"Dering Harbor village, New York",0
+place,20390,"DeRuyter village, New York",267
+place,20467,"De Witt CDP, New York",8869
+place,20500,"Dexter village, New York",295
+place,20687,"Dix Hills CDP, New York",6781
+place,20698,"Dobbs Ferry village, New York",6247
+place,20731,"Dolgeville village, New York",648
+place,20841,"Dover Plains CDP, New York",301
+place,20852,"Downsville CDP, New York",237
+place,20896,"Dresden village, New York",107
+place,20951,"Dryden village, New York",924
+place,20989,"Duane Lake CDP, New York",3
+place,20995,"Duanesburg CDP, New York",183
+place,21050,"Dundee village, New York",927
+place,21105,"Dunkirk city, New York",6466
+place,21226,"Durhamville CDP, New York",91
+place,21380,"Eagle Bay CDP, New York",88
+place,21523,"Earlville village, New York",152
+place,21578,"East Atlantic Beach CDP, New York",319
+place,21589,"East Aurora village, New York",5037
+place,21600,"East Avon CDP, New York",867
+place,21809,"Eastchester CDP, New York",8597
+place,21919,"East Durham CDP, New York",143
+place,21985,"East Farmingdale CDP, New York",24379
+place,22029,"East Frankfort CDP, New York",35
+place,22084,"East Glenville CDP, New York",4384
+place,22106,"East Greenbush CDP, New York",2852
+place,22183,"East Hampton village, New York",6076
+place,22200,"East Hampton North CDP, New York",2060
+place,22238,"East Herkimer CDP, New York",402
+place,22260,"East Hills village, New York",3144
+place,22315,"East Islip CDP, New York",3945
+place,22326,"East Ithaca CDP, New York",851
+place,22370,"East Kingston CDP, New York",177
+place,22447,"East Marion CDP, New York",424
+place,22480,"East Massapequa CDP, New York",4954
+place,22502,"East Meadow CDP, New York",11278
+place,22546,"East Moriches CDP, New York",1977
+place,22557,"East Nassau village, New York",65
+place,22612,"East Northport CDP, New York",5581
+place,22623,"East Norwich CDP, New York",1016
+place,22733,"East Patchogue CDP, New York",5910
+place,22810,"Eastport CDP, New York",709
+place,22832,"East Quogue CDP, New York",1429
+place,22843,"East Randolph CDP, New York",207
+place,22865,"East Rochester village, New York",4108
+place,22876,"East Rockaway village, New York",2003
+place,22964,"East Setauket CDP, New York",7514
+place,22980,"East Shoreham CDP, New York",1491
+place,23052,"East Syracuse village, New York",3717
+place,23217,"East Williston village, New York",454
+place,23283,"East Worcester CDP, New York",20
+place,23316,"Eatons Neck CDP, New York",112
+place,23404,"Eden CDP, New York",1240
+place,23602,"Edmeston CDP, New York",752
+place,23635,"Edwards CDP, New York",63
+place,23701,"Eggertsville CDP, New York",4251
+place,23745,"Elba village, New York",146
+place,23789,"Elbridge village, New York",609
+place,23811,"Eldred CDP, New York",159
+place,23822,"Elizabethtown CDP, New York",1097
+place,23965,"Ellenville village, New York",930
+place,24020,"Ellicottville village, New York",1065
+place,24075,"Ellisburg village, New York",63
+place,24141,"Elma Center CDP, New York",2014
+place,24229,"Elmira city, New York",15215
+place,24251,"Elmira Heights village, New York",1473
+place,24273,"Elmont CDP, New York",5811
+place,24295,"Elmsford village, New York",3618
+place,24405,"Elwood CDP, New York",4694
+place,24515,"Endicott village, New York",7872
+place,24526,"Endwell CDP, New York",4064
+place,24625,"Erin CDP, New York",42
+place,24713,"Esperance village, New York",43
+place,24823,"Evans Mills village, New York",434
+place,24867,"Fabius village, New York",216
+place,24988,"Fair Haven village, New York",81
+place,25043,"Fairmount CDP, New York",3454
+place,25076,"Fairport village, New York",2953
+place,25109,"Fairview CDP (Dutchess County), New York",2564
+place,25120,"Fairview CDP (Westchester County), New York",1052
+place,25164,"Falconer village, New York",1683
+place,25230,"Fallsburg CDP, New York",889
+place,25384,"Farmingdale village, New York",4438
+place,25417,"Farmingville CDP, New York",3955
+place,25428,"Farnham village, New York",13
+place,25527,"Fayetteville village, New York",1597
+place,25571,"Felts Mills CDP, New York",47
+place,25747,"Fillmore CDP, New York",332
+place,25839,"Fire Island CDP, New York",344
+place,25857,"Firthcliffe CDP, New York",1243
+place,25923,"Fishers Island CDP, New York",342
+place,25934,"Fishers Landing CDP, New York",21
+place,25967,"Fishkill village, New York",3135
+place,26121,"Flanders CDP, New York",455
+place,26209,"Fleischmanns village, New York",94
+place,26264,"Floral Park village, New York",5659
+place,26319,"Florida village, New York",1117
+place,26352,"Flower Hill village, New York",3464
+place,26418,"Fly Creek CDP, New York",92
+place,26462,"Fonda village, New York",1117
+place,26561,"Forest Home CDP, New York",418
+place,26649,"Forestville CDP, New York",293
+place,26704,"Fort Ann village, New York",178
+place,26726,"Fort Covington CDP, New York",614
+place,26759,"Fort Drum CDP, New York",15305
+place,26770,"Fort Edward village, New York",1330
+place,26880,"Fort Johnson village, New York",60
+place,26902,"Fort Montgomery CDP, New York",369
+place,26924,"Fort Plain village, New York",862
+place,26946,"Fort Salonga CDP, New York",3781
+place,27133,"Fowlerville CDP, New York",15
+place,27188,"Frankfort village, New York",1124
+place,27221,"Franklin village, New York",348
+place,27309,"Franklin Square CDP, New York",6731
+place,27331,"Franklinville village, New York",592
+place,27419,"Fredonia village, New York",3114
+place,27452,"Freedom Plains CDP, New York",1218
+place,27485,"Freeport village, New York",11548
+place,27529,"Freeville village, New York",377
+place,27672,"Frewsburg CDP, New York",518
+place,27694,"Friendship CDP, New York",560
+place,27815,"Fulton city, New York",5052
+place,27859,"Fultonville village, New York",270
+place,27969,"Gainesville village, New York",50
+place,28035,"Galeville CDP, New York",1546
+place,28101,"Galway village, New York",207
+place,28138,"Gananda CDP, New York",1275
+place,28145,"Gang Mills CDP, New York",1557
+place,28178,"Garden City village, New York",25982
+place,28189,"Garden City Park CDP, New York",4633
+place,28200,"Garden City South CDP, New York",1051
+place,28244,"Gardiner CDP, New York",398
+place,28310,"Gardnertown CDP, New York",1838
+place,28376,"Garrattsville CDP, New York",0
+place,28431,"Gasport CDP, New York",474
+place,28453,"Gates CDP, New York",2093
+place,28618,"Geneseo village, New York",3989
+place,28640,"Geneva city, New York",6965
+place,28761,"Germantown CDP, New York",564
+place,28860,"Ghent CDP, New York",306
+place,28959,"Gilbertsville village, New York",72
+place,28990,"Gilgo CDP, New York",16
+place,29014,"Glasco CDP, New York",304
+place,29058,"Glen Aubrey CDP, New York",35
+place,29113,"Glen Cove city, New York",11393
+place,29245,"Glen Head CDP, New York",1788
+place,29322,"Glen Park village, New York",30
+place,29333,"Glens Falls city, New York",11794
+place,29338,"Glens Falls North CDP, New York",7150
+place,29421,"Glenwood Landing CDP, New York",673
+place,29443,"Gloversville city, New York",5254
+place,29476,"Golden's Bridge CDP, New York",569
+place,29509,"Gordon Heights CDP, New York",174
+place,29520,"Gorham CDP, New York",169
+place,29542,"Goshen village, New York",4799
+place,29597,"Gouverneur village, New York",2262
+place,29630,"Gowanda village, New York",1012
+place,29707,"Grahamsville CDP, New York",431
+place,29872,"Grand View-on-Hudson village, New York",45
+place,29894,"Grandyle Village CDP, New York",628
+place,30026,"Granville village, New York",1299
+place,30136,"Great Bend CDP, New York",52
+place,30169,"Great Neck village, New York",5312
+place,30191,"Great Neck Estates village, New York",917
+place,30202,"Great Neck Gardens CDP, New York",57
+place,30213,"Great Neck Plaza village, New York",5819
+place,30235,"Great River CDP, New York",814
+place,30279,"Greece CDP, New York",4947
+place,30411,"Greene village, New York",2470
+place,30521,"Green Island village, New York",692
+place,30543,"Greenlawn CDP, New York",4202
+place,30576,"Greenport village, New York",1930
+place,30581,"Greenport West CDP, New York",942
+place,30598,"Greenvale CDP, New York",1945
+place,30609,"Greenville CDP (Greene County), New York",1114
+place,30642,"Greenville CDP (Westchester County), New York",3242
+place,30675,"Greenwich village, New York",884
+place,30752,"Greenwood Lake village, New York",764
+place,30807,"Greigsville CDP, New York",206
+place,30961,"Groton village, New York",1286
+place,31022,"Groveland Station CDP, New York",11
+place,31137,"Guilford CDP, New York",57
+place,31258,"Hadley CDP, New York",344
+place,31291,"Hagaman village, New York",160
+place,31346,"Hailesboro CDP, New York",130
+place,31357,"Haines Falls CDP, New York",134
+place,31445,"Halesite CDP, New York",1285
+place,31533,"Hall CDP, New York",180
+place,31643,"Hamburg village, New York",5583
+place,31709,"Hamilton village, New York",3301
+place,31746,"Hamilton College CDP, New York",1211
+place,31786,"Hamlin CDP, New York",592
+place,31830,"Hammond village, New York",200
+place,31852,"Hammondsport village, New York",487
+place,31896,"Hampton Bays CDP, New York",4552
+place,31918,"Hampton Manor CDP, New York",4617
+place,31940,"Hancock village, New York",779
+place,31973,"Hankins CDP, New York",26
+place,32006,"Hannawa Falls CDP, New York",62
+place,32017,"Hannibal village, New York",718
+place,32094,"Harbor Hills CDP, New York",82
+place,32105,"Harbor Isle CDP, New York",461
+place,32325,"Harriman village, New York",1407
+place,32391,"Harris Hill CDP, New York",5517
+place,32402,"Harrison village, New York",22910
+place,32523,"Hartsdale CDP, New York",2507
+place,32578,"Hartwick CDP, New York",95
+place,32597,"Hartwick Seminary CDP, New York",334
+place,32710,"Hastings-on-Hudson village, New York",3051
+place,32732,"Hauppauge CDP, New York",29214
+place,32754,"Haverstraw village, New York",2192
+place,32776,"Haviland CDP, New York",536
+place,32842,"Hawthorne CDP, New York",2554
+place,32963,"Head of the Harbor village, New York",376
+place,33128,"Hemlock CDP, New York",19
+place,33139,"Hempstead village, New York",17320
+place,34044,"Henderson CDP, New York",35
+place,34118,"Heritage Hills CDP, New York",364
+place,34121,"Herkimer village, New York",4214
+place,34165,"Hermon CDP, New York",61
+place,34198,"Herricks CDP, New York",1046
+place,34220,"Herrings CDP, New York",0
+place,34264,"Heuvelton village, New York",413
+place,34286,"Hewlett CDP, New York",3916
+place,34297,"Hewlett Bay Park village, New York",243
+place,34308,"Hewlett Harbor village, New York",172
+place,34319,"Hewlett Neck village, New York",101
+place,34374,"Hicksville CDP, New York",23962
+place,34451,"High Falls CDP, New York",154
+place,34484,"Highland CDP, New York",1827
+place,34495,"Highland Falls village, New York",1202
+place,34528,"Highland-on-the-Lake CDP, New York",1159
+place,34660,"Hillburn village, New York",605
+place,34693,"Hillcrest CDP, New York",1026
+place,34786,"Hillside CDP, New York",87
+place,34803,"Hillside Lake CDP, New York",105
+place,34847,"Hilton village, New York",1571
+place,34979,"Hobart village, New York",491
+place,35056,"Holbrook CDP, New York",8980
+place,35111,"Holland CDP, New York",349
+place,35144,"Holland Patent village, New York",326
+place,35155,"Holley village, New York",568
+place,35254,"Holtsville CDP, New York",9417
+place,35276,"Homer village, New York",1349
+place,35353,"Honeoye CDP, New York",609
+place,35364,"Honeoye Falls village, New York",2075
+place,35474,"Hoosick Falls village, New York",848
+place,35573,"Hopewell Junction CDP, New York",1207
+place,35672,"Hornell city, New York",4557
+place,35694,"Horseheads village, New York",3371
+place,35710,"Horseheads North CDP, New York",466
+place,35738,"Hortonville CDP, New York",141
+place,35771,"Houghton CDP, New York",829
+place,35969,"Hudson city, New York",6701
+place,35980,"Hudson Falls village, New York",1214
+place,36156,"Hunt CDP, New York",44
+place,36167,"Hunter village, New York",670
+place,36233,"Huntington CDP, New York",16920
+place,37022,"Huntington Bay village, New York",321
+place,37044,"Huntington Station CDP, New York",9135
+place,37132,"Hurley CDP, New York",671
+place,37154,"Hurleyville CDP, New York",300
+place,37198,"Hyde Park CDP, New York",1067
+place,37275,"Ilion village, New York",2087
+place,37528,"Interlaken village, New York",270
+place,37583,"Inwood CDP, New York",4381
+place,37737,"Irondequoit CDP, New York",14631
+place,37803,"Irvington village, New York",4164
+place,37840,"Islandia village, New York",6834
+place,37847,"Island Park village, New York",1007
+place,37869,"Islip CDP, New York",4886
+place,38022,"Islip Terrace CDP, New York",1592
+place,38077,"Ithaca city, New York",29367
+place,38209,"Jacksonville CDP, New York",87
+place,38253,"Jamesport CDP, New York",783
+place,38264,"Jamestown city, New York",13209
+place,38275,"Jamestown West CDP, New York",1631
+place,38429,"Jefferson CDP, New York",152
+place,38451,"Jefferson Heights CDP, New York",707
+place,38500,"Jefferson Valley-Yorktown CDP, New York",4391
+place,38506,"Jeffersonville village, New York",369
+place,38539,"Jericho CDP, New York",12521
+place,38748,"Johnson City village, New York",8339
+place,38781,"Johnstown city, New York",7798
+place,38825,"Jordan village, New York",413
+place,38934,"Kaser village, New York",1071
+place,38946,"Katonah CDP, New York",1395
+place,38985,"Kauneonga Lake CDP, New York",114
+place,39089,"Keeseville CDP, New York",654
+place,39232,"Kenmore village, New York",3904
+place,39243,"Kennedy CDP, New York",163
+place,39309,"Kensington village, New York",494
+place,39397,"Kerhonkson CDP, New York",416
+place,39463,"Keuka Park CDP, New York",454
+place,39485,"Kiamesha Lake CDP, New York",23
+place,39562,"Kinderhook village, New York",371
+place,39672,"Kings Park CDP, New York",3642
+place,39694,"Kings Point village, New York",1169
+place,39727,"Kingston city, New York",16375
+place,39853,"Kiryas Joel village, New York",5703
+place,40175,"Kysorville CDP, New York",6
+place,40189,"Lackawanna city, New York",4611
+place,40200,"Lacona village, New York",187
+place,40233,"La Fargeville CDP, New York",300
+place,40398,"Lake Carmel CDP, New York",887
+place,40475,"Lake Delta CDP, New York",444
+place,40486,"Lake Erie Beach CDP, New York",110
+place,40508,"Lake George village, New York",855
+place,40530,"Lake Grove village, New York",4206
+place,40552,"Lake Huntington CDP, New York",113
+place,40585,"Lake Katrine CDP, New York",1942
+place,40607,"Lakeland CDP, New York",447
+place,40651,"Lake Luzerne CDP, New York",532
+place,40689,"Lake Mohegan CDP, New York",1496
+place,40761,"Lake Placid village, New York",2241
+place,40838,"Lake Ronkonkoma CDP, New York",5167
+place,40937,"Lake Success village, New York",7608
+place,41003,"Lakeview CDP, New York",746
+place,41036,"Lakeville CDP, New York",477
+place,41069,"Lakewood village, New York",1971
+place,41135,"Lancaster village, New York",5780
+place,41223,"Lansing village, New York",5523
+place,41333,"Larchmont village, New York",3405
+place,41399,"Latham CDP, New York",7905
+place,41432,"Lattingtown village, New York",787
+place,41465,"Laurel CDP, New York",698
+place,41487,"Laurel Hollow village, New York",1656
+place,41520,"Laurens village, New York",222
+place,41553,"Lawrence village, New York",2145
+place,41784,"Leeds CDP, New York",123
+place,41872,"Leicester village, New York",72
+place,42026,"Le Roy village, New York",2380
+place,42081,"Levittown CDP, New York",12731
+place,42147,"Lewiston village, New York",1105
+place,42224,"Liberty village, New York",2842
+place,42279,"Lido Beach CDP, New York",1176
+place,42323,"Lima village, New York",939
+place,42345,"Lime Lake CDP, New York",141
+place,42378,"Limestone CDP, New York",32
+place,42455,"Lincolndale CDP, New York",255
+place,42488,"Lincoln Park CDP, New York",2078
+place,42554,"Lindenhurst village, New York",6896
+place,42609,"Linwood CDP, New York",17
+place,42642,"Lisle village, New York",16
+place,42741,"Little Falls city, New York",1896
+place,42829,"Little Valley village, New York",675
+place,42884,"Liverpool village, New York",2521
+place,42928,"Livingston Manor CDP, New York",401
+place,42950,"Livonia village, New York",402
+place,42972,"Livonia Center CDP, New York",142
+place,43005,"Lloyd Harbor village, New York",789
+place,43038,"Loch Sheldrake CDP, New York",500
+place,43082,"Lockport city, New York",9002
+place,43192,"Locust Valley CDP, New York",1862
+place,43214,"Lodi village, New York",50
+place,43335,"Long Beach city, New York",9279
+place,43401,"Long Lake CDP, New York",288
+place,43511,"Lorenz Park CDP, New York",680
+place,43533,"Lorraine CDP, New York",5
+place,43566,"Loudonville CDP, New York",2194
+place,43720,"Lowville village, New York",3996
+place,43874,"Lynbrook village, New York",8896
+place,43885,"Lyncourt CDP, New York",2360
+place,43918,"Lyndonville village, New York",736
+place,43951,"Lyon Mountain CDP, New York",33
+place,43962,"Lyons CDP, New York",1633
+place,44006,"Lyons Falls village, New York",298
+place,44105,"MacDonnell Heights CDP, New York",451
+place,44149,"Macedon CDP, New York",1268
+place,44193,"McGraw village, New York",287
+place,44226,"Machias CDP, New York",283
+place,44358,"McLean CDP, New York",59
+place,44424,"Madison village, New York",218
+place,44479,"Madrid CDP, New York",171
+place,44534,"Mahopac CDP, New York",2640
+place,44677,"Malden-on-Hudson CDP, New York",37
+place,44710,"Malone village, New York",5496
+place,44787,"Malverne village, New York",2106
+place,44792,"Malverne Park Oaks CDP, New York",208
+place,44831,"Mamaroneck village, New York",10220
+place,44853,"Manchester village, New York",655
+place,44897,"Manhasset CDP, New York",18477
+place,44908,"Manhasset Hills CDP, New York",1600
+place,45018,"Manlius village, New York",2440
+place,45073,"Mannsville village, New York",202
+place,45106,"Manorhaven village, New York",919
+place,45139,"Manorville CDP, New York",2740
+place,45392,"Marathon village, New York",544
+place,45480,"Marcellus village, New York",945
+place,45524,"Marcy CDP, New York",1012
+place,45557,"Margaretville village, New York",747
+place,45573,"Mariaville Lake CDP, New York",28
+place,45634,"Marion CDP, New York",418
+place,45659,"Marist College CDP, New York",2671
+place,45700,"Marlboro CDP, New York",1310
+place,45986,"Massapequa CDP, New York",8381
+place,45997,"Massapequa Park village, New York",3498
+place,46019,"Massena village, New York",5418
+place,46074,"Mastic CDP, New York",1242
+place,46085,"Mastic Beach CDP, New York",1829
+place,46107,"Matinecock village, New York",550
+place,46140,"Mattituck CDP, New York",1549
+place,46151,"Mattydale CDP, New York",1155
+place,46162,"Maybrook village, New York",632
+place,46206,"Mayfield village, New York",303
+place,46239,"Mayville village, New York",1687
+place,46349,"Mechanicstown CDP, New York",3914
+place,46360,"Mechanicville city, New York",1448
+place,46404,"Medford CDP, New York",9405
+place,46415,"Medina village, New York",3053
+place,46503,"Melrose Park CDP, New York",279
+place,46514,"Melville CDP, New York",38373
+place,46536,"Menands village, New York",4685
+place,46646,"Meridian village, New York",38
+place,46668,"Merrick CDP, New York",8705
+place,46750,"Merritt Park CDP, New York",201
+place,46811,"Mexico village, New York",1462
+place,46866,"Middleburgh village, New York",819
+place,46976,"Middle Island CDP, New York",2837
+place,46998,"Middleport village, New York",633
+place,47042,"Middletown city, New York",10369
+place,47108,"Middleville village, New York",57
+place,47229,"Milford village, New York",333
+place,47273,"Millbrook village, New York",1487
+place,47306,"Miller Place CDP, New York",3278
+place,47361,"Millerton village, New York",501
+place,47405,"Mill Neck village, New York",174
+place,47427,"Millport village, New York",39
+place,47482,"Millwood CDP, New York",532
+place,47548,"Milton CDP (Saratoga County), New York",645
+place,47554,"Milton CDP (Ulster County), New York",883
+place,47636,"Mineola village, New York",20595
+place,47680,"Minetto CDP, New York",238
+place,47702,"Mineville CDP, New York",215
+place,47757,"Minoa village, New York",579
+place,47823,"Mohawk village, New York",785
+place,47977,"Mongaup Valley CDP, New York",146
+place,47988,"Monroe village, New York",5328
+place,48010,"Monsey CDP, New York",7443
+place,48054,"Montauk CDP, New York",2069
+place,48090,"Montebello village, New York",2754
+place,48142,"Montgomery village, New York",1552
+place,48175,"Monticello village, New York",5334
+place,48197,"Montour Falls village, New York",1173
+place,48208,"Montrose CDP, New York",1433
+place,48241,"Mooers CDP, New York",88
+place,48296,"Moravia village, New York",921
+place,48450,"Moriches CDP, New York",615
+place,48483,"Morris village, New York",252
+place,48538,"Morrisonville CDP, New York",404
+place,48593,"Morrisville village, New York",1114
+place,48736,"Mountain Dale CDP, New York",98
+place,48750,"Mountain Lodge Park CDP, New York",78
+place,48879,"Mount Ivy CDP, New York",711
+place,48890,"Mount Kisco village, New York",10149
+place,48945,"Mount Morris village, New York",1681
+place,49066,"Mount Sinai CDP, New York",2466
+place,49121,"Mount Vernon city, New York",20287
+place,49143,"Mount Vision CDP, New York",7
+place,49220,"Munnsville village, New York",98
+place,49231,"Munsey Park village, New York",1339
+place,49242,"Munsons Corners CDP, New York",2244
+place,49330,"Muttontown village, New York",1758
+place,49363,"Myers Corner CDP, New York",3002
+place,49407,"Nanuet CDP, New York",9902
+place,49418,"Napanoch CDP, New York",313
+place,49424,"Napeague CDP, New York",396
+place,49429,"Naples village, New York",804
+place,49473,"Narrowsburg CDP, New York",314
+place,49506,"Nassau village, New York",403
+place,49555,"Nassau Lake CDP, New York",31
+place,49605,"Natural Bridge CDP, New York",43
+place,49715,"Nazareth College CDP, New York",1169
+place,49726,"Nedrow CDP, New York",520
+place,49748,"Nelliston village, New York",221
+place,49781,"Nelsonville village, New York",113
+place,49825,"Nesconset CDP, New York",5734
+place,49891,"Newark village, New York",6247
+place,49902,"Newark Valley village, New York",427
+place,49924,"New Baltimore CDP, New York",30
+place,49946,"New Berlin village, New York",517
+place,50034,"Newburgh city, New York",13399
+place,50067,"New Cassel CDP, New York",6143
+place,50100,"New City CDP, New York",12365
+place,50221,"Newfane CDP, New York",904
+place,50243,"Newfield CDP, New York",314
+place,50265,"New Hackensack CDP, New York",329
+place,50276,"New Hamburg CDP, New York",185
+place,50298,"New Hartford village, New York",1953
+place,50353,"New Hempstead village, New York",1154
+place,50397,"New Hyde Park village, New York",7907
+place,50551,"New Paltz village, New York",4139
+place,50573,"Newport village, New York",246
+place,50617,"New Rochelle city, New York",30085
+place,50705,"New Square village, New York",2413
+place,50727,"New Suffolk CDP, New York",1899
+place,50837,"New Windsor CDP, New York",2863
+place,51000,"New York city, New York",4600634
+place,51011,"New York Mills village, New York",1426
+place,51055,"Niagara Falls city, New York",21299
+place,51088,"Niagara University CDP, New York",305
+place,51110,"Nichols village, New York",124
+place,51262,"Niskayuna CDP, New York",11640
+place,51286,"Nissequogue village, New York",388
+place,51297,"Niverville CDP, New York",251
+place,51319,"Norfolk CDP, New York",577
+place,51396,"North Amityville CDP, New York",3861
+place,51418,"Northampton CDP, New York",414
+place,51440,"North Babylon CDP, New York",3961
+place,51467,"North Ballston Spa CDP, New York",190
+place,51484,"North Bay CDP, New York",49
+place,51495,"North Bay Shore CDP, New York",2656
+place,51517,"North Bellmore CDP, New York",4930
+place,51528,"North Bellport CDP, New York",3822
+place,51561,"North Blenheim CDP, New York",44
+place,51583,"North Boston CDP, New York",376
+place,51792,"North Collins village, New York",634
+place,51847,"North Creek CDP, New York",650
+place,51915,"Northeast Ithaca CDP, New York",1030
+place,52040,"North Gates CDP, New York",1915
+place,52067,"North Granville CDP, New York",250
+place,52078,"North Great River CDP, New York",677
+place,52188,"North Haven village, New York",321
+place,53022,"North Hills village, New York",2780
+place,53055,"North Hornell village, New York",471
+place,53198,"North Lindenhurst CDP, New York",4848
+place,53231,"North Lynbrook CDP, New York",152
+place,53253,"North Massapequa CDP, New York",3614
+place,53264,"North Merrick CDP, New York",1923
+place,53275,"North New Hyde Park CDP, New York",12932
+place,53319,"North Patchogue CDP, New York",2107
+place,53396,"Northport village, New York",3959
+place,53462,"North Rose CDP, New York",110
+place,53561,"North Sea CDP, New York",2185
+place,53660,"North Syracuse village, New York",2533
+place,53682,"North Tonawanda city, New York",9467
+place,53748,"North Valley Stream CDP, New York",2795
+place,53770,"Northville village, New York",638
+place,53775,"Northville CDP, New York",507
+place,53792,"North Wantagh CDP, New York",1748
+place,53852,"Northwest Harbor CDP, New York",953
+place,53853,"Northwest Ithaca CDP, New York",2034
+place,53979,"Norwich city, New York",4825
+place,54012,"Norwood village, New York",370
+place,54056,"Noyack CDP, New York",833
+place,54078,"Nunda village, New York",470
+place,54100,"Nyack village, New York",5348
+place,54111,"Oak Beach CDP, New York",36
+place,54144,"Oakdale CDP, New York",2372
+place,54155,"Oakfield village, New York",334
+place,54430,"Ocean Beach village, New York",79
+place,54441,"Oceanside CDP, New York",14002
+place,54452,"Odessa village, New York",361
+place,54485,"Ogdensburg city, New York",5317
+place,54540,"Olcott CDP, New York",139
+place,54551,"Old Bethpage CDP, New York",2017
+place,54562,"Old Brookville village, New York",1808
+place,54617,"Old Field village, New York",229
+place,54639,"Old Forge CDP, New York",336
+place,54705,"Old Westbury village, New York",3257
+place,54716,"Olean city, New York",9641
+place,54837,"Oneida city, New York",5512
+place,54848,"Oneida Castle village, New York",99
+place,54881,"Oneonta city, New York",8524
+place,55002,"Ontario CDP, New York",1018
+place,55167,"Orangeburg CDP, New York",2910
+place,55189,"Orange Lake CDP, New York",2482
+place,55266,"Orchard Park village, New York",2543
+place,55321,"Orient CDP, New York",740
+place,55365,"Oriskany village, New York",558
+place,55376,"Oriskany Falls village, New York",185
+place,55530,"Ossining village, New York",8049
+place,55574,"Oswego city, New York",10283
+place,55618,"Otego village, New York",186
+place,55673,"Otisville village, New York",218
+place,55750,"Otter Lake CDP, New York",4
+place,55816,"Ovid village, New York",299
+place,55882,"Owego village, New York",2735
+place,55937,"Oxbow CDP, New York",7
+place,55948,"Oxford village, New York",585
+place,55992,"Oyster Bay CDP, New York",4529
+place,56011,"Oyster Bay Cove village, New York",429
+place,56088,"Painted Post village, New York",2972
+place,56110,"Palatine Bridge village, New York",426
+place,56132,"Palenville CDP, New York",99
+place,56187,"Palmyra village, New York",656
+place,56212,"Pamelia Center CDP, New York",289
+place,56231,"Panama village, New York",164
+place,56291,"Parc CDP, New York",797
+place,56341,"Parish village, New York",342
+place,56363,"Parishville CDP, New York",196
+place,56660,"Patchogue village, New York",7395
+place,56770,"Paul Smiths CDP, New York",552
+place,56781,"Pavilion CDP, New York",553
+place,56814,"Pawling village, New York",1180
+place,56869,"Peach Lake CDP, New York",210
+place,56902,"Pearl River CDP, New York",8746
+place,56968,"Peconic CDP, New York",538
+place,56979,"Peekskill city, New York",6582
+place,57001,"Pelham village, New York",3682
+place,57023,"Pelham Manor village, New York",2656
+place,57177,"Penn Yan village, New York",3674
+place,57243,"Perry village, New York",1231
+place,57287,"Perrysburg CDP, New York",95
+place,57364,"Peru CDP, New York",849
+place,57518,"Phelps village, New York",553
+place,57551,"Philadelphia village, New York",601
+place,57639,"Philmont village, New York",249
+place,57650,"Phoenicia CDP, New York",34
+place,57661,"Phoenix village, New York",808
+place,57749,"Piermont village, New York",937
+place,57782,"Pierrepont Manor CDP, New York",70
+place,57804,"Piffard CDP, New York",148
+place,57815,"Pike CDP, New York",77
+place,57980,"Pine Bush CDP, New York",1552
+place,58057,"Pine Hill CDP, New York",112
+place,58145,"Pine Plains CDP, New York",849
+place,58189,"Pine Valley CDP, New York",88
+place,58354,"Pittsford village, New York",3073
+place,58409,"Plainedge CDP, New York",2758
+place,58442,"Plainview CDP, New York",20225
+place,58475,"Plandome village, New York",570
+place,58486,"Plandome Heights village, New York",260
+place,58497,"Plandome Manor village, New York",163
+place,58541,"Plattekill CDP, New York",188
+place,58574,"Plattsburgh city, New York",13841
+place,58601,"Plattsburgh West CDP, New York",1745
+place,58684,"Pleasant Valley CDP, New York",469
+place,58728,"Pleasantville village, New York",3746
+place,58739,"Plessis CDP, New York",0
+place,58794,"Poestenkill CDP, New York",400
+place,58849,"Point Lookout CDP, New York",311
+place,58937,"Poland village, New York",198
+place,58992,"Pomona village, New York",1104
+place,59157,"Poquott village, New York",126
+place,59212,"Port Byron village, New York",455
+place,59223,"Port Chester village, New York",11184
+place,59245,"Port Dickinson village, New York",354
+place,59311,"Port Ewen CDP, New York",519
+place,59322,"Port Gibson CDP, New York",79
+place,59333,"Port Henry CDP, New York",386
+place,59355,"Port Jefferson village, New York",7195
+place,59377,"Port Jefferson Station CDP, New York",4211
+place,59388,"Port Jervis city, New York",3644
+place,59443,"Portlandville CDP, New York",21
+place,59454,"Port Leyden village, New York",81
+place,59498,"Portville village, New York",332
+place,59520,"Port Washington CDP, New York",13165
+place,59531,"Port Washington North village, New York",1441
+place,59564,"Potsdam village, New York",7058
+place,59619,"Pottersville CDP, New York",358
+place,59641,"Poughkeepsie city, New York",18916
+place,59708,"Prattsburgh CDP, New York",266
+place,59740,"Prattsville CDP, New York",71
+place,59831,"Preston-Potter Hollow CDP, New York",42
+place,59883,"Prospect CDP, New York",203
+place,59960,"Pulaski village, New York",1773
+place,59993,"Pultneyville CDP, New York",126
+place,60103,"Putnam Lake CDP, New York",605
+place,60408,"Quiogue CDP, New York",206
+place,60422,"Quogue village, New York",877
+place,60455,"Radisson CDP, New York",3064
+place,60576,"Randolph CDP, New York",709
+place,60598,"Ransomville CDP, New York",796
+place,60609,"Rapids CDP, New York",141
+place,60675,"Ravena village, New York",860
+place,60829,"Red Creek village, New York",95
+place,60884,"Redford CDP, New York",4
+place,60895,"Red Hook village, New York",1460
+place,60983,"Red Oaks Mill CDP, New York",1055
+place,61016,"Redwood CDP, New York",45
+place,61115,"Remsen village, New York",333
+place,61142,"Remsenburg-Speonk CDP, New York",955
+place,61148,"Rensselaer city, New York",4543
+place,61159,"Rensselaer Falls village, New York",81
+place,61236,"Retsof CDP, New York",24
+place,61346,"Rhinebeck village, New York",3024
+place,61368,"Rhinecliff CDP, New York",88
+place,61434,"Richburg village, New York",94
+place,61489,"Richfield Springs village, New York",496
+place,61588,"Richmondville village, New York",300
+place,61621,"Richville village, New York",8
+place,61665,"Ridge CDP, New York",2759
+place,61797,"Rifton CDP, New York",86
+place,61874,"Ripley CDP, New York",59
+place,61973,"Riverhead CDP, New York",14351
+place,62061,"Riverside village, New York",254
+place,62066,"Riverside CDP, New York",1482
+place,63000,"Rochester city, New York",143073
+place,63014,"Rochester Institute of Technology CDP, New York",5859
+place,63132,"Rock Hill CDP, New York",1191
+place,63264,"Rockville Centre village, New York",14016
+place,63319,"Rocky Point CDP, New York",3229
+place,63330,"Rodman CDP, New York",109
+place,63363,"Roessleville CDP, New York",11894
+place,63418,"Rome city, New York",17958
+place,63429,"Romulus CDP, New York",271
+place,63473,"Ronkonkoma CDP, New York",16524
+place,63506,"Roosevelt CDP, New York",2473
+place,63583,"Roscoe CDP, New York",695
+place,63725,"Rosendale CDP, New York",466
+place,63770,"Roslyn village, New York",2346
+place,63792,"Roslyn Estates village, New York",405
+place,63803,"Roslyn Harbor village, New York",320
+place,63814,"Roslyn Heights CDP, New York",1926
+place,63924,"Rotterdam CDP, New York",8742
+place,63957,"Round Lake village, New York",158
+place,63968,"Round Top CDP, New York",49
+place,63979,"Rouses Point village, New York",786
+place,64056,"Ruby CDP, New York",60
+place,64155,"Rushford CDP, New York",78
+place,64199,"Rushville village, New York",168
+place,64232,"Russell Gardens village, New York",589
+place,64309,"Rye city, New York",10579
+place,64325,"Rye Brook village, New York",6694
+place,64408,"Sackets Harbor village, New York",361
+place,64430,"Saddle Rock village, New York",534
+place,64441,"Saddle Rock Estates CDP, New York",77
+place,64452,"Sagaponack village, New York",499
+place,64485,"Sag Harbor village, New York",2940
+place,64551,"St. Bonaventure CDP, New York",1356
+place,64584,"St. James CDP, New York",4953
+place,64606,"St. John Fisher College CDP, New York",831
+place,64639,"St. Johnsville village, New York",585
+place,64716,"St. Regis Falls CDP, New York",72
+place,64749,"Salamanca city, New York",2914
+place,64771,"Salem CDP, New York",344
+place,64842,"Salisbury CDP, New York",3874
+place,64848,"Salisbury Center CDP, New York",18
+place,64859,"Salisbury Mills CDP, New York",33
+place,64881,"Saltaire village, New York",173
+place,64892,"Salt Point CDP, New York",123
+place,64958,"Sanborn CDP, New York",927
+place,65024,"Sand Ridge CDP, New York",48
+place,65035,"Sands Point village, New York",951
+place,65068,"Sandy Creek village, New York",235
+place,65233,"Saranac Lake village, New York",2843
+place,65255,"Saratoga Springs city, New York",23957
+place,65288,"Saugerties village, New York",2484
+place,65310,"Saugerties South CDP, New York",399
+place,65332,"Savannah CDP, New York",240
+place,65354,"Savona village, New York",301
+place,65409,"Sayville CDP, New York",6059
+place,65431,"Scarsdale village, New York",8252
+place,65475,"Schaghticoke village, New York",676
+place,65508,"Schenectady city, New York",31372
+place,65519,"Schenevus CDP, New York",63
+place,65585,"Schoharie village, New York",977
+place,65640,"Schroon Lake CDP, New York",721
+place,65739,"Schuyler Lake CDP, New York",7
+place,65750,"Schuylerville village, New York",1083
+place,65761,"Scio CDP, New York",342
+place,65882,"Scotchtown CDP, New York",4040
+place,65893,"Scotia village, New York",2054
+place,65926,"Scottsburg CDP, New York",2
+place,65948,"Scotts Corners CDP, New York",760
+place,65959,"Scottsville village, New York",472
+place,66047,"Sea Cliff village, New York",1557
+place,66058,"Seaford CDP, New York",3531
+place,66102,"Searingtown CDP, New York",1467
+place,66212,"Selden CDP, New York",5640
+place,66322,"Seneca Falls CDP, New York",2397
+place,66366,"Seneca Knolls CDP, New York",360
+place,66465,"Setauket CDP, New York",1761
+place,66663,"Sharon Springs village, New York",924
+place,66828,"Shelter Island CDP, New York",1258
+place,66850,"Shelter Island Heights CDP, New York",622
+place,66872,"Shenorock CDP, New York",194
+place,66883,"Sherburne village, New York",1116
+place,66949,"Sherman village, New York",496
+place,66993,"Sherrill city, New York",1438
+place,67048,"Shinnecock Hills CDP, New York",643
+place,67070,"Shirley CDP, New York",6776
+place,67081,"Shokan CDP, New York",218
+place,67191,"Shoreham village, New York",360
+place,67207,"Shorehaven CDP, New York",110
+place,67257,"Shortsville village, New York",341
+place,67279,"Shrub Oak CDP, New York",977
+place,67334,"Sidney village, New York",3255
+place,67367,"Siena College CDP, New York",928
+place,67411,"Silver Creek village, New York",807
+place,67466,"Silver Springs village, New York",361
+place,67488,"Sinclairville village, New York",128
+place,67510,"Skaneateles village, New York",2020
+place,67631,"Slaterville Springs CDP, New York",17
+place,67638,"Sleepy Hollow village, New York",4705
+place,67640,"Sleepy Hollow Lake CDP, New York",203
+place,67686,"Sloan village, New York",730
+place,67708,"Sloatsburg village, New York",944
+place,67730,"Smallwood CDP, New York",27
+place,67851,"Smithtown CDP, New York",14401
+place,68088,"Smithville Flats CDP, New York",82
+place,68099,"Smyrna village, New York",151
+place,68209,"Sodus village, New York",890
+place,68242,"Sodus Point village, New York",193
+place,68286,"Solvay village, New York",2439
+place,68374,"Sound Beach CDP, New York",782
+place,68462,"Southampton village, New York",8151
+place,68610,"South Blooming Grove village, New York",420
+place,68737,"South Cairo CDP, New York",117
+place,68847,"South Corning village, New York",212
+place,68891,"South Dayton village, New York",107
+place,68946,"South Edmeston CDP, New York",41
+place,68968,"South Fallsburg CDP, New York",857
+place,69001,"South Farmingdale CDP, New York",2692
+place,69023,"South Floral Park village, New York",93
+place,69078,"South Glens Falls village, New York",1720
+place,69188,"South Hempstead CDP, New York",468
+place,69199,"South Hill CDP, New York",2543
+place,69254,"South Huntington CDP, New York",6334
+place,69265,"South Ilion CDP, New York",0
+place,69342,"South Lansing CDP, New York",798
+place,69364,"South Lima CDP, New York",0
+place,69386,"South Lockport CDP, New York",3630
+place,69452,"Southold CDP, New York",2673
+place,69606,"Southport CDP, New York",1300
+place,69892,"South Valley Stream CDP, New York",3491
+place,70035,"Spackenkill CDP, New York",1026
+place,70068,"Sparkill CDP, New York",376
+place,70090,"Sparrow Bush CDP, New York",249
+place,70123,"Speculator village, New York",317
+place,70167,"Spencer village, New York",260
+place,70189,"Spencerport village, New York",1239
+place,70321,"Springfield Center CDP, New York",57
+place,70387,"Springs CDP, New York",2475
+place,70420,"Spring Valley village, New York",11322
+place,70442,"Springville village, New York",3830
+place,70464,"Springwater CDP, New York",31
+place,70552,"Staatsburg CDP, New York",123
+place,70618,"Stamford village, New York",677
+place,70717,"Stannards CDP, New York",20
+place,70849,"Star Lake CDP, New York",224
+place,71267,"Stewart Manor village, New York",301
+place,71322,"Stillwater village, New York",662
+place,71377,"Stittville CDP, New York",23
+place,71597,"Stone Ridge CDP, New York",1297
+place,71608,"Stony Brook CDP, New York",5762
+place,71620,"Stony Brook University CDP, New York",17961
+place,71663,"Stony Point CDP, New York",1952
+place,71718,"Stottville CDP, New York",482
+place,71817,"Strykersville CDP, New York",223
+place,71894,"Suffern village, New York",5667
+place,72246,"Sunset Bay CDP, New York",229
+place,72327,"SUNY Oswego CDP, New York",1996
+place,72400,"Swan Lake CDP, New York",78
+place,72521,"Sylvan Beach village, New York",184
+place,72554,"Syosset CDP, New York",13286
+place,73000,"Syracuse city, New York",93151
+place,73057,"Taconic Shores CDP, New York",75
+place,73143,"Tannersville village, New York",598
+place,73154,"Tappan CDP, New York",2085
+place,73176,"Tarrytown village, New York",11837
+place,73352,"Terryville CDP, New York",2472
+place,73495,"Thendara CDP, New York",20
+place,73517,"Theresa village, New York",116
+place,73583,"Thiells CDP, New York",1190
+place,73605,"Thomaston village, New York",997
+place,73715,"Thornwood CDP, New York",1573
+place,73726,"Thousand Island Park CDP, New York",129
+place,73737,"Three Mile Bay CDP, New York",0
+place,73880,"Ticonderoga CDP, New York",1822
+place,73902,"Tillson CDP, New York",307
+place,73990,"Tioga Terrace CDP, New York",208
+place,74017,"Titusville CDP, New York",75
+place,74023,"Tivoli village, New York",193
+place,74166,"Tonawanda city, New York",7365
+place,75021,"Tonawanda Town CDP, New York",28703
+place,75121,"Town Line CDP, New York",327
+place,75341,"Tribes Hill CDP, New York",54
+place,75484,"Troy city, New York",22873
+place,75506,"Trumansburg village, New York",749
+place,75572,"Tuckahoe CDP, New York",986
+place,75583,"Tuckahoe village, New York",2372
+place,75627,"Tully village, New York",629
+place,75671,"Tupper Lake village, New York",1925
+place,75682,"Turin village, New York",121
+place,75726,"Tuscarora CDP, New York",0
+place,75779,"Tuxedo village, New York",1086
+place,75803,"Tuxedo Park village, New York",453
+place,76001,"Unadilla village, New York",294
+place,76023,"Unadilla Forks CDP, New York",8
+place,76089,"Uniondale CDP, New York",33941
+place,76155,"Union Springs village, New York",631
+place,76210,"Unionville village, New York",70
+place,76280,"University at Buffalo CDP, New York",4884
+place,76287,"University Gardens CDP, New York",1376
+place,76331,"Upper Brookville village, New York",716
+place,76386,"Upper Nyack village, New York",899
+place,76397,"Upper Red Hook CDP, New York",56
+place,76540,"Utica city, New York",30694
+place,76584,"Vails Gate CDP, New York",1746
+place,76617,"Valatie village, New York",984
+place,76639,"Valhalla CDP, New York",2435
+place,76661,"Valley Cottage CDP, New York",3003
+place,76672,"Valley Falls village, New York",42
+place,76705,"Valley Stream village, New York",12321
+place,76881,"Van Etten CDP, New York",198
+place,76969,"Varna CDP, New York",137
+place,76985,"Vassar College CDP, New York",2577
+place,77112,"Vernon village, New York",752
+place,77167,"Verona CDP, New York",952
+place,77211,"Verplanck CDP, New York",294
+place,77376,"Victor village, New York",1270
+place,77431,"Victory village, New York",43
+place,77513,"Village Green CDP, New York",486
+place,77519,"Village of the Branch village, New York",2531
+place,77574,"Viola CDP, New York",3232
+place,77585,"Virgil CDP, New York",36
+place,77684,"Voorheesville village, New York",913
+place,77728,"Waddington village, New York",168
+place,77772,"Wading River CDP, New York",2194
+place,77783,"Wadsworth CDP, New York",33
+place,77805,"Wainscott CDP, New York",772
+place,77849,"Walden village, New York",1374
+place,77948,"Walker Valley CDP, New York",89
+place,78003,"Wallkill CDP, New York",888
+place,78036,"Walton village, New York",2020
+place,78063,"Walton Park CDP, New York",329
+place,78091,"Walworth CDP, New York",285
+place,78113,"Wampsville village, New York",842
+place,78124,"Wanakah CDP, New York",679
+place,78146,"Wantagh CDP, New York",6031
+place,78168,"Wappingers Falls village, New York",2665
+place,78289,"Warrensburg CDP, New York",1690
+place,78333,"Warsaw village, New York",2936
+place,78355,"Warwick village, New York",2267
+place,78421,"Washington Heights CDP, New York",598
+place,78454,"Washington Mills CDP, New York",929
+place,78465,"Washingtonville village, New York",1970
+place,78476,"Wassaic CDP, New York",59
+place,78520,"Waterford village, New York",417
+place,78553,"Waterloo village, New York",2591
+place,78575,"Water Mill CDP, New York",1531
+place,78608,"Watertown city, New York",16343
+place,78663,"Waterville village, New York",900
+place,78674,"Watervliet city, New York",3421
+place,78696,"Watkins Glen village, New York",1758
+place,78806,"Waverly village, New York",1832
+place,78850,"Wayland village, New York",570
+place,78960,"Webster village, New York",4902
+place,78982,"Websters Crossing CDP, New York",0
+place,79015,"Weedsport village, New York",1025
+place,79048,"Wells CDP, New York",90
+place,79070,"Wells Bridge CDP, New York",20
+place,79081,"Wellsburg village, New York",63
+place,79092,"Wellsville village, New York",3292
+place,79174,"Wesley Hills village, New York",881
+place,79246,"West Babylon CDP, New York",13367
+place,79301,"West Bay Shore CDP, New York",608
+place,79444,"Westbury village, New York",8115
+place,79499,"West Carthage village, New York",587
+place,79543,"West Chazy CDP, New York",149
+place,79697,"West Danby CDP, New York",28
+place,79785,"West Elmira CDP, New York",761
+place,79796,"West End CDP, New York",855
+place,79895,"Westernville CDP, New York",1
+place,79939,"Westfield village, New York",1158
+place,79961,"Westford CDP, New York",21
+place,80082,"West Glens Falls CDP, New York",2346
+place,80170,"Westhampton CDP, New York",1872
+place,80181,"Westhampton Beach village, New York",4027
+place,80186,"West Hampton Dunes village, New York",11
+place,80203,"West Haverstraw village, New York",3057
+place,80225,"West Hempstead CDP, New York",4824
+place,80258,"West Hills CDP, New York",2984
+place,80291,"West Hurley CDP, New York",464
+place,80302,"West Islip CDP, New York",11044
+place,80324,"West Kill CDP, New York",59
+place,80423,"Westmere CDP, New York",4387
+place,80522,"Westmoreland CDP, New York",332
+place,80599,"West Nyack CDP, New York",6129
+place,80632,"Weston Mills CDP, New York",541
+place,80747,"West Point CDP, New York",7985
+place,80764,"Westport CDP, New York",178
+place,80863,"West Sand Lake CDP, New York",939
+place,80885,"West Sayville CDP, New York",1197
+place,80907,"West Seneca CDP, New York",17453
+place,81127,"Westvale CDP, New York",1161
+place,81138,"West Valley CDP, New York",165
+place,81292,"West Winfield village, New York",561
+place,81419,"Wheatley Heights CDP, New York",652
+place,81622,"Whitehall village, New York",303
+place,81644,"White Lake CDP (Oneida County), New York",8
+place,81655,"White Lake CDP (Sullivan County), New York",32
+place,81677,"White Plains city, New York",55240
+place,81710,"Whitesboro village, New York",1312
+place,81831,"Whitney Point village, New York",715
+place,82029,"Williamson CDP, New York",1755
+place,82084,"Williamsville village, New York",5330
+place,82117,"Williston Park village, New York",1786
+place,82260,"Willsboro CDP, New York",298
+place,82282,"Willsboro Point CDP, New York",122
+place,82304,"Wilmington CDP, New York",254
+place,82359,"Wilson village, New York",595
+place,82469,"Windham CDP, New York",553
+place,82524,"Windsor village, New York",280
+place,82579,"Wingdale CDP, New York",369
+place,82612,"Winthrop CDP, New York",133
+place,82656,"Witherbee CDP, New York",0
+place,82678,"Wolcott village, New York",759
+place,82733,"Woodbourne CDP, New York",274
+place,82744,"Woodbury CDP, New York",13303
+place,82750,"Woodbury village, New York",5758
+place,82942,"Woodmere CDP, New York",4667
+place,82953,"Woodridge village, New York",183
+place,82986,"Woodsburgh village, New York",154
+place,83041,"Woodstock CDP, New York",2496
+place,83063,"Woodsville CDP, New York",5
+place,83118,"Worcester CDP, New York",437
+place,83272,"Wurtsboro village, New York",579
+place,83283,"Wurtsboro Hills CDP, New York",28
+place,83349,"Wynantskill CDP, New York",1100
+place,83371,"Wyoming village, New York",259
+place,83426,"Yaphank CDP, New York",6562
+place,84000,"Yonkers city, New York",66133
+place,84011,"York CDP, New York",46
+place,84044,"Yorkshire CDP, New York",843
+place,84088,"Yorktown Heights CDP, New York",2885
+place,84099,"Yorkville village, New York",1066
+place,84143,"Youngstown village, New York",251
+place,84187,"Zena CDP, New York",157
+county,001,"Albany County, New York",214282
+county,003,"Allegany County, New York",15483
+county,005,"Bronx County, New York",406235
+county,007,"Broome County, New York",89003
+county,009,"Cattaraugus County, New York",28781
+county,011,"Cayuga County, New York",27244
+county,013,"Chautauqua County, New York",52575
+county,015,"Chemung County, New York",36143
+county,017,"Chenango County, New York",19416
+county,019,"Clinton County, New York",34680
+county,021,"Columbia County, New York",24934
+county,023,"Cortland County, New York",19929
+county,025,"Delaware County, New York",19277
+county,027,"Dutchess County, New York",122977
+county,029,"Erie County, New York",481447
+county,031,"Essex County, New York",15738
+county,033,"Franklin County, New York",19245
+county,035,"Fulton County, New York",19755
+county,037,"Genesee County, New York",26489
+county,039,"Greene County, New York",17596
+county,041,"Hamilton County, New York",2112
+county,043,"Herkimer County, New York",18696
+county,045,"Jefferson County, New York",55978
+county,047,"Kings County, New York",982849
+county,049,"Lewis County, New York",9593
+county,051,"Livingston County, New York",23278
+county,053,"Madison County, New York",23683
+county,055,"Monroe County, New York",388456
+county,057,"Montgomery County, New York",20303
+county,059,"Nassau County, New York",610843
+county,061,"New York County, New York",2267474
+county,063,"Niagara County, New York",77455
+county,065,"Oneida County, New York",107685
+county,067,"Onondaga County, New York",251551
+county,069,"Ontario County, New York",54804
+county,071,"Orange County, New York",161908
+county,073,"Orleans County, New York",12949
+county,075,"Oswego County, New York",40670
+county,077,"Otsego County, New York",26355
+county,079,"Putnam County, New York",31864
+county,081,"Queens County, New York",794626
+county,083,"Rensselaer County, New York",67676
+county,085,"Richmond County, New York",149450
+county,087,"Rockland County, New York",126770
+county,089,"St. Lawrence County, New York",41908
+county,091,"Saratoga County, New York",102699
+county,093,"Schenectady County, New York",67635
+county,095,"Schoharie County, New York",10495
+county,097,"Schuyler County, New York",5984
+county,099,"Seneca County, New York",14443
+county,101,"Steuben County, New York",41939
+county,103,"Suffolk County, New York",683354
+county,105,"Sullivan County, New York",29783
+county,107,"Tioga County, New York",15843
+county,109,"Tompkins County, New York",59330
+county,111,"Ulster County, New York",73664
+county,113,"Warren County, New York",36784
+county,115,"Washington County, New York",18668
+county,117,"Wayne County, New York",32665
+county,119,"Westchester County, New York",469864
+county,121,"Wyoming County, New York",15775
+county,123,"Yates County, New York",9439

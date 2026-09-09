@@ -285,3 +285,17 @@ roll_by_class <- cache_pull(
          property_class = as.integer(property_class),
          ## ORPTS municipality codes: the third and fourth digits are below 20 for cities
          is_city = as.integer(substr(municipality_code, 3, 4)) < 20)
+
+
+## --- ACS 5-year 2019-2023, workers 16+ by PLACE OF WORK (table B08604), an
+## independent count of jobs located in the city and the county, from the
+## household survey rather than employer records.
+acs_workplace <- cache_pull(
+  "census_acs5_2023_workplace_ny.csv", "https://api.census.gov/data/2023/acs/acs5",
+  function() {
+    bind_rows(
+      census_get("2023/acs/acs5", list(get = "NAME,B08604_001E", "for" = "place:*", "in" = "state:36")) |> mutate(level = "place", geo = place),
+      census_get("2023/acs/acs5", list(get = "NAME,B08604_001E", "for" = "county:*", "in" = "state:36")) |> mutate(level = "county", geo = county)) |>
+      select(level, geo, NAME, workers = B08604_001E)
+  }) |>
+  mutate(workers = as.numeric(workers))
