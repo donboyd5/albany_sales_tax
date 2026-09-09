@@ -23,13 +23,14 @@ book:
     - chapters/05-calibration.qmd
     - chapters/06-results.qmd
     - chapters/07-alternatives.qmd
-    - chapters/08-sensitivity.qmd
     - chapters/09-checks-preemption-timing.qmd
     - chapters/10-limitations-recommendations.qmd
     - chapters/11-authorization.qmd
     - chapters/references.qmd
   appendices:
     - appendices/glossary.qmd
+    - appendices/city-comparison.qmd
+    - appendices/sensitivity.qmd
     - appendices/route-b.qmd
     - appendices/county-tables.qmd
     - appendices/reproducing.qmd

@@ -37,10 +37,9 @@ The result is a city base of about **\$`r fb(est_pref$B_c_central)` billion, or 
 | @sec-approach | How the estimate is built |
 | @sec-data | Where every number comes from |
 | @sec-apportionment | How the county's taxable sales are divided between the city and the rest of the county, in detail |
-| @sec-calibration | How the method was checked against cities whose collections are known, how far those collections can be trusted, and why the two differ |
+| @sec-calibration | How the method compares with cities that already tax, and how much weight that comparison gets |
 | @sec-results | The estimate, its ranges, and a planning figure |
 | @sec-alternatives | What simpler and different methods give |
-| @sec-sensitivity | What changes when each assumption is varied |
 | @sec-checks | Validations, the preemption comparison, and first-year timing |
 | @sec-limitations | What could be wrong, and what to do next |
 | @sec-authorization | What it would take to authorize the tax |

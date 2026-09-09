@@ -1,5 +1,7 @@
 # Sensitivity analysis {#sec-sensitivity}
 
+This appendix varies each assumption in turn. The results chapter gives the conclusions; the tables are here.
+
 ```{r}
 #| include: false
 source(here::here("chapters", "_common.R"))

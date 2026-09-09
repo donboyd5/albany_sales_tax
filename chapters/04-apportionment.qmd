@@ -42,7 +42,7 @@ What each class is, and why it is shared out the way it is:
 
 - **Over-the-counter sales** (`r fp(cls$share[cls$class == "store"], 0)` of the county total): stores other than car dealers, restaurants, bars, hotels, entertainment, repair shops, personal services and rentals. These are sourced to the store, so the city's share of the county's *store receipts* from the 2022 Economic Census is the natural measure, taken industry group by industry group at the finest level published for both the city and the county (of the `r R$n_store_groups` store and delivered-goods groups, `r R$n_store_4digit` resolve at the four-digit level and `r R$n_store_3digit` at three digits). The city holds only `r fp(R$a_ecret)` of the county's retail receipts: the county's shopping has moved to Wolf Road in Colonie and Crossgates in Guilderland.
 
-- **Sales to businesses and other non-store sales** (`r fp(cls$share[cls$class == "business"], 0)`): every seller industry that is not a store, a car dealer, a utility or a delivered-goods retailer. The taxable sales here are mostly things businesses buy: supplies and equipment from wholesalers, software and computer services, cleaning, security and waste services, repair and maintenance work. Such sales are sourced to where the buyer takes delivery or where the service is performed, so the sharing rule needs to stand for *where the purchasing businesses are*. The measure used is the city's share of the county's private-sector jobs, leaving out government because governments are exempt purchasers. The rest of this chapter takes this class apart.
+- **Sales to businesses and other non-store sales** (`r fp(cls$share[cls$class == "business"], 0)`): every seller industry that is not a store, a car dealer, a utility or a delivered-goods retailer. The taxable sales here are mostly things businesses buy: supplies and equipment from wholesalers, software and computer services, cleaning, security and waste services, repair and maintenance work. Such sales are sourced to where the buyer takes delivery or where the service is performed, so the sharing rule needs to stand for *where the purchasers are*. Each industry group in the class is tagged by who mostly buys from it. Groups that sell mostly to businesses use the city's share of the county's private-sector jobs, leaving out government because governments are exempt purchasers; groups that sell mostly to households use the city's share of household income; groups that sell to both use half of each. The rest of this chapter takes this class apart.
 
 - **Motor vehicles** (`r fp(cls$share[cls$class == "motor_vehicle"], 0)`): car and truck dealers, plus one government group explained below. Vehicles are sourced to where the *buyer lives*, whatever the dealer's address, so the measure is the city's share of the county's recently registered vehicles. See @sec-motor-vehicles.
 
@@ -72,7 +72,7 @@ Every sharing rule is a fraction: the city's part of some county total. @tbl-rul
 #| tbl-cap: "City of Albany as a share of Albany County under every measure used or considered."
 tibble(Measure = c(
   "Population, 2020 Census",
-  "Private-sector jobs, excluding government (LODES 2023). Used for sales to businesses and utilities",
+  "Private-sector jobs, excluding government (LODES 2023). Used for the mostly-business groups and for utilities",
   "All jobs, including government (LODES 2023)",
   "Government jobs alone (LODES 2023)",
   "Private jobs excluding government, education and health care (LODES 2023)",
@@ -84,7 +84,7 @@ tibble(Measure = c(
   "Store receipts as used, weighted by the store classes",
   "Recently registered vehicles, model year 2024 and later (DMV). Used for motor vehicles",
   "Vehicles available to households (ACS)",
-  "Aggregate household income (ACS). Used for the residence half of delivered goods",
+  "Aggregate household income (ACS). Used for household-facing business groups and the residence half of delivered goods",
   "Households (ACS)",
   "Utility and telephone base measured from the school district tax"),
   `City share of county` = fp(c(pop, R$a_wxp, R$a_work, R$a_pub, R$a_exx, R$a_pay, R$a_estab, R$a_ecall, R$a_ecrec_x,
@@ -152,13 +152,13 @@ Three rules of New York sales tax explain why the largest families are read as b
 
 Software, computer services, data processing, staffing, and building services (cleaning, security, landscaping, pest control, trash) round out the class. The IT families are overwhelmingly sold to organizations; the building services go to homeowners as well as to office buildings, and are read as mixed.
 
-By this reading, about `r fp(bc$share_of_class[bc$customer == "business"], 0)` of the class is mostly sold to businesses, `r fp(bc$share_of_class[bc$customer == "mixed"], 0)` is mixed and `r fp(bc$share_of_class[bc$customer == "household"], 0)` is mostly sold to households. The judgment matters because household purchases should follow where households are (the city has `r fp(R$a_inc)` of the county's household income), not where the jobs are (`r fp(R$a_wxp)`). If the household-facing families are moved to the residence measure and the mixed families are split evenly, the class's city share falls from `r fp(R$a_wxp)` to `r fp(R$a_bus_split)`. That variant is carried through the calibration below.
+By this reading, about `r fp(bc$share_of_class[bc$customer == "business"], 0)` of the class is mostly sold to businesses, `r fp(bc$share_of_class[bc$customer == "mixed"], 0)` is mixed and `r fp(bc$share_of_class[bc$customer == "household"], 0)` is mostly sold to households. The judgment matters because household purchases should follow where households are (the city has `r fp(R$a_inc)` of the county's household income), not where the jobs are (`r fp(R$a_wxp)`). So the household-facing families follow household income, the mixed families are split evenly between the two measures, and only the mostly-business families follow jobs. That is the rule used, and it gives the city `r fp(R$a_bus_split)` of the class as a whole; using the jobs share for the whole class would give `r fp(R$a_wxp)`, and that is shown as an alternative in @tbl-busalts.
 
 ## The business sharing rule, taken apart {#sec-business-rule}
 
 ### What the number is
 
-The rule says the city gets `r fp(R$a_wxp)` of the county's sales to businesses because the city has `r fp(R$a_wxp)` of the county's private-sector jobs: `r fn(cj$private)` of `r fn(kj$private)` in the Census Bureau's 2023 job-location data, after removing `r fn(kj$government)` government jobs (of which `r fn(cj$government)`, `r fp(R$a_pub, 0)`, are in the city).
+The jobs measure that governs the mostly-business groups gives the city `r fp(R$a_wxp)` of them, because the city has `r fp(R$a_wxp)` of the county's private-sector jobs: `r fn(cj$private)` of `r fn(kj$private)` in the Census Bureau's 2023 job-location data, after removing `r fn(kj$government)` government jobs (of which `r fn(cj$government)`, `r fp(R$a_pub, 0)`, are in the city).
 
 Is a share that high believable? Two independent sources say yes. The 2022 Economic Census, which counts employees from business records rather than unemployment-insurance filings, gives the city `r fp(R$ec_emp_share)` of the county's employment in the private service sectors it publishes by place (`r fp(R$ec_emp_share_x)` leaving out education and health). And the American Community Survey, which asks households where they work, counts `r fn(R$acs_work_city)` people working in the city out of `r fn(R$acs_work_county)` working anywhere in the county, `r fp(R$acs_work_share)`, against the job data's `r fp(R$a_work)` for all jobs including government. The city really is where about half of the county's jobs are; the question is which of those jobs stand for taxable purchasing.
 
@@ -172,6 +172,9 @@ lp |>
             `of which education and health` = edu_health,
             `Share of all jobs` = fp(share_total), `Share of private jobs` = fp(share_private),
             `Share of private jobs excluding education and health` = fp(share_private_ex_exempt)) |>
+  bind_rows(tibble(Place = "**Albany County**", `All jobs` = sum(lp$total), Government = sum(lp$government), Private = sum(lp$private),
+                   `of which education and health` = sum(lp$edu_health), `Share of all jobs` = "100%", `Share of private jobs` = "100%",
+                   `Share of private jobs excluding education and health` = "100%")) |>
   kb(digits = 0, align = "lrrrrrrr", format.args = list(big.mark = ","))
 ```
 
@@ -189,6 +192,10 @@ ls |>
             `Treatment` = case_when(cns == "CNS20" ~ "excluded (exempt purchaser)",
                                     cns %in% c("CNS15", "CNS16") ~ "counted; largely exempt institutions",
                                     TRUE ~ "counted")) |>
+  bind_rows(tibble(Sector = "**All sectors**", `City jobs` = sum(ls$city), `Rest of county` = sum(ls$rest), `County jobs` = sum(ls$county),
+                   `City share` = fp(sum(ls$city) / sum(ls$county)), `Share of the city's private jobs` = "", Treatment = ""),
+            tibble(Sector = "**Private sectors (all but government)**", `City jobs` = cj$private, `Rest of county` = kj$private - cj$private, `County jobs` = kj$private,
+                   `City share` = fp(cj$private / kj$private), `Share of the city's private jobs` = "100%", Treatment = "the sharing rule")) |>
   kb(digits = 0, align = "lrrrrrl", format.args = list(big.mark = ","))
 ```
 
@@ -198,13 +205,13 @@ Two things stand out.
 
 **The sectors that buy the most taxable goods per employee are in the suburbs.** The city has only `r fp(ls$share[ls$cns == "CNS05"], 0)` of the county's manufacturing jobs, `r fp(ls$share[ls$cns == "CNS06"], 0)` of its wholesale jobs, `r fp(ls$share[ls$cns == "CNS08"], 0)` of transportation and warehousing, `r fp(ls$share[ls$cns == "CNS04"], 0)` of construction and `r fp(ls$share[ls$cns == "CNS07"], 0)` of retail. A distribution centre, a factory, a construction yard or a big-box store buys equipment, fuel, supplies, fixtures and repair services out of all proportion to its headcount. A hospital or a university buys a great deal too, but most of it is exempt.
 
-So the rule gives the city `r fp(R$a_wxp)` because the city is where the county's people *work*, in institutions and offices. Whether that is also where the county's *taxable business purchases* land is the question.
+So the jobs measure gives the city `r fp(R$a_wxp)` because the city is where the county's people *work*, in institutions and offices. Whether that is also where the county's *taxable business purchases* land is the question.
 
-### Reasons the `r fp(R$a_wxp, 0)` may be too high
+### Reasons the jobs measure may still give the city too much
 
 1. **Exempt institutions.** Hospitals and universities are counted in the rule but are largely exempt purchasers, exactly the objection that removed government from it. Taking education and health care out as well gives `r fp(R$a_exx)`. That is a floor for this correction rather than an estimate, because both sectors also contain taxable private employers (medical practices, clinics, private schools and training firms).
 2. **Purchases do not scale with headcount.** The suburban sectors above buy more taxable inputs per job. A firm's *receipts* would track its purchasing better than its headcount, and the Economic Census publishes receipts by place; but only for the service sectors. It publishes no place-level figures for construction, wholesale, manufacturing or company headquarters, the sectors that buy most, and among the sectors it does cover the dollars are dominated by finance and by hospitals, whose receipts are large and whose purchases are largely exempt. A receipts rule is therefore shown in @tbl-busalts, with and without education and health, but it measures the wrong sectors well and the right sectors not at all. No public source gives taxable purchases per job by industry and place, so the concern cannot be corrected directly, but two proxies point the same way. The city's share of the county's private *business locations* in the Economic Census is `r fp(R$a_estab)`: each location buys supplies and services whether it has five employees or five thousand, and the city's establishments are larger than the suburbs'. The city's share of private *payroll* is `r fp(R$a_pay)`, higher than its job share, because its jobs are high-wage office and health jobs; payroll is a poor guide to purchases of taxable goods.
-3. **Part of the class is bought by households.** By the reading in @tbl-buscustomer, `r fp(bc$share_of_class[bc$customer == "household"], 0)` of the class goes mostly to households and `r fp(bc$share_of_class[bc$customer == "mixed"], 0)` is mixed. Following those parts to where households are gives `r fp(R$a_bus_split)` for the class as a whole.
+3. **Part of the class is bought by households.** By the reading in @tbl-buscustomer, `r fp(bc$share_of_class[bc$customer == "household"], 0)` of the class goes mostly to households and `r fp(bc$share_of_class[bc$customer == "mixed"], 0)` is mixed. The rule used follows those parts to where households are, which is what brings the class as a whole to `r fp(R$a_bus_split)`.
 
 ### Reasons it may not be
 
@@ -228,7 +235,7 @@ af |> filter(class == "business") |>
   kb(digits = c(0, 0, 0, 2, 2, 1, 0, 3), align = "lrrrrrrr")
 ```
 
-Counting government jobs (`r fp(share_of("lodes"))`) gives \$`r fm(rev_of("lodes"))` million, but it is not a defensible specification: it distributes taxable purchases by a measure of *exempt* activity, and it is shown only to size the difference. The payroll rule gives \$`r fm(rev_of("ec_payroll"))` million. The three rules that respond to the doubts above all come in lower: business locations \$`r fm(rev_of("ec_estab"))` million, jobs excluding exempt institutions \$`r fm(rev_of("lodes_ex_exempt"))` million, the customer-type split \$`r fm(rev_of("by_customer"))` million. Sharing the whole class by household income, a floor that treats every business purchase as if it were made where people live, gives \$`r fm(rev_of("residence"))` million.
+The rule used, jobs for the mostly-business groups and household income for the household-facing ones, gives \$`r fm(rev_of("lodes_ex_pubadmin"))` million. Using the jobs share for the whole class, with no customer split, gives \$`r fm(rev_of("nosplit"))` million. Counting government jobs (`r fp(share_of("lodes"))`) gives \$`r fm(rev_of("lodes"))` million, but it is not a defensible specification: it distributes taxable purchases by a measure of *exempt* activity, and it is shown only to size the difference. The payroll rule gives \$`r fm(rev_of("ec_payroll"))` million and the receipts rules, which cover only the service sectors, \$`r fm(rev_of("ec_receipts_ex_eduhealth"))`–`r fm(rev_of("ec_receipts"))` million. The measures that respond most directly to the exempt-institution doubt come in lower: business locations \$`r fm(rev_of("ec_estab"))` million, jobs excluding exempt institutions \$`r fm(rev_of("lodes_ex_exempt"))` million, and taxable commercial property, which leaves every exempt owner out, \$`r fm(rev_of("assessed"))` million (@sec-exempt). Sharing the whole class by household income, a floor that treats every business purchase as if it were made where people live, gives \$`r fm(rev_of("residence"))` million.
 
 The plausible rules therefore span roughly \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))`–`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million, against the \$`r fm(REV)` million used. The last column shows that the rule used fits the calibration cities no better than the alternatives; two of the rules that give lower revenue fit slightly better. With fifteen cities a typical miss of 0.17 cannot be told apart from 0.19, so the ranking is not evidence either way, and the choice rests on the exemption argument rather than on fit. The differences are smaller than the raw shares suggest because the calibration is re-fitted each time and because the class is a quarter of the base: moving its city share by ten points moves the raw city base by about `r fp(0.10 * cls$share[cls$class == "business"], 1)` of the county total.
 
@@ -262,6 +269,9 @@ Government is not the only exempt purchaser in the city. Religious organizations
 R$exempt_tab |>
   transmute(`Type of exempt property` = grp, `County, $ billion` = fmv_county / 1e9, `City of Albany, $ billion` = fmv_city / 1e9,
             `City share` = fp(city_share, 0), `Parcels in city` = n_city) |>
+  bind_rows(tibble(`Type of exempt property` = "**All exempt property**", `County, $ billion` = sum(R$exempt_tab$fmv_county) / 1e9,
+                   `City of Albany, $ billion` = sum(R$exempt_tab$fmv_city) / 1e9,
+                   `City share` = fp(sum(R$exempt_tab$fmv_city) / sum(R$exempt_tab$fmv_county), 0), `Parcels in city` = sum(R$exempt_tab$n_city))) |>
   kb(digits = c(0, 2, 2, 0, 0), align = "lrrrr", format.args = list(big.mark = ","))
 ```
 
@@ -274,6 +284,8 @@ The same rolls give a sharing rule that leaves every one of them out: the city's
 #| tbl-cap: "Taxable property in Albany County by type, 2025 assessment rolls, full market value, and the city's share."
 R$taxable_tab |>
   transmute(`Type of taxable property` = grp, `County, $ billion` = county / 1e9, `City of Albany, $ billion` = city / 1e9, `City share` = fp(city_share, 0)) |>
+  bind_rows(tibble(`Type of taxable property` = "**All taxable property**", `County, $ billion` = sum(R$taxable_tab$county) / 1e9,
+                   `City of Albany, $ billion` = sum(R$taxable_tab$city) / 1e9, `City share` = fp(sum(R$taxable_tab$city) / sum(R$taxable_tab$county), 0))) |>
   kb(digits = c(0, 2, 2, 0), align = "lrrr")
 ```
 
@@ -281,7 +293,7 @@ The city has `r fp(R$a_assessed)` of the county's taxable commercial and industr
 
 ## The store sharing rule: receipts, payroll or locations? {#sec-store-rule}
 
-The over-the-counter and delivered classes together carry `r fp(R$store_share_of_base, 0)` of the base, so the store rule deserves the same test as the business rule. The concern is that Economic Census receipts are gross, not taxable: a city whose stores sell more groceries, prescriptions and gasoline than the county's do will have a receipts share above its taxable share (Auburn is the clearest case in @sec-calibration). No public source gives taxable sales by store and place, so the exempt mix cannot be corrected directly. What can be done is to replace receipts with the two other measures the Economic Census publishes by place and industry, payroll and the number of establishments, and re-fit the calibration under each.
+The over-the-counter and delivered classes together carry `r fp(R$store_share_of_base, 0)` of the base, so the store rule deserves the same test as the business rule. The concern is that Economic Census receipts are gross, not taxable: a city whose stores sell more groceries, prescriptions and gasoline than the county's do will have a receipts share above its taxable share (Auburn is the clearest case; @sec-city-detail). No public source gives taxable sales by store and place, so the exempt mix cannot be corrected directly. What can be done is to replace receipts with the two other measures the Economic Census publishes by place and industry, payroll and the number of establishments, and re-fit the calibration under each.
 
 ```{r}
 #| label: tbl-storealts
@@ -326,6 +338,7 @@ One more group belongs here. NAICS 9261, "Administration of Economic Programs," 
 
 ## Where this leaves the business share
 
-The city's `r fp(R$a_wxp)` of the county's private jobs is a real number, and the city really is where the county's institutions and offices are. But the jobs are disproportionately in exempt institutions and in offices that buy little per employee, while the suburbs have the factories, warehouses, contractors' yards and big stores that buy a lot. Every adjustment that responds to that (excluding exempt institutions, counting business locations instead of jobs, following household-facing sales to households) lowers the city's share of the class, to between `r fp(R$a_exx)` and `r fp(R$a_bus_split)`. On the other side, the one thing that can be measured directly for Albany, the taxable utility base, is more concentrated in the city than the rule says, and the calibration already removes a `r fp(1 - est_pref$B_c_central / B_pred, 0)` overstatement that includes this effect for the typical city.
+The city's `r fp(R$a_wxp)` of the county's private jobs is a real number, and the city really is where the county's institutions and offices are. But the jobs are disproportionately in exempt institutions and in offices that buy little per employee, while the suburbs have the factories, warehouses, contractors' yards and big stores that buy a lot; and part of what the class sells goes to households, not businesses. The rule used answers the second point directly, by sending household-facing sales to where households are, and gives the city `r fp(R$a_bus_split)` of the class. Every measure that answers the first point (excluding exempt institutions, counting business locations instead of jobs, using taxable commercial property) lowers the share further, to between `r fp(R$a_assessed)` and `r fp(R$a_exx)`. On the other side, the one thing that can be measured directly for Albany, the taxable utility base, is more concentrated in the city than the jobs measure says, and the comparison with other cities already removes a `r fp(1 - est_pref$B_c_central / B_pred, 0)` overstatement that includes this effect for the typical city.
 
-In sum, `r fp(R$a_wxp)` is at the high end of a defensible range for the class, that the calibrated revenue under the plausible alternatives runs from \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` to \$`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million, and that the planning range in @sec-results is built to cover it. The independent measure that leaves out exempt property automatically, the city's share of the county's taxable commercial and industrial property value from the assessment rolls, gives `r fp(R$a_assessed)` (@sec-exempt). The definitive way to do better is a tabulation of taxable sales inside the city limits from the Tax Department's return-level data.
+In sum, the rule used sits in the middle of a defensible range for the class, and the calibrated revenue under the plausible alternatives runs from \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` to \$`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million; the planning range in @sec-results is built to cover it. The definitive way to do better is a tabulation of taxable sales inside the city limits from the Tax Department's return-level data.
+

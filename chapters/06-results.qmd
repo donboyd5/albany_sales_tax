@@ -42,6 +42,10 @@ The intervals are prediction intervals: they include the uncertainty in the fitt
 
 The county base grew `r fp(R$cagr, 1)` a year from 2022–23 to 2025–26 (`r fp(R$by_year$growth[R$by_year$fy == 2026], 1)` in the latest year). For a tax starting in 2027 or later, the estimate should be read as a share, `r fp(s_cal)` of whatever the county base then is, rather than as a fixed dollar figure.
 
+## What moves the estimate, in brief
+
+Every assumption was varied one at a time, with the comparison against other cities re-run under each (@sec-sensitivity). Two families of choices move the answer: how the comparison with other cities is turned into an adjustment (@sec-calibration), and which measure stands for where sales to businesses land (@sec-apportionment). Together they produce the spread of readings in the table above. Everything else, the split of delivered goods, the treatment of online sales, the vehicle measure, the shopping response, moves the estimate by a few percent at most.
+
 ## Where Albany sits among cities that tax
 
 Seventeen taxing cities have a concentration ratio R inferred from collections, ranging from `r f2(min(route_b$R))` (Yonkers) to `r f2(max(route_b$R))` (Oneida), median `r f2(median(route_b$R))`. Albany's R of `r f2(R_cal)` sits near the median, next to `r paste(route_b$city[order(abs(route_b$R - R_cal))][1:3], collapse = ", ")`. That is the expected shape: a city whose retail has moved to the suburbs (its retail-only R is `r f2(R$a_ecret / pop)`) but which holds `r fp(R$a_wxp)` of the county's private-sector jobs. The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (`r fp(R$a_ecret)`) below and the measured utility share (`r fp(R$a_util)`) above, with the estimate at `r fp(s_cal)` between them.

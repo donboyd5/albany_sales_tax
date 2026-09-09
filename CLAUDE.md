@@ -236,3 +236,14 @@ commercial + industrial FMV) = 22.5%; calibrated on 11 non-Westchester
 cities (Westchester FMV unusable) gives $11.1 M. In the planning envelope.
 REMINDER: ny73-2j3u has NO city rows (60 jurisdictions); city bases are
 inferred from collections; never write that city taxable sales are published.
+
+## Central rule for the business class (2026-09-09, user decision)
+
+The customer-type split is now the DEFAULT (business_by_customer = TRUE in
+apportion_city): mostly-business groups by private jobs ex government,
+household-facing by ACS income, mixed half each; class share 38.5%. Plain
+jobs rule (42.8%) is the "nosplit" alternative. Headline now $12.8 M central
+(share form), level $10.8 M, apportioned $14.0 M, planning $10-17 M, budget
+$10 M. Chapter 5 is a short summary; the city-comparison detail and the
+sensitivity tables are appendices (user finds the city inference
+unconvincing and wants it out of the main text).

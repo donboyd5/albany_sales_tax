@@ -130,7 +130,7 @@ CLASS_LABEL <- c(store = "Over-the-counter sales", business = "Sales to business
                  motor_vehicle = "Motor vehicles", delivered_split = "Delivered household goods",
                  utilities = "Utilities and telephone")
 CLASS_ALLOC <- c(store = "Where the stores are (Economic Census receipts)",
-                 business = "Where private-sector jobs are (LODES, excluding government)",
+                 business = "Mostly-business groups: where private-sector jobs are (LODES, excluding government); household-facing groups: where household income is (ACS); mixed groups half each",
                  motor_vehicle = "Where car owners live (DMV registrations)",
                  delivered_split = "Half stores, half household income (ACS)",
                  utilities = "Where private-sector jobs are (LODES, excluding government)")
@@ -256,7 +256,7 @@ variants <- tribble(
   "Business sharing rule: Economic Census payroll", list(business_allocator = "ec_payroll"),
   "Business sharing rule: Economic Census business locations", list(business_allocator = "ec_estab"),
   "Business sharing rule: employment excluding government, education and health (exempt-institution bound)", list(business_allocator = "lodes_ex_exempt"),
-  "Business class split by customer type (household part by residence)", list(business_by_customer = TRUE),
+  "Business class not split by customer: private jobs for the whole class", list(business_by_customer = FALSE),
   "Business sharing rule: household income (residence) for the whole class (floor)", list(business_allocator = "residence"),
   "Store sharing rule: Economic Census payroll instead of receipts", list(store_allocator = "payroll"),
   "Store sharing rule: Economic Census establishments instead of receipts", list(store_allocator = "establishments"),
@@ -277,12 +277,12 @@ R$REV_util_meas <- rev(apply_calibration(fit_pref, B_util_meas, B_k)$B_c_central
 ## --- sharing-rule alternatives with the calibration re-fitted under each (share form) ---------------
 ALT <- tribble(
   ~key, ~class, ~label, ~args,
-  "lodes_ex_pubadmin", "business", "Private-sector jobs, excluding government (used)", list(business_allocator = "lodes_ex_pubadmin"),
+  "lodes_ex_pubadmin", "business", "Private-sector jobs, excluding government, for the mostly-business groups; household income for household-facing groups; half each for mixed (used)", list(business_allocator = "lodes_ex_pubadmin"),
+  "nosplit", "business", "Private-sector jobs, excluding government, for the whole class (no customer split)", list(business_by_customer = FALSE),
   "lodes", "business", "All jobs, including government", list(business_allocator = "lodes"),
   "ec_payroll", "business", "Private-sector payroll (Economic Census)", list(business_allocator = "ec_payroll"),
   "ec_estab", "business", "Private business locations (Economic Census establishments)", list(business_allocator = "ec_estab"),
   "lodes_ex_exempt", "business", "Private jobs excluding government, education and health", list(business_allocator = "lodes_ex_exempt"),
-  "by_customer", "business", "Split by customer type: household-facing groups by residence, mixed half and half", list(business_by_customer = TRUE),
   "residence", "business", "Household income (residence) for the whole class", list(business_allocator = "residence"),
   "assessed", "business", "Taxable commercial and industrial property, full market value (assessment rolls; Westchester cities unavailable)", list(business_allocator = "assessed"),
   "ec_receipts", "business", "Private-sector receipts, matched sectors (Economic Census; no construction, wholesale or manufacturing at place level)", list(business_allocator = "ec_receipts"),
@@ -293,8 +293,8 @@ ALT <- tribble(
 R$a_assessed <- a_assessed <- assessed_share("Albany city, New York", "36001")
 R$a_ecrec <- a_ecrec <- ec_receipts_share("Albany city, New York", "001")
 R$a_ecrec_x <- a_ecrec_x <- ec_receipts_share("Albany city, New York", "001", exclude = c("61", "62"))
-alb_share <- c(lodes_ex_pubadmin = a_wxp, lodes = a_work, ec_payroll = a_pay, ec_estab = a_estab,
-               lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc, assessed = a_assessed,
+alb_share <- c(lodes_ex_pubadmin = NA, nosplit = a_wxp, lodes = a_work, ec_payroll = a_pay, ec_estab = a_estab,
+               lodes_ex_exempt = a_exx, residence = a_inc, assessed = a_assessed,
                ec_receipts = a_ecrec, ec_receipts_ex_eduhealth = a_ecrec_x,
                store_receipts = NA, store_payroll = NA, store_estab = NA)
 R$alloc_fits <- alloc_fits <- purrr::map_dfr(seq_len(nrow(ALT)), function(i) {
@@ -318,7 +318,7 @@ bus_split <- bus |> mutate(a_split = case_when(customer == "household" ~ a_inc,
                                                customer == "mixed" ~ 0.5 * a_wxp + 0.5 * a_inc,
                                                TRUE ~ a_wxp))
 R$a_bus_split <- sum(bus_split$a_split * bus_split$B_kg) / sum(bus_split$B_kg)
-R$alloc_fits$albany_share[R$alloc_fits$key == "by_customer"] <- R$a_bus_split
+R$alloc_fits$albany_share[R$alloc_fits$key == "lodes_ex_pubadmin"] <- R$a_bus_split
 
 ## --- alternatives (memo §8) -------------------------------------------------------------------------
 R$pc_cities <- pc_cities <- route_b$B_c / route_b$P_c

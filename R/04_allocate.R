@@ -244,7 +244,8 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            delivered_to_residence = 0.5,
                            resid_var = "agginc",
                            business_allocator = BUSINESS_ALLOCATORS,
-                           store_allocator = STORE_ALLOCATORS) {
+                           store_allocator = STORE_ALLOCATORS,
+                           business_by_customer = TRUE) {
   business_allocator <- match.arg(business_allocator)
   store_allocator <- match.arg(store_allocator)
   county_fips3 <- substr(county_fips5, 3, 5)
@@ -314,7 +315,19 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
         TRUE                                           ~ store_method),
       fallback = !grepl("^EC (RCPTOT|PAYANN|ESTAB) 4-digit", store_method) &
                  sourcing_class %in% c("store", "delivered_split"),
-      B_cg = B_kg * a_g)
+      customer = ifelse(sourcing_class == "business", business_customer_type(naics_industry_group), NA)) |>
+    ## Business-class groups whose taxable customers are mostly households
+    ## follow residence; mixed groups are split evenly; mostly-business groups
+    ## keep the business allocator. This is the central specification.
+    mutate(a_g = if (business_by_customer) case_when(
+             sourcing_class == "business" & customer == "household" ~ a_resid,
+             sourcing_class == "business" & customer == "mixed"     ~ 0.5 * a_g + 0.5 * a_resid,
+             TRUE ~ a_g) else a_g,
+           allocator = if (business_by_customer) case_when(
+             sourcing_class == "business" & customer == "household" ~ paste0("ACS ", resid_var, " (household-facing)"),
+             sourcing_class == "business" & customer == "mixed"     ~ paste0("50% ", allocator, " / 50% ACS ", resid_var, " (mixed)"),
+             TRUE ~ allocator) else allocator,
+           B_cg = B_kg * a_g)
 }
 
 ## Total predicted city base. NA if any class's sharing rule is unavailable
@@ -386,7 +399,7 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
                               ecommerce_frac = 0,
                               mv_include_4413 = FALSE,
                               mv_allocator = c("dmv", "acs_vehicles"),
-                              business_by_customer = FALSE,
+                              business_by_customer = TRUE,
                               store_allocator = STORE_ALLOCATORS) {
   business_allocator <- match.arg(business_allocator)
   mv_allocator <- match.arg(mv_allocator)
@@ -394,7 +407,7 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
   d <- apportion_city(ec_place_name, place_fips, county_fips5, dtf_juris, dmv_county,
                       fys = fys, delivered_to_residence = delivered_to_residence,
                       resid_var = resid_var, business_allocator = business_allocator,
-                      store_allocator = store_allocator)
+                      store_allocator = store_allocator, business_by_customer = business_by_customer)
   county_fips3 <- substr(county_fips5, 3, 5)
   place_fips5  <- substr(place_fips, 3, 7)
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
@@ -410,15 +423,6 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
   if (ecommerce_frac > 0) {
     d <- d |> mutate(a_g = ifelse(naics_industry_group %in% ECOMMERCE_PRONE,
                                   (1 - ecommerce_frac) * a_g + ecommerce_frac * a_resid, a_g))
-  }
-  if (business_by_customer) {
-    ## groups whose customers are mostly households follow residence; mixed
-    ## groups are split evenly; mostly-business groups keep the employment share
-    d <- d |> mutate(ct = ifelse(sourcing_class == "business",
-                                 business_customer_type(naics_industry_group), NA),
-                     a_g = case_when(ct == "household" ~ a_resid,
-                                     ct == "mixed"     ~ 0.5 * a_g + 0.5 * a_resid,
-                                     TRUE              ~ a_g))
   }
   if (any(is.na(d$a_g) & d$B_kg > 0)) return(NA_real_)
   sum(d$B_kg * d$a_g, na.rm = TRUE)
