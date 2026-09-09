@@ -17,11 +17,12 @@ f2 <- function(x) formatC(x, format = "f", digits = 2)
 fn <- function(x) formatC(x, format = "d", big.mark = ",")
 sd_up <- function(sg) paste0("+", formatC(100 * (exp(sg) - 1), format = "f", digits = 0), "%")
 sd_dn <- function(sg) paste0("-", formatC(100 * (1 - exp(-sg)), format = "f", digits = 0), "%")
-rev <- function(b, beta = 1, ph = R$phi) 0.005 * b * (1 - ph) * beta
+rev <- function(b, beta = 1) 0.005 * b * beta                       # calibrated (cash-based) bases
+rev_base <- function(b, beta = 1, ph = R$phi) 0.005 * b * (1 - ph) * beta   # taxable-sales bases
 
 ## short-hands used in prose
-REV <- R$REV; REV_all <- R$REV_all; B_k <- R$B_k; B_pred <- R$B_pred
-est <- R$est; est_pref <- R$est_pref; fit <- R$fit; fit_pref <- R$fit_pref
+REV <- R$REV; REV_all <- R$REV_all; REV_level <- R$REV_level; REV_raw <- R$REV_raw; B_k <- R$B_k; B_pred <- R$B_pred
+est <- R$est_all; est_pref <- R$est_pref; fit <- R$fit_all; fit_pref <- R$fit_pref; fit_lev <- R$fit_lev; est_lev <- R$est_lev
 pop <- R$pop; P_c <- R$P_c; P_k <- R$P_k; phi <- R$phi; s_cal <- R$s_cal; R_cal <- R$R_cal
 appo <- R$appo; calib <- R$calib; route_b <- R$route_b
 kb <- function(d, ...) kable(d, format = "pipe", ...)

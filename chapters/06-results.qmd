@@ -3,57 +3,61 @@
 ```{r}
 #| include: false
 source(here::here("chapters", "_common.R"))
-af <- R$alloc_fits; grid <- R$grid; s_ci <- R$s_ci
+af <- R$alloc_fits; s_ci <- R$s_ci
 ```
 
-## The city's taxable sales
+## Three readings of the city's taxable sales
+
+| Reading | City base, $ billion | Share of county | Revenue, $ million a year |
+|---|---:|---:|---:|
+| Apportioned from the county figure by the sourcing rules (@sec-apportionment), converted to cash | `r fb(B_pred)` | `r fp(B_pred / B_k)` | `r fm(REV_raw)` |
+| **Reduced by the typical gap between taxing cities' collections and the same method (@sec-fits, shares)** | **`r fb(est_pref$B_c_central)`** | **`r fp(s_cal)`** | **`r fm(REV)`** |
+| Reduced by the level-form line, which scales large bases down by more | `r fb(est_lev$B_c_central)` | `r fp(est_lev$B_c_central / B_k)` | `r fm(REV_level)` |
+
+The first is what the county's taxable sales imply for the city under the tax law's sourcing rules. The second and third adjust it by what the collections of comparable taxing cities show, in two ways that @sec-calibration explains and that differ because of county size. **The central estimate is the middle reading, \$`r fm(REV)` million**, because the city would be paid on collections and because that reading depends on a single, plain comparison rather than on a fitted slope. The comparison with other cities is examined closely in @sec-calibration and is given limited weight; a reader who gives it none should use the first figure, and one who believes large counties behave differently should use the third. The range below spans all three.
+
+## The central estimate and its ranges
 
 | Measure | Value |
 |---|---|
 | County taxable sales, average of sales tax years 2022–23 to 2024–25 | \$`r fb(B_k)` billion |
-| City, apportioned from the county figure (@sec-apportionment) | \$`r fb(B_pred)` billion (`r fp(B_pred / B_k)` of county) |
-| **City, after calibration against collections in taxing cities (@sec-calibration)** | **\$`r fb(est_pref$B_c_central)` billion (`r fp(s_cal)` of county)** |
-| City, calibration on the best-supported cities only | \$`r fb(R$est_trust$B_c_central)` billion |
-| 68% range (two chances in three) | \$`r fb(est_pref$lo68)`–`r fb(est_pref$hi68)` billion |
-| 90% range | \$`r fb(est_pref$lo90)`–`r fb(est_pref$hi90)` billion |
+| **City taxable sales, central (median of the fitted distribution)** | **\$`r fb(est_pref$B_c_central)` billion (`r fp(s_cal)` of county)** |
+| City taxable sales, mean of the fitted distribution | \$`r fb(est_pref$B_c_mean)` billion |
+| 68% prediction interval | \$`r fb(est_pref$lo68)`–`r fb(est_pref$hi68)` billion |
+| 90% prediction interval | \$`r fb(est_pref$lo90)`–`r fb(est_pref$hi90)` billion |
 | Same share applied to the latest year (`r R$latest_label`, \$`r fb(R$B_latest)` billion) | \$`r fb(s_cal * R$B_latest)` billion |
 | Concentration ratio R (city share of sales ÷ city share of population) | `r f2(R_cal)` |
 
-## Revenue
-
-| Measure | \$ million a year |
+| Revenue | \$ million a year |
 |---|---:|
-| Apportioned base, no calibration | `r fm(R$REV_raw)` |
-| **Central estimate (calibrated), `r R$years_label` activity levels** | **`r fm(REV)`** |
-| Calibrated on the best-supported cities only | `r fm(R$REV_trust)` |
+| **Central estimate, `r R$years_label` activity levels** | **`r fm(REV)`** |
 | Central estimate at `r R$latest_label` levels | `r fm(rev(s_cal * R$B_latest))` |
-| 68% range | `r fm(rev(est_pref$lo68))` – `r fm(rev(est_pref$hi68))` |
-| 90% range | `r fm(rev(est_pref$lo90))` – `r fm(rev(est_pref$hi90))` |
+| 68% prediction interval | `r fm(rev(est_pref$lo68))` – `r fm(rev(est_pref$hi68))` |
+| 90% prediction interval | `r fm(rev(est_pref$lo90))` – `r fm(rev(est_pref$hi90))` |
 | If no calibration cities are excluded | `r fm(REV_all)` |
+| Calibration on the best-supported cities only | `r fm(R$REV_trust)` |
 | With a 3% shopping loss | `r fm(rev(est_pref$B_c_central, 0.97))` |
+
+The intervals are prediction intervals: they include the uncertainty in the fitted comparison as well as the scatter around it, and use the t distribution on `r fit_pref$df` degrees of freedom. The plain ±σ ranges that ignore the first of those would be \$`r fm(rev(R$naive_pref["lo68"]))`–`r fm(rev(R$naive_pref["hi68"]))` million (68%) and \$`r fm(rev(R$naive_pref["lo90"]))`–`r fm(rev(R$naive_pref["hi90"]))` million (90%).
 
 The county base grew `r fp(R$cagr, 1)` a year from 2022–23 to 2025–26 (`r fp(R$by_year$growth[R$by_year$fy == 2026], 1)` in the latest year). For a tax starting in 2027 or later, the estimate should be read as a share, `r fp(s_cal)` of whatever the county base then is, rather than as a fixed dollar figure.
 
 ## Where Albany sits among cities that tax
 
-Seventeen taxing cities have an observed concentration ratio R ranging from `r f2(min(route_b$R))` (Yonkers) to `r f2(max(route_b$R))` (Oneida), median `r f2(median(route_b$R))`. Albany's calibrated R of `r f2(R_cal)` sits just below the median, next to `r paste(route_b$city[order(abs(route_b$R - R_cal))][1:3], collapse = ", ")`. That is the expected shape: a city whose retail has moved to the suburbs (its retail-only R is `r f2(R$a_ecret / pop)`) but which holds `r fp(R$a_wxp)` of the county's private-sector jobs. The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (`r fp(R$a_ecret)`) below and the measured utility share (`r fp(R$a_util)`) above, with the estimate at `r fp(s_cal)` between them.
+Seventeen taxing cities have a concentration ratio R inferred from collections, ranging from `r f2(min(route_b$R))` (Yonkers) to `r f2(max(route_b$R))` (Oneida), median `r f2(median(route_b$R))`. Albany's R of `r f2(R_cal)` sits near the median, next to `r paste(route_b$city[order(abs(route_b$R - R_cal))][1:3], collapse = ", ")`. That is the expected shape: a city whose retail has moved to the suburbs (its retail-only R is `r f2(R$a_ecret / pop)`) but which holds `r fp(R$a_wxp)` of the county's private-sector jobs. The two Albany quantities that can be observed directly bracket the answer: the retail-receipts share (`r fp(R$a_ecret)`) below and the measured utility share (`r fp(R$a_util)`) above, with the estimate at `r fp(s_cal)` between them.
 
-## Two anchors
-
-The apportioned base gives \$`r fm(R$REV_raw)` million; the calibrated base gives \$`r fm(REV)` million. The first is what the county's taxable sales imply for the city under the sourcing rules. The second is what the collections of comparable taxing cities suggest would actually show up under a city's code. @sec-calibration explains why the second is lower and why neither is the truth. The central estimate is the calibrated figure, because the city would be paid on collections, but the apportioned figure is a legitimate estimate in its own right and the planning range below includes it.
-
-## A reasonable range, and how it relates to the statistical one
+## A planning range, and a budget figure
 
 Two ranges are reported and they should not be confused.
 
-The **statistical range** (68%: \$`r fm(rev(est_pref$lo68))`–`r fm(rev(est_pref$hi68))` million; 90%: \$`r fm(rev(est_pref$lo90))`–`r fm(rev(est_pref$hi90))` million) comes from how far the method missed on the calibration cities. It treats Albany as no easier to predict than any of them and describes how well the method performs where it can be checked, at the point estimate of the typical miss.
+The **prediction interval** (68%: \$`r fm(rev(est_pref$lo68))`–`r fm(rev(est_pref$hi68))` million; 90%: \$`r fm(rev(est_pref$lo90))`–`r fm(rev(est_pref$hi90))` million) comes from how far the method missed on the calibration cities, under one specification. It treats Albany as no easier to predict than any of them.
 
-The **planning range of \$`r R$PLAN_LO`–`r R$PLAN_HI` million** is computed rather than chosen. It is the envelope of two things: the 68% range evaluated at the *upper* end of the confidence interval for the typical miss itself (σ is known only to within `r f3(s_ci["lo"])`–`r f3(s_ci["hi"])` on 13 degrees of freedom, and at its upper end the 68% range is \$`r fm(rev(est_pref$B_c_central * exp(-s_ci["hi"])))`–`r fm(rev(est_pref$B_c_central * exp(s_ci["hi"])))` million); and every plausible specification tried: which cities are included (including the best-supported subset), the form of the calibration line, the sharing rule for sales to businesses, and the apportioned base with no calibration at all. Three observations bear on how to read it:
+The **planning range of \$`r R$PLAN_LO`–`r R$PLAN_HI` million** is computed rather than chosen. It is the envelope of the 68% prediction interval and of the central figure under every plausible specification tried: the three readings above; each form of the comparison on each calibration sample, including the best-supported subset (@sec-fits); each plausible sharing rule for sales to businesses and for the store classes (@sec-apportionment). It is a two-in-three range, not a worst case; the 90% prediction interval alone runs from \$`r R$PLAN90_LO` to `r R$PLAN90_HI` million. Three observations bear on how to read it:
 
-1. The statistical range understates the uncertainty in two ways the envelope partly repairs. The typical miss is estimated from fifteen residuals and is itself uncertain by a factor of about 1.6 either way. And `r fp(R$cty_fe, 0)` of the miss is *between counties*, so Albany is a fresh draw from a distribution of county effects estimated on only eleven counties.
-2. Discrete choices sit outside the statistical range entirely. On the same fifteen cities, fixing the calibration line's slope at one instead of estimating it gives \$`r fm(rev(grid[["Slope fixed at 1"]][2]))` million against \$`r fm(REV)` million, and the plausible business sharing rules span \$`r fm(min(af$rev[!af$key %in% c("lodes", "residence")]))`–`r fm(max(af$rev[!af$key %in% c("lodes", "residence")]))` million (@sec-apportionment).
+1. The prediction interval understates the uncertainty in one way the envelope does not repair. The typical miss is estimated from fifteen residuals and is itself uncertain by a factor of about 1.6 either way (σ between `r f3(s_ci["lo"])` and `r f3(s_ci["hi"])`), and the misses run by county, so Albany is a fresh draw from a distribution of county effects seen in only eleven counties.
+2. The form of the comparison is worth \$`r fm(REV - REV_level)` million on the same fifteen cities, and the plausible business sharing rules span \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))`–`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million. These discrete choices sit outside the prediction interval entirely, which is why the planning range is built from them as well.
 3. Albany's sharing rules resolve at fine industry detail, its Economic Census coverage is near-complete, and its one measurable component lies between the two jobs rules. These are conditions under which the method should do better than its average, though nothing in the data proves it.
 
 ::: {.keypoint}
-If a single figure is needed for budgeting, **\$`r R$BUDGET` million** is the prudent choice at steady state and current activity levels: the central estimate rounded down, inside every plausible specification tried, and above the residence-only floor. The first year will be lower for reasons that have nothing to do with the base (@sec-timing).
+If a single figure is needed for budgeting, **\$`r R$BUDGET` million** is the prudent choice at steady state and current activity levels: the lower of the two calibrated readings, rounded down, and inside every plausible specification tried. The City's own experience argues for prudence: its 2025 sales tax receipts came in \$`r fm((R$city_report$budget_thousands - R$city_report$actual_thousands) * 1e3)` million below budget (City of Albany, Interim Financial Report, 4th Quarter 2025). The first year of a new tax will be lower still for reasons that have nothing to do with the base (@sec-timing).
 :::

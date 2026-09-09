@@ -31,7 +31,7 @@ alts <- tibble(
              "M. Industry-by-industry division, calibrated (this site)"),
   `City share` = ifelse(is.na(shares), "", fp(shares)),
   `City base, $ billion` = shares * B_k / 1e9,
-  `Revenue, $ million` = rev(shares * B_k) / 1e6,
+  `Revenue, $ million` = ifelse(seq_along(shares) == 15, rev(shares * B_k), rev_base(shares * B_k)) / 1e6,
   `Likely direction of error` = c(
     "Ignores structure entirely; a coincidence that it lands near the centre",
     "Low: treats business purchases and commuter and visitor spending as if made where people live",
@@ -58,11 +58,11 @@ Reading the table:
 - The **residence-side** methods (B, C, D, J) cluster low; the **workplace-side** methods (E, F, G, G', H) cluster high. Each side is right about part of the base and wrong about the rest. The industry-by-industry division is the weighted combination and lands between them, which is the simplest argument that it is doing what it should.
 - The **typical-taxing-city** transfer (I) gives \$`r fm(rev(median(route_b$R) * pop * B_k))` million, but "typical" spans a factor of four across the seventeen cities, so it is a weak anchor.
 - The **Yonkers analogy** (K) is the only method that uses the yield of an actual half-point add-on. Yonkers' special rate is 1.5% (1% plus the 0.5%), so a third of its special-tax collections, \$`r fm(yh)` million for `r fn(yp)` people, is what half a point raises there: \$`r formatC(yh / yp, format = "f", digits = 0)` per resident, or \$`r fm(yh / yp * P_c)` million scaled to Albany's population. That is low because Yonkers is the least commercially concentrated taxing city in the state (R = `r f2(R$R_yonk)`); adjusting for Albany's higher R gives \$`r fm(yh / yp * P_c * R_cal / R$R_yonk)` million. The adjustment is circular. One thing it does show: a half-point difference at a city boundary has been administered by the Tax Department for years.
-- The **uncalibrated division** (L) is \$`r fm(rev(B_pred))` million. The calibration's downward correction is the single largest methodological choice after the class assignments themselves, and it is worth `r fp(1 - REV / rev(B_pred), 0)`.
+- The **uncalibrated division** (L) is \$`r fm(REV_raw)` million. The adjustment from the taxing cities' collections is the single largest methodological choice after the class assignments themselves, and it is worth `r fp(1 - REV / REV_raw, 0)` in the form used and `r fp(1 - REV_level / REV_raw, 0)` in the level form.
 
 ## Methods not implemented, and why
 
-- **A Tax Department special tabulation.** The Office of Tax Policy Analysis holds return-level data with vendor location and could tabulate taxable sales inside the city limits directly, as it does for counties considering rate changes. This would replace everything in this site with a measurement. **It is the single most valuable next step**, and the city should request it; the school-district utility tax already gives the Department a precedent for accounting separately for sales within the city of Albany.
+- **A Tax Department special tabulation.** The Office of Tax Policy Analysis holds return-level data with vendor location and could tabulate taxable sales inside the city limits directly, as it does for counties considering rate changes. This would replace everything in this site with a measurement. **It is the single most valuable next step, and the lead time is months, so the city should request it now**; the school-district utility tax already gives the Department a precedent for accounting separately for sales within the city of Albany.
 - **A consumer-spending build-up**: resident income times taxable-spending propensity, plus commuter and visitor inflows. Data-hungry, and the inflow term is exactly the unobserved quantity; it would not be independent of the assumptions already made.
 - **A retail catchment model.** Would refine the store rule but not the business rule, which is where the uncertainty is.
 - **Taxable commercial assessed value** from the city and county assessment rolls as an alternative business sharing rule. Feasible and cheap; not pulled here. It would be a useful third opinion alongside jobs and business locations, and it leaves out exempt property automatically (@sec-limitations).

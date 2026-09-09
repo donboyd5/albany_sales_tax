@@ -34,27 +34,43 @@ R$appo <- appo
 R$B_k  <- B_k <- sum(appo$B_kg)
 R$B_pred <- B_pred <- sum(appo$B_cg, na.rm = TRUE)
 calib  <- build_calibration()
-fit    <- fit_calibration(calib)
-est    <- apply_calibration(fit, B_pred)
 phi_tab <- albany_phi()
 phi    <- mean(phi_tab$phi)
-rev    <- function(b, beta = 1, ph = phi) 0.005 * b * (1 - ph) * beta
+## Revenue helpers. Calibrated bases are cash-based (fitted to collections /
+## rate), so phi is NOT applied to them; the uncalibrated apportioned base is
+## a taxable-sales base, so phi is.
+rev      <- function(b, beta = 1) 0.005 * b * beta
+rev_base <- function(b, beta = 1, ph = phi) 0.005 * b * (1 - ph) * beta
 cal_pref <- calib |> filter(!city %in% names(CALIB_EXCLUDE))
-fit_pref <- fit_calibration(cal_pref)
-est_pref <- apply_calibration(fit_pref, B_pred)
-R$calib <- calib; R$fit <- fit[c("alpha","beta","se_beta","sigma","r2","n")]; R$est <- est
-R$cal_pref <- cal_pref; R$fit_pref <- fit_pref[c("alpha","beta","se_beta","sigma","r2","n")]
-R$est_pref <- est_pref
+## central: share form on the preferred 15; level form and all-17 alongside
+fit_pref <- fit_calibration(cal_pref, "share");  est_pref <- apply_calibration(fit_pref, B_pred, B_k)
+fit_lev  <- fit_calibration(cal_pref, "level");  est_lev  <- apply_calibration(fit_lev, B_pred)
+fit_all  <- fit_calibration(calib, "share");     est_all  <- apply_calibration(fit_all, B_pred, B_k)
+fit_all_lev <- fit_calibration(calib, "level");  est_all_lev <- apply_calibration(fit_all_lev, B_pred)
+keep <- function(f) f[c("form","alpha","beta","se_beta","se_beta_cluster","p_beta_eq_1","sigma","r2","n","df","xbar","Sxx","n_clusters")]
+R$calib <- calib; R$cal_pref <- cal_pref
+R$fit_pref <- keep(fit_pref); R$est_pref <- est_pref
+R$fit_lev <- keep(fit_lev); R$est_lev <- est_lev
+R$fit_all <- keep(fit_all); R$est_all <- est_all
+R$fit_all_lev <- keep(fit_all_lev); R$est_all_lev <- est_all_lev
+## legacy names used by the appendix and older text
+R$fit <- R$fit_all_lev; R$est <- est_all_lev
+R$naive_pref <- naive_band(fit_pref, est_pref$B_c_central)
 R$phi <- phi; R$phi_tab <- phi_tab
 R$CALIB_EXCLUDE <- CALIB_EXCLUDE
 R$cty_fe   <- county_effect_share(calib)
 R$gm_all   <- exp(mean(log(calib$ratio))); R$gm_pref <- exp(mean(log(cal_pref$ratio)))
 R$diag     <- calibration_diagnostics()
-R$REV      <- REV <- rev(est_pref$B_c_central)
-R$REV_all  <- rev(est$B_c_central)
+R$REV      <- REV <- rev(est_pref$B_c_central)          # share form, preferred 15, median
+R$REV_mean <- rev(est_pref$B_c_mean)
+R$REV_level <- rev(est_lev$B_c_central)
+R$REV_all  <- rev(est_all$B_c_central)
+R$REV_all_level <- rev(est_all_lev$B_c_central)
+R$REV_raw  <- rev_base(B_pred)
 R$s_ci     <- sigma_ci(fit_pref)
-R$loo      <- leave_one_out(calib, B_pred)
-R$grid     <- grid <- calibration_grid(calib, B_pred)
+R$loo      <- leave_one_out(calib, B_pred, B_k, "share")
+R$loo_level <- leave_one_out(calib, B_pred, B_k, "level")
+R$level_decomp <- level_decomposition(cal_pref, B_pred)
 R$ramp     <- new_code_ramp()
 R$s_cal    <- s_cal <- est_pref$B_c_central / B_k
 R$R_cal    <- s_cal / pop
@@ -62,6 +78,7 @@ R$route_b  <- route_b <- summarise_route_b(build_route_b())
 R$identity <- check_identity(build_route_b())
 R$oswego   <- oswego_evidence()
 R$suppression <- suppression_report()
+R$cor_pred_Bk <- cor(cal_pref$log_pred, log(cal_pref$B_k))
 
 ## county base by year
 by_year <- read_county_base() |> filter(jurisdiction == "ALBANY", fy <= 2026) |>
@@ -124,8 +141,11 @@ R$cls <- appo |>
             B_c = sum(B_cg, na.rm = TRUE), .groups = "drop") |>
   mutate(share = B / B_k, label = CLASS_LABEL[class], allocator = CLASS_ALLOC[class]) |>
   arrange(desc(B))
-R$n_store_4digit <- sum(grepl("4-digit", appo$store_method))
-R$n_store_3digit <- sum(grepl("3-digit", appo$store_method))
+st_only <- appo |> filter(sourcing_class %in% c("store", "delivered_split"))
+R$n_store_groups <- nrow(st_only)
+R$n_store_4digit <- sum(grepl("4-digit", st_only$store_method))
+R$n_store_3digit <- sum(grepl("3-digit", st_only$store_method))
+R$n_store_sector <- sum(grepl("sector", st_only$store_method))
 
 ## --- inside the business class ------------------------------------------------------
 bus <- appo |> filter(sourcing_class == "business") |>
@@ -207,22 +227,25 @@ R$xcity_fit <- list(slope = unname(coef(m_gap)[2]), se = summary(m_gap)$coeffici
 R$alb_gap <- a_wxp - pop
 R$alb_eduhealth <- (R$city_jobs$edu + R$city_jobs$health) / R$city_jobs$private
 
-## --- calibration variants (memo §5.3 / §9.2) ---------------------------------------------------
+## --- calibration sample x functional form --------------------------------------------------------
+samples <- list(`All 17 cities` = calib,
+                `Excluding Salamanca and Ogdensburg (used)` = cal_pref)
+R$forms <- calibration_forms(samples, B_pred, B_k) |> mutate(rev = rev(B_c))
 cal_variant <- function(d, lbl) {
-  m <- lm(log_obs ~ log_pred, d); s <- summary(m)$sigma
-  ct <- lmtest::coeftest(m, vcov. = sandwich::vcovCL(m, cluster = d$county))
-  c0 <- exp(coef(m)[1] + coef(m)[2] * log(B_pred))
-  tibble(Specification = lbl, n = nrow(d), beta = unname(coef(m)[2]), se = ct[2, 2], sigma = s,
-         R2 = summary(m)$r.squared, B_c = unname(c0), rev = rev(unname(c0)),
-         lo68 = rev(c0 * exp(-s)), hi68 = rev(c0 * exp(s)),
-         lo90 = rev(c0 * exp(-1.645 * s)), hi90 = rev(c0 * exp(1.645 * s)))
+  f <- fit_calibration(d, "share"); e <- apply_calibration(f, B_pred, B_k)
+  fl <- fit_calibration(d, "level"); el <- apply_calibration(fl, B_pred)
+  tibble(Specification = lbl, n = nrow(d), beta = f$beta, se = f$se_beta, sigma = f$sigma,
+         B_c = e$B_c_central, rev = rev(e$B_c_central), lo68 = rev(e$lo68), hi68 = rev(e$hi68),
+         lo90 = rev(e$lo90), hi90 = rev(e$hi90),
+         beta_level = fl$beta, se_level = fl$se_beta, sigma_level = fl$sigma, rev_level = rev(el$B_c_central))
 }
 R$cv <- cv <- bind_rows(
   cal_variant(calib, "All 17 cities"),
   cal_variant(filter(calib, !westchester), "Excluding Westchester (4 cities)"),
+  cal_variant(filter(cal_pref, !westchester), "Preferred 15 excluding Westchester (11 cities)"),
   cal_variant(filter(calib, city != "Yonkers"), "Excluding Yonkers"),
   cal_variant(filter(calib, city != "Salamanca"), "Excluding Salamanca"),
-  cal_variant(filter(calib, !city %in% c("Salamanca", "Ogdensburg")), "Excluding Salamanca and Ogdensburg (used)"))
+  cal_variant(cal_pref, "Excluding Salamanca and Ogdensburg (used)"))
 R$gm_ratio <- exp(mean(calib$log_obs - calib$log_pred)); R$med_ratio <- median(calib$ratio)
 
 ## --- sensitivity: one knob at a time, central calibration re-applied ----------------------------
@@ -235,6 +258,8 @@ variants <- tribble(
   "Business sharing rule: employment excluding government, education and health (exempt-institution bound)", list(business_allocator = "lodes_ex_exempt"),
   "Business class split by customer type (household part by residence)", list(business_by_customer = TRUE),
   "Business sharing rule: household income (residence) for the whole class (floor)", list(business_allocator = "residence"),
+  "Store sharing rule: Economic Census payroll instead of receipts", list(store_allocator = "payroll"),
+  "Store sharing rule: Economic Census establishments instead of receipts", list(store_allocator = "establishments"),
   "Delivered goods: 0% to residence", list(delivered_to_residence = 0),
   "Delivered goods: 100% to residence", list(delivered_to_residence = 1),
   "Residence sharing rule: households instead of income", list(resid_var = "hh"),
@@ -244,33 +269,43 @@ variants <- tribble(
   "Motor vehicles: ACS vehicles available instead of DMV registrations", list(mv_allocator = "acs_vehicles"))
 R$sens <- sens <- variants |> rowwise() |>
   mutate(B_pred_v = do.call(apportion_variant, c(ALB, args)),
-         B_cal_v = apply_calibration(fit_pref, B_pred_v)$B_c_central,
+         B_cal_v = apply_calibration(fit_pref, B_pred_v, B_k)$B_c_central,
          Rev = rev(B_cal_v)) |> ungroup() |> select(-args)
 R$B_util_meas <- B_util_meas <- sum(ifelse(appo$sourcing_class == "utilities", appo$B_kg * a_util, appo$B_cg), na.rm = TRUE)
-R$REV_util_meas <- rev(apply_calibration(fit_pref, B_util_meas)$B_c_central)
+R$REV_util_meas <- rev(apply_calibration(fit_pref, B_util_meas, B_k)$B_c_central)
 
-## --- business sharing rule alternatives with the calibration re-fitted under each -------------------
-BUS_ALT <- tribble(
-  ~key, ~label, ~args,
-  "lodes_ex_pubadmin", "Private-sector jobs, excluding government (used)", list(business_allocator = "lodes_ex_pubadmin"),
-  "lodes", "All jobs, including government", list(business_allocator = "lodes"),
-  "ec_payroll", "Private-sector payroll (Economic Census)", list(business_allocator = "ec_payroll"),
-  "ec_estab", "Private business locations (Economic Census establishments)", list(business_allocator = "ec_estab"),
-  "lodes_ex_exempt", "Private jobs excluding government, education and health", list(business_allocator = "lodes_ex_exempt"),
-  "by_customer", "Split by customer type: household-facing groups by residence, mixed half and half", list(business_by_customer = TRUE),
-  "residence", "Household income (residence) for the whole class", list(business_allocator = "residence"))
+## --- sharing-rule alternatives with the calibration re-fitted under each (share form) ---------------
+ALT <- tribble(
+  ~key, ~class, ~label, ~args,
+  "lodes_ex_pubadmin", "business", "Private-sector jobs, excluding government (used)", list(business_allocator = "lodes_ex_pubadmin"),
+  "lodes", "business", "All jobs, including government", list(business_allocator = "lodes"),
+  "ec_payroll", "business", "Private-sector payroll (Economic Census)", list(business_allocator = "ec_payroll"),
+  "ec_estab", "business", "Private business locations (Economic Census establishments)", list(business_allocator = "ec_estab"),
+  "lodes_ex_exempt", "business", "Private jobs excluding government, education and health", list(business_allocator = "lodes_ex_exempt"),
+  "by_customer", "business", "Split by customer type: household-facing groups by residence, mixed half and half", list(business_by_customer = TRUE),
+  "residence", "business", "Household income (residence) for the whole class", list(business_allocator = "residence"),
+  "store_receipts", "store", "Receipts (used)", list(store_allocator = "receipts"),
+  "store_payroll", "store", "Payroll", list(store_allocator = "payroll"),
+  "store_estab", "store", "Establishments", list(store_allocator = "establishments"))
 alb_share <- c(lodes_ex_pubadmin = a_wxp, lodes = a_work, ec_payroll = a_pay, ec_estab = a_estab,
-               lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc)
-R$alloc_fits <- alloc_fits <- purrr::map_dfr(seq_len(nrow(BUS_ALT)), function(i) {
-  args <- BUS_ALT$args[[i]]
+               lodes_ex_exempt = a_exx, by_customer = NA, residence = a_inc,
+               store_receipts = NA, store_payroll = NA, store_estab = NA)
+R$alloc_fits <- alloc_fits <- purrr::map_dfr(seq_len(nrow(ALT)), function(i) {
+  args <- ALT$args[[i]]
   cal_v <- do.call(build_calibration_variant, args) |> filter(!city %in% names(CALIB_EXCLUDE))
-  f_v <- fit_calibration(cal_v)
-  Bp_v <- do.call(apportion_variant, c(ALB, args)); e_v <- apply_calibration(f_v, Bp_v)
-  tibble(key = BUS_ALT$key[i], label = BUS_ALT$label[i], albany_share = unname(alb_share[BUS_ALT$key[i]]),
-         beta = f_v$beta, sigma = f_v$sigma, r2 = f_v$r2,
+  f_v <- fit_calibration(cal_v, "share")
+  Bp_v <- do.call(apportion_variant, c(ALB, args)); e_v <- apply_calibration(f_v, Bp_v, B_k)
+  tibble(key = ALT$key[i], class = ALT$class[i], label = ALT$label[i], albany_share = unname(alb_share[ALT$key[i]]),
+         beta = f_v$beta, sigma = f_v$sigma,
          B_pred = Bp_v, B_cal = e_v$B_c_central, rev = rev(e_v$B_c_central),
          lo68 = rev(e_v$lo68), hi68 = rev(e_v$hi68))
 })
+## Albany city share of the store classes under each store rule
+store_share_under <- function(sa) { d <- do.call(apportion_city, c(ALB, list(store_allocator = sa)))
+  st <- d |> filter(sourcing_class %in% c("store", "delivered_split")); sum(st$a_store_used * st$B_kg) / sum(st$B_kg) }
+R$alloc_fits$albany_share[R$alloc_fits$key == "store_receipts"] <- store_share_under("receipts")
+R$alloc_fits$albany_share[R$alloc_fits$key == "store_payroll"]  <- store_share_under("payroll")
+R$alloc_fits$albany_share[R$alloc_fits$key == "store_estab"]    <- store_share_under("establishments")
 ## the business-class city share implied by the customer-type split
 bus_split <- bus |> mutate(a_split = case_when(customer == "household" ~ a_inc,
                                                customer == "mixed" ~ 0.5 * a_wxp + 0.5 * a_inc,
@@ -287,17 +322,23 @@ R$yonk_pop  <- yonk_pop  <- pp$place$P_c[pp$place$place_fips == "3684000"]
 R$R_yonk    <- R_yonk    <- route_b$R[route_b$city == "Yonkers"]
 R$C_k <- C_k <- mean(d3$amt[d3$taxing_jurisdiction == "Albany County Sales and Use Tax"])
 R$status_quo <- status_quo <- 0.40 * pop * C_k
+## external check: City of Albany Interim Financial Report, 4th Quarter 2025
+## (Treasurer, 11 May 2026): sales and use tax actual $47,299 thousand against
+## an amended budget of $49,973 thousand. Hand-entered from the report; see
+## data/crosswalk/albany_city_sales_tax_2025.csv.
+R$city_report <- read_csv(file.path(PATHS$crosswalk, "albany_city_sales_tax_2025.csv"), col_types = cols(.default = "c")) |>
+  mutate(across(c(actual_thousands, budget_thousands), as.numeric))
 R$PREEMPT_LOSS <- status_quo - 0.015 * est_pref$B_c_central
 
 ## --- rate-ambiguity variant -------------------------------------------------------------------
 cal_alt <- build_calibration(rate_source = "pub718a_col")
-fit_alt <- fit_calibration(cal_alt)
-R$fit_alt <- fit_alt[c("alpha","beta","se_beta","sigma","r2","n")]
-R$est_alt <- apply_calibration(fit_alt, B_pred)
+fit_alt <- fit_calibration(cal_alt, "share")
+R$fit_alt <- keep(fit_alt)
+R$est_alt <- apply_calibration(fit_alt, B_pred, B_k)
 R$rb_alt  <- summarise_route_b(build_route_b(rate_source = "pub718a_col"))
 
 R$B_9261 <- B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
-R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv))$B_c_central)
+R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv), B_k)$B_c_central)
 
 ## --- how well does collections / rate recover reported taxable sales? -------------------------
 ## At the county level both are observed, so the inference used for the 17
@@ -349,11 +390,11 @@ R$city_stability <- rb_panel |> group_by(city, county) |>
 TRUST_CITIES <- R$city_stability |> filter(rate_all_agree, swing < 0.10, !city %in% names(CALIB_EXCLUDE)) |> pull(city)
 R$TRUST_CITIES <- TRUST_CITIES
 cal_trust <- calib |> filter(city %in% TRUST_CITIES)
-fit_trust <- fit_calibration(cal_trust)
-R$fit_trust <- fit_trust[c("alpha", "beta", "se_beta", "sigma", "r2", "n")]
-R$est_trust <- apply_calibration(fit_trust, B_pred)
+fit_trust <- fit_calibration(cal_trust, "share")
+R$fit_trust <- keep(fit_trust)
+R$est_trust <- apply_calibration(fit_trust, B_pred, B_k)
 R$REV_trust <- rev(R$est_trust$B_c_central)
-R$REV_raw <- rev(B_pred)
+R$REV_trust_level <- rev(apply_calibration(fit_calibration(cal_trust, "level"), B_pred)$B_c_central)
 
 ## --- does the county row include residential energy? cross-county test ------------------------
 ## Pub 718-R lists which counties tax residential energy. If the DTF county
@@ -388,19 +429,23 @@ R$re_summary <- re_test |> group_by(status) |>
 R$re_albany <- re_test |> filter(county == "ALBANY") |> select(elec_pc, util_pc, petrol_pc, total_pc)
 
 ## --- planning range ---------------------------------------------------------------------------
-## Envelope of (i) the preferred 68% band at the upper end of sigma's 95% CI
-## and (ii) every specification variant: exclusion set x functional form,
-## business sharing rule (the plausible ones, i.e. not the floor and not the
-## government-inclusive rule), calibration sample including the trusted
-## subset, and the uncalibrated apportionment itself (the reviewer's point
-## that apportioned taxable sales are a legitimate estimate in their own
-## right). Rounded to $1 M.
+## Envelope of (i) the 68% prediction interval of the central fit (share form,
+## preferred 15, with parameter uncertainty and leverage) and (ii) the central
+## figure under every plausible specification: functional form x sample
+## (preferred sample and all 17), the best-supported subset, the plausible
+## business and store sharing rules (not the government-inclusive rule and
+## not the residence floor), and the uncalibrated apportionment. Rounded
+## outward to $1 M. The 90% prediction interval is reported separately.
 plausible_alloc <- alloc_fits |> filter(!key %in% c("residence", "lodes"))
-spec_revs <- c(rev(unlist(grid[, c("Log-log fit", "Slope fixed at 1", "Median ratio")])),
-               plausible_alloc$rev, cv$rev, R$REV_trust, R$REV_raw,
-               rev(est_pref$B_c_central * exp(-R$s_ci["hi"])), rev(est_pref$B_c_central * exp(R$s_ci["hi"])))
-R$PLAN_LO <- round(min(spec_revs) / 1e6); R$PLAN_HI <- round(max(spec_revs) / 1e6)
-R$BUDGET  <- floor(REV / 1e6)
+spec_revs <- c(R$forms$rev, plausible_alloc$rev, R$REV_trust, R$REV_trust_level, R$REV_raw,
+               rev(est_pref$lo68), rev(est_pref$hi68))
+R$spec_revs <- spec_revs
+R$PLAN_LO <- floor(min(spec_revs) / 1e6); R$PLAN_HI <- ceiling(max(spec_revs) / 1e6)
+R$PLAN90_LO <- floor(rev(est_pref$lo90) / 1e6); R$PLAN90_HI <- ceiling(rev(est_pref$hi90) / 1e6)
+## Budget figure: the lower of the two calibrated readings, rounded down.
+R$BUDGET  <- floor(min(REV, R$REV_level) / 1e6)
+R$B_9261 <- B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
+R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv), B_k)$B_c_central)
 
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)

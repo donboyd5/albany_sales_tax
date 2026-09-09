@@ -219,40 +219,74 @@ build_calibration <- function(fys = ANALYSIS_FYS, rate_source = "verified", ...)
            westchester = county == "Westchester")
 }
 
-## Fit log(B_obs) = alpha + beta * log(B_pred), with standard errors clustered
-## by county because Fulton, Cattaraugus, Oneida and Westchester each contribute
-## more than one city.
-fit_calibration <- function(calib, drop_westchester = FALSE) {
+## Fit the calibration line. Two forms:
+##   share (central): log(B_obs / B_k) = alpha + beta * log(B_pred / B_k)
+##                    -- nets the county base out of both sides, so the slope
+##                    is not driven by county size, and Albany's predicted
+##                    share sits inside the sample range.
+##   level:           log(B_obs) = alpha + beta * log(B_pred)
+##                    -- the original form; its slope below 1 is carried by
+##                    county size (log B_pred and log B_k correlate 0.90) and
+##                    Albany is extrapolated at high leverage.
+## Standard errors: plain OLS is reported as the main figure. The
+## county-clustered version is kept but with only ~10 clusters it is not
+## reliable (it comes out *smaller* than OLS in the level form).
+fit_calibration <- function(calib, form = c("share", "level"), drop_westchester = FALSE) {
+  form <- match.arg(form)
   d <- if (drop_westchester) filter(calib, !westchester) else calib
-  m <- lm(log_obs ~ log_pred, data = d)
-  vc <- sandwich::vcovCL(m, cluster = d$county)
-  ct <- lmtest::coeftest(m, vcov. = vc)
-  list(model = m, data = d, coeftest = ct, vcov = vc,
+  d <- d |> mutate(x = if (form == "share") log(B_c_pred / B_k) else log_pred,
+                   y = if (form == "share") log(B_c_obs / B_k) else log_obs)
+  m <- lm(y ~ x, data = d)
+  vc <- tryCatch(sandwich::vcovCL(m, cluster = d$county), error = function(e) NULL)
+  list(model = m, data = d, form = form,
        alpha = unname(coef(m)[1]), beta = unname(coef(m)[2]),
-       se_alpha = unname(ct[1, 2]), se_beta = unname(ct[2, 2]),
-       resid_sd = sd(residuals(m)),
-       sigma = summary(m)$sigma,
-       r2 = summary(m)$r.squared, n = nrow(d),
+       se_beta = summary(m)$coefficients[2, 2],
+       se_beta_cluster = if (is.null(vc)) NA_real_ else sqrt(vc[2, 2]),
+       p_beta_eq_1 = 2 * pt(-abs((coef(m)[2] - 1) / summary(m)$coefficients[2, 2]), df = nrow(d) - 2),
+       sigma = summary(m)$sigma, r2 = summary(m)$r.squared,
+       n = nrow(d), df = nrow(d) - 2, xbar = mean(d$x), Sxx = sum((d$x - mean(d$x))^2),
        n_clusters = dplyr::n_distinct(d$county))
 }
 
-## Apply a fitted calibration to Albany's predicted base and return the central
-## estimate with 68% and 90% bands from the residual spread.
-apply_calibration <- function(fit, B_pred_albany) {
-  ctr <- exp(fit$alpha + fit$beta * log(B_pred_albany))
-  s   <- fit$sigma
+## Apply a fitted calibration to Albany. The central figure is the conditional
+## MEDIAN (exp of the fitted log); the smeared mean exp(sigma^2/2) is also
+## returned. Intervals are proper prediction intervals: the standard error
+## includes parameter uncertainty and leverage,
+##     se_pred = sigma * sqrt(1 + 1/n + (x0 - xbar)^2 / Sxx),
+## with t(n-2) quantiles. "68%" uses the 16th/84th percentiles, "90%" the
+## 5th/95th.
+apply_calibration <- function(fit, B_pred_albany, B_k_albany = NULL) {
+  if (fit$form == "share" && is.null(B_k_albany)) stop("share-form calibration needs B_k_albany")
+  x0 <- if (fit$form == "share") log(B_pred_albany / B_k_albany) else log(B_pred_albany)
+  scale <- if (fit$form == "share") B_k_albany else 1
+  mu  <- fit$alpha + fit$beta * x0
+  lev <- 1 / fit$n + (x0 - fit$xbar)^2 / fit$Sxx
+  se  <- fit$sigma * sqrt(1 + lev)
+  t68 <- qt(0.84, fit$df); t90 <- qt(0.95, fit$df)
+  ctr <- exp(mu) * scale
   tibble(
     B_c_pred_raw = B_pred_albany,
     B_c_central  = ctr,
-    lo68 = ctr * exp(-s),           hi68 = ctr * exp(s),
-    lo90 = ctr * exp(-1.645 * s),   hi90 = ctr * exp(1.645 * s),
-    resid_sd_logs = s)
+    B_c_mean     = ctr * exp(fit$sigma^2 / 2),
+    lo68 = exp(mu - t68 * se) * scale, hi68 = exp(mu + t68 * se) * scale,
+    lo90 = exp(mu - t90 * se) * scale, hi90 = exp(mu + t90 * se) * scale,
+    resid_sd_logs = fit$sigma, se_pred_logs = se, leverage = lev, t68 = t68, t90 = t90)
 }
 
-## Revenue = 0.005 * B_c * (1 - phi) * beta
+## Naive band, kept only to show what the proper interval adds.
+naive_band <- function(fit, central) {
+  s <- fit$sigma
+  c(lo68 = central * exp(-s), hi68 = central * exp(s), lo90 = central * exp(-1.645 * s), hi90 = central * exp(1.645 * s))
+}
+
+## Revenue. The calibrated base is already on a CASH footing, because the
+## cities' bases it is fitted to are collections / rate; so the administrative
+## wedge phi must NOT be applied to it again. phi applies only when going from
+## a taxable-sales base (the uncalibrated apportionment) to cash.
 revenue_from_base <- function(B_c, phi = 0, beta = 1, rate = 0.005) {
   rate * B_c * (1 - phi) * beta
 }
+rev_cash <- function(B_c_cash, beta = 1, rate = 0.005) rate * B_c_cash * beta
 
 ## phi, observed as 1 - (county distributions / (0.04 * county taxable sales)).
 albany_phi <- function(fys = ANALYSIS_FYS) {
@@ -304,7 +338,9 @@ CALIB_EXCLUDE <- c(
 ## Share of the variance in log(observed/predicted) that is between counties
 ## rather than between cities within a county.
 county_effect_share <- function(calib) {
-  summary(lm(log(ratio) ~ county, data = calib))$r.squared
+  m <- lm(log(ratio) ~ county, data = calib)
+  list(r2 = summary(m)$r.squared, adj_r2 = summary(m)$adj.r.squared,
+       f_p = anova(m)$`Pr(>F)`[1], n = nrow(calib), n_counties = dplyr::n_distinct(calib$county))
 }
 
 ## Per-city decomposition: how much of the predicted base comes from each
@@ -344,30 +380,47 @@ sigma_ci <- function(fit, level = 0.95) {
     hi = s * sqrt(df / qchisq((1 - level) / 2, df)))
 }
 
-## Leave-one-out: refit dropping each city in turn. Shows whether the two
-## excluded cities are the only ones whose removal changes sigma materially.
-leave_one_out <- function(calib, B_pred) {
+## Leave-one-out: refit dropping each city in turn (share form).
+leave_one_out <- function(calib, B_pred, B_k, form = "share") {
   purrr::map_dfr(c("(none)", calib$city), function(cc) {
     d <- if (cc == "(none)") calib else calib |> filter(city != cc)
-    m <- lm(log_obs ~ log_pred, d)
-    tibble(dropped = cc, n = nrow(d), beta = unname(coef(m)[2]),
-           sigma = summary(m)$sigma,
-           B_c = exp(unname(coef(m)[1]) + unname(coef(m)[2]) * log(B_pred)))
+    f <- fit_calibration(d, form = form)
+    tibble(dropped = cc, n = nrow(d), beta = f$beta, sigma = f$sigma,
+           B_c = apply_calibration(f, B_pred, B_k)$B_c_central)
   })
 }
 
-## Exclusion set x functional form. The log-log slope, a slope fixed at one
-## (geometric-mean ratio), and the median ratio, each on both samples.
-calibration_grid <- function(calib, B_pred, exclude = names(CALIB_EXCLUDE)) {
-  sets <- list(`All 17` = calib,
-               `Excluding Salamanca and Ogdensburg` = calib |> filter(!city %in% exclude))
-  purrr::map_dfr(names(sets), function(nm) {
-    d <- sets[[nm]]; m <- lm(log_obs ~ log_pred, d)
+## Functional form x calibration sample. Rows: the share-form line (central),
+## the level-form line, the share-form line with slope fixed at 1 (i.e. the
+## geometric-mean observed/predicted ratio), the median ratio, and the
+## encompassing level-form regression with log B_k as a second regressor.
+calibration_forms <- function(samples, B_pred, B_k) {
+  purrr::map_dfr(names(samples), function(nm) {
+    d <- samples[[nm]]
+    fs <- fit_calibration(d, "share"); fl <- fit_calibration(d, "level")
+    me <- lm(log_obs ~ log_pred + log(B_k), data = d)
+    enc <- exp(unname(coef(me)[1]) + unname(coef(me)[2]) * log(B_pred) + unname(coef(me)[3]) * log(B_k))
+    gm  <- exp(mean(log(d$ratio)))
     tibble(Sample = nm, n = nrow(d),
-           `Log-log fit` = exp(unname(coef(m)[1]) + unname(coef(m)[2]) * log(B_pred)),
-           `Slope fixed at 1` = exp(mean(d$log_obs - d$log_pred)) * B_pred,
-           `Median ratio` = median(d$ratio) * B_pred)
+           form = c("Shares: log(city share) on log(apportioned share)",
+                    "Levels: log(city base) on log(apportioned base)",
+                    "Shares, slope fixed at 1 (typical ratio)",
+                    "Median ratio",
+                    "Levels, with log(county base) as a second term"),
+           slope = c(fs$beta, fl$beta, 1, NA, unname(coef(me)[2])),
+           se = c(fs$se_beta, fl$se_beta, NA, NA, summary(me)$coefficients[2, 2]),
+           sigma = c(fs$sigma, fl$sigma, sd(log(d$ratio)), NA, summary(me)$sigma),
+           B_c = c(apply_calibration(fs, B_pred, B_k)$B_c_central, apply_calibration(fl, B_pred)$B_c_central,
+                   gm * B_pred, median(d$ratio) * B_pred, enc))
   })
+}
+
+## Decomposition of the level-form correction into the typical ratio and
+## the slope extrapolation.
+level_decomposition <- function(calib, B_pred) {
+  fl <- fit_calibration(calib, "level"); gm <- exp(mean(log(calib$ratio)))
+  ctr <- apply_calibration(fl, B_pred)$B_c_central
+  c(gm_factor = gm, slope_factor = ctr / (gm * B_pred), total = ctr / B_pred)
 }
 
 ## Ogdensburg's ramp after its code was created: implied share of county base by

@@ -111,11 +111,26 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
   and appear in neither figure, so this is taxable commercial load, not
   evidence for counting government jobs.
 
-## Phase 3 headline
+## Headline (revised 2026-09-09 after the second external review)
 
-Revenue approximately **$11.1 M/year**, 68% band $9.2-13.5 M, 90% $8.1-15.3 M;
-planning range $8-15 M (computed envelope), budget figure $11 M. B_c calibrated
-= $2.21 B, R = 0.77.
+Three readings: apportioned base converted to cash $14.5 M; central
+**$13.0 M** (share-form calibration on the preferred 15: apportioned share
+scaled by the typical 0.90 collections/apportionment ratio; slope 0.99, not
+distinguishable from 1); level-form $11.1 M (slope 0.88, a county-size
+artefact: log B_pred and log B_k correlate 0.90, Albany extrapolated at
+leverage 0.21). Prediction intervals include parameter uncertainty and
+leverage with t(13): 68% $10.1-16.6 M, 90% $8.5-19.7 M. Planning range = envelope
+of the 68% PI and all plausible specification centrals ($10-17 M); budget
+figure $11 M = lower calibrated reading rounded down. The central is the
+conditional MEDIAN; the smeared mean is $13.3 M. phi is applied only to the
+uncalibrated apportioned base (calibrated bases are fitted to cash). R^2 is
+not reported. County fixed effects: pattern is persuasive, statistic is not
+(adj R^2 0.55, p 0.10). Store rule now has payroll/establishment variants
+(store_allocator in apportion_city). Store detail: of 49 store/delivered
+groups, 30 resolve at 4 digits, 19 at 3. Eighteen cities impose a tax; 17
+reconcile; 15 in the preferred fit. City of Albany Q4 2025 interim report
+(crosswalk albany_city_sales_tax_2025.csv): sales tax $47.3 M actual vs
+$50.0 M budget, consistent with the $46.2 M status-quo figure.
 
 Calibration: the preferred fit drops Salamanca (100% on Seneca Nation Allegany
 Territory, Census AIANNH 0080) and Ogdensburg (jurisdiction code created 1 Mar

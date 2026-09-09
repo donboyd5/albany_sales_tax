@@ -353,3 +353,26 @@ the truth. Central estimate unchanged. Language pass: "site" not "book";
 "sourced" not "taxed" for sourcing; filler removed. Chapter 1 corrected:
 Yonkers preempts the full 4% and adds 1.5 points, so "every city preempts and
 the combined rate does not rise" was wrong for Yonkers.
+
+## Second external review (2026-09-09, fourth pass)
+
+Accepted and fixed: level-form slope is a county-size artefact (share form
+now central; both reported; encompassing regression shown); clustered SEs
+dropped for OLS with a caveat; R^2 removed; median vs mean stated; proper
+prediction intervals with leverage and t(n-2); phi no longer applied to
+calibrated (cash-based) figures; store-rule variants (payroll,
+establishments) with calibration re-fitted; store-detail counts corrected
+(30/19 of 49, not 72/55 of 302); 18 vs 17 vs 15 cities stated; the
+"excluding Westchester" sentence corrected; "conservative" clarified; fit
+ranking of business rules noted with the n=15 caveat; postal-name
+over-coding risk added to mechanism 1 and to timing; Ogdensburg ramp
+direction stated; county-FE 83% replaced by the pattern with adj R^2 and p;
+City of Albany Q4 2025 report cited as an external check; shopping response
+also shrinks the county distribution (noted); utilities in the city face
+8.5% + 3% (noted); DTF tabulation request urged now. The reviewer's
+"site out of sync" point was a timing artefact (site published from a later
+commit than the one reviewed); site and repo are in sync at each publish
+(publish script records the source commit).
+The user's own view: little credence in the 17-city regression. The site
+now leads with the apportioned reading and presents the adjustment as a
+single typical gap, examined and given limited weight.

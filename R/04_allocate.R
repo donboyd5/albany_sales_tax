@@ -138,10 +138,16 @@ ec_lookup <- function(ec_place, ec_county, place_name, county_fips3, key, var) {
 ## the finest NAICS level at which BOTH the place and the county publish an
 ## unsuppressed value. Falls back RCPTOT -> PAYANN and 4-digit -> 3 -> sector.
 ## Returns the share and the method actually used.
-store_share_for_group <- function(g, ec_place, ec_county, place_name, county_fips3) {
+STORE_ALLOCATORS <- c("receipts", "payroll", "establishments")
+store_var_order <- function(store_allocator) {
+  switch(store_allocator, receipts = c("RCPTOT", "PAYANN"), payroll = c("PAYANN", "RCPTOT"),
+         establishments = c("ESTAB", "PAYANN"))
+}
+store_share_for_group <- function(g, ec_place, ec_county, place_name, county_fips3,
+                                  vars = c("RCPTOT", "PAYANN")) {
   keys <- c(g, substr(g, 1, 3), EC_SECTOR(substr(g, 1, 2)))
   lvls <- c("4-digit", "3-digit", "sector")
-  for (v in c("RCPTOT", "PAYANN")) {
+  for (v in vars) {
     for (i in seq_along(keys)) {
       pk <- ec_lookup(ec_place, ec_county, place_name, county_fips3, keys[i], v)
       if (!any(is.na(pk)) && pk[2] > 0) {
@@ -237,8 +243,10 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
                            delivered_to_residence = 0.5,
                            resid_var = "agginc",
-                           business_allocator = BUSINESS_ALLOCATORS) {
+                           business_allocator = BUSINESS_ALLOCATORS,
+                           store_allocator = STORE_ALLOCATORS) {
   business_allocator <- match.arg(business_allocator)
+  store_allocator <- match.arg(store_allocator)
   county_fips3 <- substr(county_fips5, 3, 5)
   place_fips5  <- substr(place_fips, 3, 7)
   cw <- read_naics_crosswalk()
@@ -263,7 +271,8 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
   ## store shares, group by group
   st <- map(base$naics_industry_group, store_share_for_group,
             ec_place = ec_place_sector, ec_county = ec_county_sector,
-            place_name = ec_place_name, county_fips3 = county_fips3)
+            place_name = ec_place_name, county_fips3 = county_fips3,
+            vars = store_var_order(store_allocator))
   base$a_store  <- map_dbl(st, "a")
   base$store_method <- map_chr(st, "method")
 
@@ -297,7 +306,7 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
         TRUE                                           ~ store_method),
-      fallback = !grepl("^EC (RCPTOT|PAYANN) 4-digit", store_method) &
+      fallback = !grepl("^EC (RCPTOT|PAYANN|ESTAB) 4-digit", store_method) &
                  sourcing_class %in% c("store", "delivered_split"),
       B_cg = B_kg * a_g)
 }
@@ -368,12 +377,15 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
                               ecommerce_frac = 0,
                               mv_include_4413 = FALSE,
                               mv_allocator = c("dmv", "acs_vehicles"),
-                              business_by_customer = FALSE) {
+                              business_by_customer = FALSE,
+                              store_allocator = STORE_ALLOCATORS) {
   business_allocator <- match.arg(business_allocator)
   mv_allocator <- match.arg(mv_allocator)
+  store_allocator <- match.arg(store_allocator)
   d <- apportion_city(ec_place_name, place_fips, county_fips5, dtf_juris, dmv_county,
                       fys = fys, delivered_to_residence = delivered_to_residence,
-                      resid_var = resid_var, business_allocator = business_allocator)
+                      resid_var = resid_var, business_allocator = business_allocator,
+                      store_allocator = store_allocator)
   county_fips3 <- substr(county_fips5, 3, 5)
   place_fips5  <- substr(place_fips, 3, 7)
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)

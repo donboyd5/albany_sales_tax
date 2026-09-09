@@ -8,7 +8,7 @@ source(here::here("chapters", "_common.R"))
 The City of Albany has no sales tax of its own. This site estimates what the city would collect from a **half-point (0.5%) city sales tax added on top of the existing 8%** that everyone in Albany County already pays. The county's 4% tax and its distributions to towns and cities would not change. Inside the city the combined rate would be 8.5%; elsewhere in the county it would stay 8%.
 
 ::: {.keypoint}
-**The estimate: about \$`r fm(REV)` million a year** at `r R$years_label` levels of economic activity, with a reasonable planning range of **\$`r R$PLAN_LO`–`r R$PLAN_HI` million**. A prudent single figure for a budget is **\$`r R$BUDGET` million**, and the first full year would likely come in 10 to 20 percent below that while businesses' systems catch up with a new tax code.
+**The estimate: about \$`r fm(REV)` million a year** at `r R$years_label` levels of economic activity, with a planning range of **\$`r R$PLAN_LO`–`r R$PLAN_HI` million** (a two-in-three range; the 90% range is \$`r R$PLAN90_LO`–`r R$PLAN90_HI` million). Dividing the county's taxable sales by the sourcing rules gives \$`r fm(REV_raw)` million; the central figure reduces that by the typical gap between what taxing cities collect and what the same method gives for them. A prudent single figure for a budget is **\$`r R$BUDGET` million**, and the first full year would likely come in 10 to 20 percent below the steady state while businesses' systems catch up with a new tax code.
 :::
 
 ## What the estimate depends on {.unnumbered}
@@ -19,15 +19,15 @@ This site estimates the city's share of the county's taxable sales by:
 
 1. Sorting the county's taxable sales, industry by industry, into five groups according to *where the tax law sources each kind of sale*: to the store, to the buyer's business, to the car buyer's home, to the delivery address, or to where the utility is used.
 2. Measuring the city's share of each group with the public data that best matches that rule: where the stores are, where the private-sector jobs are, where car owners live, where household income is.
-3. Checking the whole procedure against the seventeen New York cities that already have their own sales tax, where a second estimate of the base can be inferred from their collections, and adjusting the Albany figure by what that comparison shows.
+3. Comparing the result with the eighteen New York cities that already have their own sales tax, where a second estimate of the base can be inferred from their collections, and adjusting the Albany figure by the typical gap. That comparison is examined carefully and given limited weight.
 
-The result is a city base of about **\$`r fb(est_pref$B_c_central)` billion, or `r fp(s_cal)` of the county's taxable sales**, against the city's `r fp(pop)` share of the county's population. Half a percent of that, less a small administrative wedge, is the revenue figure above.
+The result is a city base of about **\$`r fb(est_pref$B_c_central)` billion, or `r fp(s_cal)` of the county's taxable sales**, against the city's `r fp(pop)` share of the county's population. Half a percent of that is the revenue figure above.
 
 ## Two things to take away {.unnumbered}
 
-**The add-on beats the conventional alternative.** Seventeen New York cities tax by *preempting* part of their county's rate, which means giving up their share of the county's distributions. For Albany that trade would lose money: the city's population-based share of county collections is worth about \$`r fm(R$status_quo)` million a year, and preempting 1.5 points would raise only \$`r fm(0.015 * est_pref$B_c_central)` million. The add-on leaves the distribution untouched, which is the case for it (@sec-preemption).
+**The add-on beats the conventional alternative.** The eighteen New York cities that tax do so by *preempting* part of their county's rate, which means giving up their share of the county's distributions. For Albany that trade would lose money: the city's population-based share of county collections is worth about \$`r fm(R$status_quo)` million a year, and preempting 1.5 points would raise only \$`r fm(0.015 * est_pref$B_c_central)` million. The add-on leaves the distribution untouched, which is the case for it (@sec-preemption).
 
-**The largest uncertainty is how well any method of this kind predicts a city's collections.** On the cities where it can be checked, the method misses by roughly `r sd_up(fit_pref$sigma)` on the high side or `r sd_dn(fit_pref$sigma)` on the low side in a typical case. That miss sets the range. Within the method, the choice that matters most is how sales to businesses are divided between the city and its suburbs, and @sec-apportionment is devoted to it.
+**The largest uncertainty is how well any method of this kind predicts a city's collections.** On the cities where it can be compared with collections, the method misses by roughly `r sd_up(fit_pref$sigma)` on the high side or `r sd_dn(fit_pref$sigma)` on the low side in a typical case, and the size of the adjustment depends on how that comparison is set up (\$`r fm(REV_level)`–`r fm(REV_raw)` million across the readings in @sec-results). Within the method, the choice that matters most is how sales to businesses are divided between the city and its suburbs; @sec-apportionment is devoted to it.
 
 ## How this site is organized {.unnumbered}
 

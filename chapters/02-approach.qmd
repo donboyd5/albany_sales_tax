@@ -9,13 +9,14 @@ source(here::here("chapters", "_common.R"))
 
 A 0.5% tax raises 0.5% of the taxable sales it applies to. In full:
 
-$$\text{Revenue} = 0.005 \times B_c \times (1 - \phi) \times \beta$$
+$$\text{Revenue} = 0.005 \times B_c \times \beta$$
 
-Three quantities appear, and only the first is hard.
+Two quantities appear, and only the first is hard.
 
-- **$B_c$, the city's taxable sales.** Everything taxable that is sold *into* the City of Albany in a year, under the same rules the county uses. The county's figure is published; the city's is not. Estimating it is the subject of @sec-apportionment and @sec-calibration.
-- **$\phi$ (phi), the administrative wedge.** The gap between the tax due on the published taxable sales and the cash a locality actually receives. Refunds, the credit vendors keep for filing on time, and timing make cash fall short; tax collected at the DMV on private car sales, audit recoveries and late returns push it above. It is measured directly from Albany County's own figures below and turns out to be slightly *negative*, meaning the county receives a little more than 4% of its published base.
+- **$B_c$, the city's taxable sales, on a cash footing.** Everything taxable that is sold *into* the City of Albany in a year, under the same rules the county uses, measured as what would actually be paid over. The county's figure is published; the city's is not. Estimating it is the subject of @sec-apportionment and @sec-calibration.
 - **$\beta$ (beta), the shopping response.** The fraction of the base that stays put when the rate inside the city is half a point above the rate outside. It is taken as 1.0 (no loss), with lower values shown as sensitivities in @sec-sensitivity.
+
+A third quantity, the **administrative wedge** ($\phi$, phi), is the gap between the tax due on published taxable sales and the cash a locality actually receives: refunds and the vendor filing credit reduce cash; tax collected at the DMV on private car sales, audit recoveries and late returns add to it. It is measured below from Albany County's own figures and is small. It enters the estimate in one place only: converting the uncalibrated apportioned base, which is a taxable-sales figure, to cash. The calibrated figures are fitted to other cities' *collections* and are already on a cash footing, so the wedge is not applied to them again.
 
 ## Why the city's taxable sales are hard to know
 
@@ -33,9 +34,9 @@ One fragment of the city's base *is* observable. The Albany City School District
 
 4. **Multiply each group's county sales by the city's share for its class, and add up.** This gives a raw city base of \$`r fb(B_pred)` billion, `r fp(B_pred / B_k)` of the county's total.
 
-5. **Check the method against cities whose collections are known.** Seventeen New York cities already levy their own sales tax, so their base can be inferred from their collections. That inference has its own weaknesses, examined in @sec-calibration. Running the identical procedure on those cities shows that it gives a larger base than their collections imply, for reasons worked out there. Two of the seventeen are set aside for documented reasons that do not apply to Albany. Albany's raw figure is corrected down to **\$`r fb(est_pref$B_c_central)` billion**, and the scatter across the remaining cities sets the error range.
+5. **Compare the method with cities whose collections are known.** Eighteen New York cities already levy their own sales tax, so a second estimate of their base can be inferred from their collections; seventeen reconcile with their county's figures. That inference has its own weaknesses, examined in @sec-calibration. Running the identical procedure on those cities shows that their collections run about 10% below the base the procedure gives, for reasons worked out there. Two cities are set aside for documented reasons that do not apply to Albany. Albany's apportioned figure, reduced by that typical gap, is **\$`r fb(est_pref$B_c_central)` billion**, and the scatter across the remaining cities sets the error range. The comparison is examined closely and given limited weight; @sec-results reports the estimate with and without it.
 
-6. **Multiply by 0.5%**, apply the small administrative wedge, and allow for shoppers crossing the line: about **\$`r fm(REV)` million a year**, plausibly \$`r R$PLAN_LO`–`r R$PLAN_HI` million.
+6. **Multiply by 0.5%** and allow for shoppers crossing the line: about **\$`r fm(REV)` million a year**, plausibly \$`r R$PLAN_LO`–`r R$PLAN_HI` million.
 
 ## The administrative wedge, measured
 
@@ -50,13 +51,13 @@ R$phi_tab |>
   kb(digits = c(0, 3, 1, 1, 0), align = "lrrrr")
 ```
 
-The gap is under 2.5% in every year and slightly negative on average: **the county received about `r fp(-phi, 2)` more than 4% of its published base**. The additions (DMV-collected tax on private car sales, audit, late returns) outweigh the subtractions. $\phi$ is carried at its observed mean; treating it as exactly zero would change the estimate by \$`r fm(abs(rev(est_pref$B_c_central) - rev(est_pref$B_c_central, ph = 0)))` million.
+The gap is under 2.5% in every year and slightly negative on average: **the county received about `r fp(-phi, 2)` more than 4% of its published base**. The additions (DMV-collected tax on private car sales, audit, late returns) outweigh the subtractions. The wedge is applied, at its observed mean, only to the uncalibrated apportioned base; it changes that figure by \$`r fm(abs(rev_base(B_pred) - 0.005 * B_pred))` million. It is also the first of the validations in @sec-checks, and @sec-calibration extends the same test to every county.
 
 ## Three terms used throughout
 
 - **R, the concentration ratio.** The city's share of the county's taxable sales divided by its share of the county's population. R = 1 means the city has exactly its per-person share of sales; R = 2 means sales are twice as concentrated in the city as people are. Albany's R comes out at `r f2(R_cal)`. Among the seventeen taxing cities it runs from `r f2(min(route_b$R))` to `r f2(max(route_b$R))`.
 - **Sharing rule** (technically, *allocator*). The measure used to say what fraction of a class of county sales belongs to the city: for example, the city's share of the county's retail receipts, or of its private-sector jobs.
-- **Calibration.** Running the whole method on cities whose true base is known, and using what that reveals to correct Albany's estimate and to size its error range.
+- **Calibration.** Running the whole method on cities that already tax, comparing the result with the base their collections imply, and using the typical gap to adjust Albany's estimate and the scatter to size its error range.
 
 ## Three different "years"
 

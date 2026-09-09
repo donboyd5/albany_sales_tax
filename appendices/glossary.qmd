@@ -22,6 +22,8 @@
 
 **NAICS.** The North American Industry Classification System, the industry code used in every dataset here. The Tax Department reports taxable sales by the *vendor's* four-digit code.
 
+**Prediction interval.** A range for a new case (here, Albany) that allows both for the scatter of the calibration cities around the fitted line and for the uncertainty in the line itself. Wider than a range built from the scatter alone.
+
 **Preemption.** The arrangement under which a city imposes a sales tax rate and the county's rate falls by the same amount inside the city. The combined rate is unchanged and the city forfeits its share of the county's distribution. All seventeen taxing cities do this.
 
 **Sales tax year.** The Tax Department's reporting year for taxable sales: March through February.
@@ -36,6 +38,6 @@
 
 **Taxable sales and purchases (the base).** What vendors report as subject to sales tax, plus purchases on which the buyer owes use tax. The Tax Department publishes it by county and by vendor industry.
 
-**Typical miss (σ, sigma).** The standard deviation of the calibration's residuals, in logarithms. A one-σ miss of 0.19 means about +21% on the high side or −17% on the low side.
+**Typical miss (σ, sigma).** The standard deviation of the calibration's residuals, in logarithms. A one-σ miss of 0.22 means about +25% on the high side or −20% on the low side.
 
 **Use tax.** Tax owed by the buyer on taxable purchases on which no sales tax was collected, typically from out-of-state vendors. Reported by the buyer and included in the base.
