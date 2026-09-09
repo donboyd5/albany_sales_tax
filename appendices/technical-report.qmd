@@ -688,6 +688,22 @@ Honest ranking of what the reader should worry about.
    footnote reasoning rather than a published rate table (see Phase 2). It is
    small and does not drive the fit.
 
+## Residential energy: county-by-county test
+
+Whether the DTF county row contains residential energy, tested by grouping
+counties by their Publication 718-R status (see the apportionment chapter).
+
+```{r}
+#| label: tbl-resid-counties
+#| tbl-cap: "Taxable sales per person by county, three-year mean, with residential-energy tax status from Publication 718-R."
+R6 <- readRDS(here::here("data", "processed", "results.rds"))
+R6$re_test |> arrange(status, desc(util_pc)) |>
+  transmute(County = county, `Residential energy tax` = status, Population = P,
+            `Electric 2211, $/person` = elec_pc, `Utilities 22, $/person` = util_pc,
+            `Petroleum 4247, $/person` = petrol_pc, `Whole base, $/person` = total_pc) |>
+  knitr::kable(format = "pipe", digits = 0, align = "llrrrrr", format.args = list(big.mark = ","))
+```
+
 ## References
 
 Agrawal, D. R. (2015). The tax gradient: Spatial aspects of fiscal competition.

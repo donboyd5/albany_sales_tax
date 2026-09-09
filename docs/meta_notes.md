@@ -329,3 +329,13 @@ New in this pass, prompted by the reviewer's doubt about the business class:
 The planning range now excludes the two rules judged implausible (all jobs
 including government; residence for the whole class) when forming the
 envelope; it is still $8–15 M because the σ-upper-CI band dominates.
+
+## Residential energy in the county row (2026-09-09, second pass)
+
+The reviewer asked whether the DTF county figure is the state-tax base. It is
+not: it covers sales subject to state, MCTD, county and NYC tax (DTF's own
+description), residential energy sits on Schedule B jurisdiction lines, and a
+cross-county comparison keyed to Pub 718-R shows utilities per person roughly
+doubling in counties that tax residential energy. Albany County does not, so
+its row excludes it. See docs/data-layouts.md §12a and the apportionment
+chapter's "Does the county figure include residential energy?" section.

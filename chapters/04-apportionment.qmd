@@ -142,7 +142,7 @@ R$bus_top |>
 Three rules of New York sales tax explain why the largest families are read as business purchases.
 
 - **Sales for resale are exempt.** A wholesaler selling to a retailer collects no tax. So the taxable sales that wholesalers report (\$`r fm(bf$B[bf$family == "wholesale"], 0)` million, `r fp(bf$share_of_class[bf$family == "wholesale"], 0)` of the class) are to *end users*: contractors buying pipe and lumber, offices buying equipment and supplies, restaurants buying fixtures, fleets buying fuel. The same logic applies to manufacturers' direct sales.
-- **Residential energy carries no county tax in Albany County** (Publication 718-R). Petroleum wholesalers are the largest single wholesale group. Home heating oil would be their main household product, and it is outside the county base. What remains is commercial fuel.
+- **Residential energy is outside the Albany County figures.** Residential heating oil, gas and electricity are exempt from the state tax, Albany County does not tax them (Publication 718-R), and on the return they are reported on separate Schedule B lines rather than on the county line; @sec-resid-energy checks against the data that the county row does not contain them. Petroleum wholesalers are the largest single wholesale group, and home heating oil would be their main household product, so what remains in the Albany County figure is commercial fuel.
 - **Repair and maintenance are taxable; new construction is not.** Contractors' taxable sales are repair, maintenance and installation work. Homeowners buy a great deal of that, which is why the specialty-trade contractors (\$`r fm(bf$B[bf$family == "constr_specialty"], 0)` million) are read as mixed rather than business.
 
 Software, computer services, data processing, staffing, and building services (cleaning, security, landscaping, pest control, trash) round out the class. The IT families are overwhelmingly sold to organizations; the building services go to homeowners as well as to office buildings, and are read as mixed.
@@ -244,6 +244,24 @@ R$xcity |>
 Albany's gap of `r formatC(100 * R$alb_gap, format = "f", digits = 1)` points is within the range of the calibration cities (Johnstown, Auburn, Glens Falls, Olean and Saratoga Springs all have gaps of the same size or larger), and its education-and-health share of `r fp(R$alb_eduhealth, 0)` is not unusual either (Utica's is `r fp(R$xcity$eduhealth_city[R$xcity$city == "Utica"], 0)`). Johnstown, with the largest gap, is *under*-predicted; Auburn and Glens Falls, with gaps like Albany's, are over-predicted. Fifteen cities cannot settle the question, but they give no sign that a jobs-heavy city is systematically over-predicted beyond what the calibration already removes.
 
 Where Albany *is* out of sample is government: public administration is `r fp(R$pub_pct, 0)` of county jobs here against 4–13% in the calibration counties, and `r fp(R$a_pub, 0)` of it is in the city. That is why government is removed from the rule on principle rather than on evidence: the calibration cities cannot test it.
+
+## Does the county figure include residential energy? {#sec-resid-energy}
+
+A reader asked whether the Tax Department's county figures are the base subject to the *state* tax, in which case residential energy would be excluded everywhere, or the base reported on each jurisdiction's line of the return, in which case a county that taxes residential energy would have it in its row and a county that does not would not. The Department's description of the dataset says it covers sales "subject to State, Metropolitan Commuter Transportation District, County, and New York City sales tax," and the return itself puts residential energy on separate Schedule B lines by jurisdiction. Neither settles what the county row contains, so the data were asked directly.
+
+Publication 718-R lists which counties tax residential energy. If the county row included residential energy wherever a *county* tax applies, counties that tax it should show a much larger utilities base per person than counties that do not. If the row were the state base, there should be no difference.
+
+```{r}
+#| label: tbl-resid
+#| tbl-cap: "Taxable sales per person by county, three-year averages, grouped by whether the county taxes residential energy (Publication 718-R). Medians of the counties in each group."
+R$re_summary |>
+  transmute(`Residential energy tax` = status, Counties = n, `Electric power (NAICS 2211), $ per person` = elec_pc,
+            `All utilities (NAICS 22), $ per person` = util_pc, `Petroleum wholesalers (4247), $ per person` = petrol_pc,
+            `Whole base, $ per person` = total_pc) |>
+  kb(digits = 0, align = "lrrrrr", format.args = list(big.mark = ","))
+```
+
+Counties that tax residential energy have about twice the utilities base per person of counties that do not, while their whole base per person is no different. The county row therefore contains residential energy where the county taxes it and not otherwise, and the figure is not simply the state base. Albany County, where only the school districts tax residential energy, looks like the untaxed group: \$`r fn(R$re_albany$util_pc)` of utilities per person against a median of \$`r fn(R$re_summary$util_pc[3])` for the untaxed counties and \$`r fn(R$re_summary$util_pc[1])` for the taxing ones. Two consequences follow. The Albany County utilities and fuel-wholesaler figures used here are commercial. And the school district's utility base, which *does* include residential energy at 3%, is not directly comparable with the county figure, so the `r fp(R$a_util)` measured share is an upper bound (@sec-checks). The full county-by-county table is in the technical appendix.
 
 ## Motor vehicles, delivered goods and utilities {#sec-motor-vehicles}
 

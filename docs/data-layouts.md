@@ -543,3 +543,32 @@ School District (Albany County) 3". Consequences:
   comparable city share; the 48.9% measured share is an upper bound.
 - TSB-M-90(6)S's statement that the county taxed residential energy at 1%
   described 1990 and is no longer current.
+
+### 12a. What the county row contains (verified 2026-09-09)
+
+Question raised in review: is `ny73-2j3u` the base subject to the *state* 4%
+(residential energy excluded everywhere) or the base on each jurisdiction's
+line of the return (residential energy included where a local tax applies)?
+
+- DTF's dataset page (`research/stats/stat_excise/taxable_sales_and_purchases/
+  taxable_sales_and_purchases_open_data.htm`) says: "taxable sales and
+  purchases subject to State, Metropolitan Commuter Transportation District,
+  County, and New York City (NYC) sales tax." No school district taxes.
+- Schedule B instructions (ST-100.3-I, `pdf/current_forms/st/st100_3i.pdf`):
+  residential gas/electric/steam go in Part 1 and residential heating fuels in
+  Part 2, "for each jurisdiction", at the jurisdiction's own rate; only
+  nonresidential utilities in localities *not* listed in Part 3 go on the
+  ordinary ST-100 Step 3 jurisdiction lines.
+- Cross-county test (R/06_results.R, `re_test`, crosswalk
+  `data/crosswalk/pub718r_residential_energy.csv`): median utilities (NAICS 22)
+  base per person, FY2023-25, is $1,247 in the 13 counties that tax
+  residential energy, $597 in the 28 with no local tax, $470 in the 16 where
+  only a school district or city taxes it; whole base per person is the same
+  across groups. Albany: $685.
+
+Conclusion: the county row includes residential energy only where the
+**county** taxes it. Albany County's utilities and 4247 figures exclude
+residential energy; the ACSD measurement (which includes it at 3%) is an
+upper bound of the comparable share. The old memo sentence that the county
+figure was "commercial because the county does not tax it" was right in
+effect but for an incompletely stated reason; the reasoning is now recorded.

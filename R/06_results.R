@@ -310,6 +310,38 @@ R$BUDGET  <- floor(REV / 1e6)
 R$B_9261 <- B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
 R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv))$B_c_central)
 
+## --- does the county row include residential energy? cross-county test ------------------------
+## Pub 718-R lists which counties tax residential energy. If the DTF county
+## row included residential energy wherever a local tax applies, counties that
+## tax it should show a much larger utilities base per person than counties
+## that do not; if the row were the state-tax base, no difference.
+re_cw <- read_csv(file.path(PATHS$crosswalk, "pub718r_residential_energy.csv"),
+                  col_types = cols(.default = col_character(), county_taxes_part1 = col_logical(),
+                                   county_taxes_part2 = col_logical(), school_district_or_city_only = col_logical()))
+pop_k <- read_csv(file.path(PATHS$raw, "census_pl2020_county_ny.csv"), col_types = cols(.default = "c")) |>
+  transmute(county = toupper(sub(" County, New York", "", NAME)), P = as.numeric(P1_001N)) |>
+  mutate(county = ifelse(county == "ST. LAWRENCE", "ST LAWRENCE", county))
+re_test <- read_county_base() |>
+  filter(fy %in% ANALYSIS_FYS, !jurisdiction %in% c("NY STATE", "MCTD", "NY CITY")) |>
+  mutate(grp = case_when(naics_industry_group == "2211" ~ "elec", naics_industry_group == "2212" ~ "gas",
+                         naics_industry_group == "4247" ~ "petrol",
+                         substr(naics_industry_group, 1, 2) == "22" ~ "other22", TRUE ~ "rest")) |>
+  group_by(county = jurisdiction, grp) |> summarise(B = sum(B, na.rm = TRUE) / length(ANALYSIS_FYS), .groups = "drop") |>
+  pivot_wider(names_from = grp, values_from = B, values_fill = 0) |>
+  inner_join(pop_k, by = "county") |> inner_join(re_cw, by = "county") |>
+  mutate(status = case_when(county_taxes_part1 ~ "County taxes residential energy",
+                            school_district_or_city_only ~ "Only a school district or city taxes it",
+                            TRUE ~ "No local tax on residential energy"),
+         total = elec + gas + other22 + petrol + rest,
+         elec_pc = elec / P, util_pc = (elec + gas + other22) / P, petrol_pc = petrol / P, total_pc = total / P)
+R$re_test <- re_test |> select(county, status, P, elec_pc, util_pc, petrol_pc, total_pc)
+R$re_summary <- re_test |> group_by(status) |>
+  summarise(n = n(), elec_pc = median(elec_pc), util_pc = median(util_pc), petrol_pc = median(petrol_pc),
+            total_pc = median(total_pc), .groups = "drop") |>
+  arrange(factor(status, levels = c("County taxes residential energy", "Only a school district or city taxes it",
+                                    "No local tax on residential energy")))
+R$re_albany <- re_test |> filter(county == "ALBANY") |> select(elec_pc, util_pc, petrol_pc, total_pc)
+
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)
 saveRDS(R, file.path(PATHS$processed, "results.rds"))

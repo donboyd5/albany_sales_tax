@@ -159,5 +159,10 @@ manufacturing, 28% of wholesale and 29% of transportation jobs. Alternatives
 $10.5-10.9 M with the calibration re-fitted; payroll 47.9% gives $11.8 M. Across
 the 15 calibration cities, the job-minus-population gap does not predict
 over-prediction (slope -0.42, p 0.52). Pub 718-R: Albany County does NOT tax
-residential energy (only the three school districts do, at 3%), so the ACSD
-utility measurement (48.9%) is an upper bound of the comparable share.
+residential energy (only the three school districts do, at 3%). The DTF
+county row is NOT the state-tax base: it covers sales subject to state, MCTD,
+county and NYC tax, residential energy sits on Schedule B jurisdiction lines,
+and utilities per person roughly double in counties that tax it (crosswalk
+data/crosswalk/pub718r_residential_energy.csv; R$re_summary). So Albany's
+utilities and 4247 figures exclude residential energy and the ACSD
+measurement (48.9%) is an upper bound of the comparable share.

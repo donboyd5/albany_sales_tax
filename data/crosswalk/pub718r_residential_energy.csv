@@ -1,0 +1,58 @@
+county,county_taxes_part1,county_taxes_part2,school_district_or_city_only,note,source
+ALBANY,FALSE,FALSE,TRUE,"Albany, Cohoes and Watervliet school districts at 3% (Part 1 only)",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ALLEGANY,TRUE,TRUE,FALSE,4.5%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+BROOME,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CATTARAUGUS,TRUE,TRUE,FALSE,"3%; Olean and Salamanca cities 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CAYUGA,FALSE,FALSE,TRUE,"Auburn city 2% (Parts 1 and 2)",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CHAUTAUQUA,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CHEMUNG,FALSE,FALSE,FALSE,"Part 1 rate suspended June-Nov 2026; not listed",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CHENANGO,FALSE,FALSE,TRUE,"Norwich city 3% (Parts 1 and 2)",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CLINTON,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+COLUMBIA,FALSE,FALSE,TRUE,"Hudson school district 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+CORTLAND,TRUE,TRUE,FALSE,4%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+DELAWARE,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+DUTCHESS,FALSE,FALSE,TRUE,"Poughkeepsie school district 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ERIE,TRUE,TRUE,FALSE,"4.75%; Lackawanna school district 7.75%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ESSEX,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+FRANKLIN,TRUE,TRUE,FALSE,2%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+FULTON,FALSE,FALSE,TRUE,"Gloversville and Johnstown school districts 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+GENESEE,FALSE,FALSE,TRUE,"Batavia school district 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+GREENE,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+HAMILTON,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+HERKIMER,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+JEFFERSON,FALSE,FALSE,TRUE,"Watertown school district 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+LEWIS,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+LIVINGSTON,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+MADISON,FALSE,FALSE,TRUE,"Oneida city 2% (Parts 1 and 2)",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+MONROE,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+MONTGOMERY,FALSE,FALSE,TRUE,"Johnstown school district (Montgomery part) 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+NASSAU,FALSE,FALSE,TRUE,"Glen Cove and Long Beach school districts 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+NIAGARA,TRUE,TRUE,FALSE,"4%; Lockport city 4%; Niagara Falls school district 7%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ONEIDA,FALSE,FALSE,TRUE,"Utica school district 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ONONDAGA,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ONTARIO,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ORANGE,FALSE,FALSE,TRUE,"Middletown and Newburgh school districts; Port Jervis city",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ORLEANS,TRUE,TRUE,FALSE,4%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+OSWEGO,FALSE,FALSE,TRUE,"Oswego city 4% (Parts 1 and 2)",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+OTSEGO,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+PUTNAM,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+RENSSELAER,FALSE,FALSE,TRUE,"Rensselaer and Troy school districts 3%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ROCKLAND,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SARATOGA,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SCHENECTADY,TRUE,TRUE,FALSE,"4%; Schenectady school district 7%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SCHOHARIE,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SCHUYLER,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SENECA,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ST LAWRENCE,TRUE,TRUE,FALSE,"4%; Ogdensburg school district 7%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+STEUBEN,FALSE,FALSE,TRUE,"Hornell school district 2.5%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SUFFOLK,TRUE,TRUE,FALSE,2.5%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+SULLIVAN,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+TIOGA,TRUE,TRUE,FALSE,3%,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+TOMPKINS,TRUE,TRUE,FALSE,"4%; Ithaca city 4%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+ULSTER,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+WARREN,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+WASHINGTON,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+WAYNE,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+WESTCHESTER,TRUE,TRUE,FALSE,"4%; several school districts 6-7%; Yonkers 4.5%",https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+WYOMING,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm
+YATES,FALSE,FALSE,FALSE,,https://www.tax.ny.gov/forms/publications/st/pub718r.htm

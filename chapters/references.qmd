@@ -16,6 +16,10 @@ New York State Department of Taxation and Finance. (2025). *Publication 718-C: S
 
 New York State Department of Taxation and Finance. (2026). *Publication 718-R: Local sales and use tax rates on residential energy*. <https://www.tax.ny.gov/forms/publications/st/pub718r.htm>
 
+New York State Department of Taxation and Finance. (2026). *Quarterly Schedule B instructions (Form ST-100.3-I): Taxes on utilities and heating fuels*. <https://www.tax.ny.gov/pdf/current_forms/st/st100_3i.pdf>
+
+New York State Department of Taxation and Finance. *Taxable sales and purchases: open data* (description of the dataset). <https://www.tax.ny.gov/research/stats/stat_excise/taxable_sales_and_purchases/taxable_sales_and_purchases_open_data.htm>
+
 New York State Department of Taxation and Finance. *Publication 750: A guide to sales tax in New York State*. <https://www.tax.ny.gov/pdf/publications/sales/pub750.pdf>
 
 New York State Department of Taxation and Finance. *Publication 838: A guide to sales tax for automobile dealers*. <https://www.tax.ny.gov/pdf/publications/sales/pub838.pdf>
