@@ -79,7 +79,7 @@ Fitting a straight line to the logarithms of the two city-base columns, with sta
 
 ```{r}
 #| label: tbl-fits
-#| tbl-cap: "Calibration fits. The slope says how the true base scales with the predicted one (1 = proportionally). σ is the typical miss, in logs. The last columns apply each fit to Albany."
+#| tbl-cap: "Calibration fits. The slope says how the collections-based base scales with the apportioned one (1 = proportionally). σ is the typical miss, in logs. The last columns apply each fit to Albany."
 bind_rows(cv |> transmute(Specification, n, `Slope` = beta, `se(slope)` = se, `σ (logs)` = sigma, `R²` = R2,
                           `Albany base, $ billion` = B_c / 1e9, `Revenue, $ million` = rev / 1e6),
           tibble(Specification = "Best-supported cities only (rate agreed by every source, stable share)", n = R$fit_trust$n,

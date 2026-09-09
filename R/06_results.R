@@ -323,8 +323,8 @@ county_test <- Bk_all |> inner_join(Ck_all, by = c("county", "fy")) |> left_join
   mutate(inferred = (C_k + preempted) / (r_k_pub718 / 100), ratio = inferred / B_k)
 R$county_test <- county_test
 R$county_test_by_county <- county_test |> group_by(county, r_k_pub718, n_cities) |>
-  summarise(B_k = mean(B_k), inferred = mean(inferred), ratio = mean(ratio), ratio_min = min(ratio), ratio_max = max(ratio),
-            swing = max(ratio) - min(ratio), .groups = "drop") |> arrange(ratio)
+  summarise(B_k = mean(B_k), inferred = mean(inferred), ratio_min = min(ratio), ratio_max = max(ratio),
+            swing = max(ratio) - min(ratio), ratio = mean(ratio), .groups = "drop") |> arrange(ratio)
 R$county_test_summary <- list(
   n_county_years = nrow(county_test), n_counties = n_distinct(county_test$county),
   median = median(county_test$ratio), mean = mean(county_test$ratio), sd = sd(county_test$ratio),
