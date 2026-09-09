@@ -9,11 +9,13 @@
 source(here::here("R", "00_setup.R"))
 
 urls <- c(
-  list.files(here("analysis"), "\\.qmd$", full.names = TRUE),
+  here("index.qmd"),
+  list.files(here("chapters"), "\\.qmd$", full.names = TRUE),
+  list.files(here("appendices"), "\\.qmd$", full.names = TRUE),
   list.files(here("data", "crosswalk"), "\\.csv$", full.names = TRUE)
 ) |>
   map(readLines, warn = FALSE) |> unlist() |>
-  stringr::str_extract_all("https?://[^\\s<>\")]+") |> unlist() |>
+  stringr::str_extract_all("https?://[^\\s<>\"),;]+") |> unlist() |>
   stringr::str_remove("[.,;]$") |> unique() |> sort()
 
 check <- function(u) {
@@ -25,7 +27,7 @@ check <- function(u) {
   if (inherits(r, "try-error")) NA_integer_ else resp_status(r)
 }
 
-BOT_BLOCKED <- "doi\\.org|findlaw|justia|nysenate|ecode360"
+BOT_BLOCKED <- "doi\\.org|findlaw|justia|nysenate|ecode360|census\\.gov/naics"
 res <- tibble(url = urls) |> mutate(status = map_int(url, check),
                                     blocked = grepl(BOT_BLOCKED, url))
 bad <- res |> filter(!blocked, is.na(status) | status >= 400)

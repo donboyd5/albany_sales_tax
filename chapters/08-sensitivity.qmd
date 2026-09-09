@@ -1,0 +1,95 @@
+# Sensitivity analysis {#sec-sensitivity}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+sens <- R$sens; grid <- R$grid; cv <- R$cv; af <- R$alloc_fits
+```
+
+## Choices inside the division of the county base
+
+Each row of @tbl-onechange changes one choice, re-runs the whole division of the county base for Albany, and applies the central calibration to the result.
+
+```{r}
+#| label: tbl-onechange
+#| tbl-cap: "One choice changed at a time. Revenue is the calibrated central estimate; the central calibration is applied without re-fitting."
+sens |> transmute(Variant, `Raw city base, $ billion` = B_pred_v / 1e9, `Calibrated city base, $ billion` = B_cal_v / 1e9,
+                  `Revenue, $ million` = Rev / 1e6, `vs central` = fp(Rev / REV - 1)) |>
+  kb(digits = c(0, 3, 3, 1, 0), align = "lrrrr")
+```
+
+The one family of choices that moves the answer is the sharing rule for sales to businesses. @sec-apportionment takes that rule apart and @tbl-busalts there gives the consistent test, in which the calibration is re-fitted under each rule so that Albany and the calibration cities are treated identically. Two points from it bear repeating here.
+
+**Counting government jobs is not a plausible specification.** Government purchases are exempt, so using government employment to distribute taxable business purchases means using a measure of *exempt* activity to divide up *taxable* purchases. The row appears because it was the original plan's choice and because the difference (\$`r fm(abs(sens$Rev[2] - REV))` million) is worth knowing, not because the higher figure is a defensible alternative. The calibration cities cannot adjudicate: government is only 4–13% of jobs there, so their predictions barely move when it is removed, whereas it is `r fp(R$pub_pct, 0)` of Albany County's jobs with `r fp(R$a_pub, 0)` of them in the city.
+
+**Hospitals and universities.** The same logic applies to them, and the job data separate education and health care, so a bound is available: dropping those sectors as well as government gives a city share of `r fp(R$a_exx)` and, with the calibration re-fitted, revenue of \$`r fm(af$rev[af$key == "lodes_ex_exempt"])` million. It is a bound rather than an estimate, because the two sectors also contain taxable private employers, but it says the remaining exempt-institution exposure is worth at most about \$`r fm(REV - af$rev[af$key == "lodes_ex_exempt"])` million.
+
+Using the directly measured school-district share for the utilities class instead of the jobs rule gives \$`r fm(R$REV_util_meas)` million.
+
+Everything else is immaterial. The delivered-goods split moves the answer by under 0.1%; the e-commerce assignment, which the 2022 industry codes make unresolvable, by under 1%. Both are immaterial for the same reason: the store share and the household-income share for those groups are within a point of each other.
+
+## The calibration sample and the rate question
+
+**If Publication 718-A's percentage column is the true rate** for the six cities discussed in @sec-rates, their recovered bases fall (by a third for the 2%-to-3% cities, by half for the 1.5%-to-3% ones). Re-running the calibration on that reading:
+
+```{r}
+#| label: tbl-rates-sens
+#| tbl-cap: "The calibration under the two readings of the six cities' rates, all seventeen cities."
+tibble(Reading = c("Rates agreed by Pub 718-A footnotes, Pub 718 and the Comptroller (used)", "Pub 718-A percentage column"),
+       `Benchmark median R` = c(median(route_b$R), median(R$rb_alt$R)),
+       Slope = c(fit$beta, R$fit_alt$beta), `σ (logs)` = c(fit$sigma, R$fit_alt$sigma),
+       `Albany base, $ billion` = c(est$B_c_central, R$est_alt$B_c_central) / 1e9,
+       `Revenue, $ million` = c(REV_all, rev(R$est_alt$B_c_central)) / 1e6,
+       `68% range, $ million` = c(sprintf("%s – %s", fm(rev(est$lo68)), fm(rev(est$hi68))),
+                                  sprintf("%s – %s", fm(rev(R$est_alt$lo68)), fm(rev(R$est_alt$hi68))))) |>
+  kb(digits = c(0, 2, 3, 3, 2, 1, 0), align = "lrrrrrr")
+```
+
+The benchmark picture changes a lot; Albany's estimate does not. Under the alternative reading the method over-predicts the small cities by more, the fitted slope steepens, and the two fits cross near Albany's size.
+
+**Which cities, and what shape of line.** The slope on the preferred sample is `r f3(fit_pref$beta)` (standard error `r f3(fit_pref$se_beta)`), significantly below 1: larger predicted bases are corrected down proportionally more, and Albany's raw prediction is the second largest in the set after Yonkers. Fixing the slope at 1, which scales the raw prediction by the typical observed-to-predicted ratio, removes that gradient:
+
+```{r}
+#| label: tbl-grid
+#| tbl-cap: "Calibration sample × form of the calibration line. Revenue in $ million."
+grid |> mutate(across(c(`Log-log fit`, `Slope fixed at 1`, `Median ratio`), ~ rev(.x) / 1e6)) |>
+  rename(`Estimated slope` = `Log-log fit`) |>
+  kb(digits = c(0, 0, 1, 1, 1), align = "lrrrr")
+```
+
+The two choices interact: on all seventeen cities the form of the line barely matters, on the fifteen it is worth \$`r fm(abs(rev(grid[["Slope fixed at 1"]][2]) - REV))` million. The size gradient is carried largely by the four Westchester cities, dense residential cities rather than state capitals; dropping them flips the slope above 1 and the estimate to \$`r fm(cv$rev[cv$Specification == "Excluding Westchester (4 cities)"])` million with a much worse fit. The estimated-slope fit is used because it fits better on every sample, but the slope-fixed figure is the more conservative reading for a large city, and it is inside the planning range.
+
+Across calibration samples (@tbl-fits), the calibrated estimate ranges from \$`r fm(min(cv$rev))` million to \$`r fm(max(cv$rev))` million.
+
+## Shopping response and administrative wedge
+
+```{r}
+#| label: tbl-beta
+#| tbl-cap: "Shopping response and administrative wedge."
+b <- est_pref$B_c_central
+bind_rows(
+  tibble(Assumption = "No shopping loss (central)", `Revenue, $ million` = rev(b) / 1e6),
+  tibble(Assumption = "3% loss of the whole base", `Revenue, $ million` = rev(b, 0.97) / 1e6),
+  tibble(Assumption = "3% loss of the over-the-counter classes only", `Revenue, $ million` = rev(b) * (1 - 0.03 * R$store_share_of_base) / 1e6),
+  tibble(Assumption = "10% loss of the whole base (aggressive)", `Revenue, $ million` = rev(b, 0.90) / 1e6),
+  tibble(Assumption = "10% loss of the over-the-counter classes only", `Revenue, $ million` = rev(b) * (1 - 0.10 * R$store_share_of_base) / 1e6),
+  tibble(Assumption = paste0("Administrative wedge as observed, ", fp(phi, 2), " (central)"), `Revenue, $ million` = rev(b) / 1e6),
+  tibble(Assumption = "Administrative wedge of zero", `Revenue, $ million` = rev(b, ph = 0) / 1e6),
+  tibble(Assumption = "Administrative wedge of +2% (an explicit charge)", `Revenue, $ million` = rev(b, ph = 0.02) / 1e6)) |>
+  kb(digits = 1, align = "lr")
+```
+
+Neither factor moves the estimate by more than about 10% even under aggressive assumptions, and both are dwarfed by the uncertainty in the base.
+
+## Base year and growth
+
+```{r}
+#| label: tbl-years
+#| tbl-cap: !expr sprintf("The calibrated share (%s) applied to each year's county base.", fp(s_cal))
+by <- R$by_year
+bind_rows(by |> transmute(Base = sales_tax_year, `County base, $ billion` = B / 1e9,
+                          `City base, $ billion` = s_cal * B / 1e9, `Revenue, $ million` = rev(s_cal * B) / 1e6),
+          tibble(Base = "Three-year average used (2022–23 to 2024–25)", `County base, $ billion` = B_k / 1e9,
+                 `City base, $ billion` = est_pref$B_c_central / 1e9, `Revenue, $ million` = REV / 1e6)) |>
+  kb(digits = c(0, 3, 2, 1), align = "lrrr")
+```

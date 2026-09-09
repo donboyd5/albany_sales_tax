@@ -1,9 +1,12 @@
 ---
-title: "Revenue from a 0.5% City of Albany add-on sales tax"
-subtitle: "Apportionment of the county base, calibrated against New York's preempting cities"
-date: today
-number-sections: false
+execute:
+  freeze: auto
 ---
+
+# Technical report {#sec-technical}
+
+This appendix is the original technical document, retained in full for readers who want the detail behind the chapters. It uses the technical vocabulary (allocator, apportionment, NAICS, σ) that the chapters translate; see the glossary.
+
 
 ```{r setup}
 #| include: false

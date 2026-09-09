@@ -1,0 +1,30 @@
+# Limitations and recommendations {#sec-limitations}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+af <- R$alloc_fits
+```
+
+## Limitations
+
+In rough order of importance:
+
+1. **The share of sales to businesses assigned to the city.** The private-jobs rule gives the city `r fp(R$a_wxp)` of the class. The jobs are disproportionately in exempt hospitals and colleges and in offices that buy little per employee, while the suburbs hold the factories, warehouses and stores that buy a lot. Every adjustment that responds to this lowers the share to between `r fp(R$a_exx)` and `r fp(R$a_bus_split)`, and the calibrated revenue under the plausible alternatives runs from \$`r fm(min(af$rev[!af$key %in% c("lodes", "residence")]))` to \$`r fm(max(af$rev[!af$key %in% c("lodes", "residence")]))` million (@sec-apportionment). The calibration cities cannot settle it, because none has Albany's concentration of government.
+2. **The two excluded calibration cities.** The preferred fit drops Salamanca and Ogdensburg for the reasons in @sec-calibration. Keeping them gives \$`r fm(REV_all)` million with a 68% range of \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` million. The leave-one-out table shows they are the only two cities whose removal changes the fit, but the decision remains a judgment.
+3. **The method still misses by `r sd_up(fit_pref$sigma)` / `r sd_dn(fit_pref$sigma)` in a typical case on the cities where it can be checked**, after the two exclusions, and by `r sd_up(fit$sigma)` / `r sd_dn(fit$sigma)` without them. Albany may be an easier case, but nothing proves it.
+4. **The calibration sample is small (17, 15 used) and selected**: mostly small retail-centre cities, with Utica, Rome and the Westchester cities the closest structural analogues to Albany.
+5. **Economic Census receipts are gross, not taxable, and are 2022 values applied to 2022–25 bases.** The sharing rules are shares, so level drift matters little; the assumption is that an industry's taxable fraction is similar inside and outside the city.
+6. **Remote sales are not published by delivery jurisdiction**, and the 2022 industry codes make e-commerce unidentifiable. Shown to be immaterial for Albany, but it is an assumption.
+7. **The utility-tax measurement is not clean.** The school district taxes residential energy and the county does not, so the measured share is an upper bound (@sec-checks).
+8. **The rate of several calibration cities is ambiguous in the published sources** (@sec-rates). The reading supported by three sources is used; the alternative widens the range but leaves Albany's central estimate essentially unchanged.
+9. **Cell suppression** removes 3–10% of county-by-industry cells; county bases are sums of published cells. The reconciliation bounds the effect at a few percent.
+10. **NAICS 9261 is classified as residence-sourced vehicle tax on the strength of its statewide distribution**, not on documentation. If it is instead business activity sourced where reported, the estimate rises by about \$`r fm(R$rev_9261_as_business - REV)` million.
+
+## Recommendations
+
+1. **Plan on \$`r R$PLAN_LO`–`r R$PLAN_HI` million a year at steady state, with \$`r R$BUDGET` million as the budget figure**, at current activity levels, rising with the county base at 2–4% a year, and 10–20% less than that in the first full year while vendors' systems pick up the new code. Do not present the estimate without its range.
+2. **Ask the Tax Department's Office of Tax Policy Analysis for a direct tabulation** of taxable sales within the city limits. It would replace this estimate with a measurement and would specifically resolve the business-purchase question. The school-district utility tax gives the Department an existing precedent for accounting separately for sales within the city of Albany.
+3. **Prefer the add-on to preemption.** With Albany's R at `r f2(R_cal)`, below the 1.067 break-even, preemption loses about \$`r fm(R$PREEMPT_LOSS)` million a year relative to the existing distribution; the add-on has no such cost.
+4. **If a start date is discretionary, choose 1 March** for a calendar-year budget; a December start defers essentially all cash to the following year.
+5. **Pull taxable commercial assessed value by municipality from the county assessment rolls** as an independent sharing rule for sales to businesses. It leaves out state-owned and other exempt property automatically, which is exactly the weakness of the jobs rule, and it tests the one Albany-specific quantity that the calibration cities structurally cannot check. This is the cheapest real improvement available without the Tax Department.

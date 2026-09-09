@@ -1,0 +1,62 @@
+# Data {#sec-data}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+```
+
+Every dataset was accessed programmatically, its column list verified against live metadata before use, and the raw pull cached with a SHA-256 fingerprint (`data/raw/MANIFEST.csv`). The column lists and the surprises found along the way are recorded in `docs/data-layouts.md` in the repository. This chapter describes each source, what it contributes, and what a reader should know about it.
+
+## At a glance
+
+| Source | What it provides | Period used |
+|---|---|---|
+| Tax Department: taxable sales by county and industry | The county base; the denominator of every share | Sales tax years 2022–23 to 2024–25 (average); 2025–26 for growth |
+| Tax Department: sales tax distributions | The administrative wedge; the school district's utility base; the seventeen cities' bases | State fiscal years 2023–2025 |
+| Tax Department publications 718, 718-A, 718-C, 718-R, 838; memorandum TSB-M-90(6)S; Comptroller 2020 | Rates, sourcing rules, sharing formulas | Current |
+| 2022 Economic Census | Where the stores and businesses are (receipts, payroll, establishments by place) | 2022 |
+| Census job-location data (LODES) | Where the jobs are, by industry and place | 2023 |
+| American Community Survey | Where households and their income are; vehicles available | 2019–2023 |
+| DMV registrations, with 2020 Census block and ZIP files | Where car owners live | Current registrations, model years 2024 and later |
+| 2020 Census | Population shares | 2020 |
+
+## New York State Department of Taxation and Finance
+
+**Taxable Sales and Purchases, quarterly** (Open NY dataset `ny73-2j3u`). The Tax Department's Office of Tax Policy Analysis compiles, from roughly 250,000 quarterly and 300,000 annual sales tax returns, the dollar amount of taxable sales *and* taxable purchases (use tax) reported by vendors, by the taxing jurisdiction the sale is sourced to and by the vendor's four-digit industry code (NAICS). It is published quarterly from sales tax year 2013–14 and is the source of the county base. Used here: Albany County and the eleven counties of the calibration cities, all `r nrow(appo)` industry groups, the three sales tax years 2022–23 through 2024–25 (final for 2023–24, preliminary after). Four things to know:
+
+- The jurisdictions are the state, the transit district, New York City and the 57 other counties, plus cities with their own tax. **The City of Albany does not appear**, which is why its base must be estimated.
+- The industry is the *vendor's*, not the buyer's. A wholesaler's taxable sales are listed under wholesale trade whoever bought them. This matters a great deal for @sec-apportionment.
+- One government group (NAICS 9261, \$8.5 billion statewide) appears to be the tax the DMV collects on private vehicle sales rather than government vendor activity; see @sec-motor-vehicles.
+- The industry codes switch from the 2017 to the 2022 edition of NAICS at 2022–23 without restating earlier years, and the 2022 edition has no separate e-commerce category. Individual county-by-industry cells are withheld for confidentiality (about 3.6% of Albany's), so every county total here is a sum of *published* cells.
+
+<https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data>
+
+**State and Local Sales Tax Distributions, annual** (`5g2s-tnb7`). The cash the Tax Department distributed to each taxing jurisdiction, by state fiscal year (April to March) since 1995. Used for Albany County's distributions (to measure the administrative wedge and to reconcile the base); the Albany City School District utility-tax distributions (the one directly measured piece of the city base); and the distributions to the seventeen taxing cities and their counties, from which each city's base is recovered as collections divided by rate. Twenty-three city rows appear; five (Corning, Fulton, Geneva, Hornell, Sherrill) are cents-to-dollars residuals of repealed taxes and are dropped. Yonkers has two rows that must be summed. <https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7>
+
+**Publications 718, 718-A and 718-C.** Publication 718 lists the combined state-plus-local rate in every jurisdiction, with separate lines for each taxing city and for the county "except" that city. Publication 718-A lists the enactment and effective dates of every county and city rate since 1965, with footnotes describing the county's rate inside each city. Publication 718-C lists the localities that exempt clothing and footwear under \$110; Albany County is not among them. Used for every rate in the analysis; see @sec-rates for the one place the publications disagree with each other. <https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf>, <https://www.tax.ny.gov/pdf/publications/sales/pub718a.pdf>, <https://www.tax.ny.gov/pdf/publications/sales/pub718c.pdf>
+
+**Publication 718-R.** Lists every locality and school district that taxes residential energy (gas, electricity, steam, and separately heating oil, coal and wood). Residential energy is exempt from the state's 4%, and "localities or school districts not listed in this publication do not impose a local tax on residential energy." **Albany County is not listed**; the Albany, Cohoes and Watervliet school districts are, at 3%. So home heating and electricity carry no county tax in Albany County, and the county's published taxable sales for utilities and for fuel dealers are commercial. This matters for the utilities check in @sec-checks and for how fuel wholesalers are read in @sec-apportionment. <https://www.tax.ny.gov/forms/publications/st/pub718r.htm>
+
+**Publication 838, *A Guide to Sales Tax for Automobile Dealers*, and Form DTF-802.** The authority for taxing motor-vehicle sales by the purchaser's residence. <https://www.tax.ny.gov/pdf/publications/sales/pub838.pdf>, <https://www.tax.ny.gov/pdf/current_forms/st/dtf802.pdf>
+
+**Publication 750, *A Guide to Sales Tax in New York State*.** The general description of what is taxable, including the rule that sales for resale are exempt and that repair and maintenance services are taxable while capital improvements are not. Used in reading what the business class contains. <https://www.tax.ny.gov/pdf/publications/sales/pub750.pdf>
+
+**TSB-M-90(6)S.** The 1990 memorandum announcing the Albany City School District's 3% tax on gas, electricity, refrigeration, steam and telephone service within the city. It establishes what the school-district collections measure: utilities *and* telephone service, residential and commercial. (It also records that the county then taxed residential energy at a reduced 1%; Publication 718-R shows the county no longer taxes it at all.) <https://tax.ny.gov/pdf/memos/sales/m90_6s.pdf>
+
+## U.S. Census Bureau
+
+**2022 Economic Census** (API dataset `ecnbasic`). The five-yearly census of business establishments: number of establishments, receipts, employment and annual payroll, by industry, for counties and for *economic places* (incorporated places and towns above a size threshold). Receipts are total receipts at the establishment's location, not taxable sales. Used for the store sharing rule, industry group by industry group, at the finest industry level published for both the city and the county; and for the payroll and establishment-count alternatives to the business sharing rule. Withheld cells are published as zero with a separate flag, which must be read or they masquerade as real zeros. <https://api.census.gov/data/2022/ecnbasic.html>
+
+**Job-location data: LEHD Origin-Destination Employment Statistics (LODES), version 8, Workplace Area Characteristics, New York, 2023.** Jobs counted at the workplace, by census block, from state unemployment-insurance records plus federal employment, with a separate count for each of twenty industry sectors including public administration. Aggregated from blocks to cities, villages and census-designated places through the LODES crosswalk. Used for the business-purchase and utilities sharing rules, with public administration removed because governments are exempt purchasers. Note that state university and state hospital employees are classified by what they do (education, health care), not as public administration. <https://lehd.ces.census.gov/data/>
+
+**American Community Survey, 5-year estimates 2019–2023.** Household counts, aggregate household income, population and vehicles available for Albany city and Albany County. Used for the residence sharing rule and as a ZIP-free cross-check on the vehicle rule. <https://api.census.gov/data/2023/acs/acs5.html>
+
+**2020 Census.** Population by place and county, used for population shares and for the county's distribution formula; population by census block, the block-to-place assignment files and the ZIP-to-block relationship file, used together to split each ZIP code's vehicle registrations between the city and the rest of the county by the population actually living in each part. <https://api.census.gov/data/2020/dec/pl.html>, <https://www2.census.gov/geo/docs/maps-data/data/baf2020/>, <https://www.census.gov/geographies/reference-files/time-series/geo/relationship-files.html>
+
+## Other sources
+
+**NYS DMV, Vehicle, Snowmobile and Boat Registrations** (Open NY `w4pv-hbkt`). Every active registration in the state, about 12.5 million rows, with the registrant's county, postal city and ZIP code, vehicle class and model year. Accessed only through server-side summarizing queries (counts by county, ZIP and state, vehicles only, model years 2024 and later), never downloaded whole. The `city` field is the *postal* city, not the municipality: ZIP 12205 is labelled "ALBANY" but is largely the town of Colonie. That is why registrations are assigned to the city through the block-population weights and never by the city name. `r fp(R$oos_share)` of Albany County registrations carry out-of-state ZIP codes (leasing and fleet companies) and are dropped from both numerator and denominator. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
+
+**Office of the State Comptroller, *Understanding Local Government Sales Tax in New York State: 2020 Update*.** Figure 2 gives each taxing city's rate; Appendix C summarizes every county's sharing arrangement with its municipalities, including Albany County's (60% retained, 40% distributed to cities and towns by census population). <https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
+
+**Agrawal (2015); Baker, Johnson and Kueng (2021).** Peer-reviewed evidence on how shoppers respond to sales-tax differences across a border, used to frame the shopping response.

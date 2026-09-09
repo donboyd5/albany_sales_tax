@@ -1,0 +1,45 @@
+# References {.unnumbered}
+
+Agrawal, D. R. (2015). The tax gradient: Spatial aspects of fiscal competition. *American Economic Journal: Economic Policy, 7*(2), 1–29. <https://www.aeaweb.org/articles?id=10.1257/pol.20120360>
+
+Baker, S. R., Johnson, S., & Kueng, L. (2021). Shopping for lower sales tax rates. *American Economic Journal: Macroeconomics, 13*(3), 209–250. <https://www.aeaweb.org/articles?id=10.1257/mac.20190026>
+
+New York State Department of Taxation and Finance. (2026). *Taxable sales and purchases quarterly data: Beginning sales tax year 2013–2014* [Data set]. <https://data.ny.gov/Government-Finance/Taxable-Sales-And-Purchases-Quarterly-Data-Beginni/ny73-2j3u/about_data>
+
+New York State Department of Taxation and Finance. (2025). *State and local sales tax distributions: Beginning fiscal years ended March 31, 1995* [Data set]. <https://data.ny.gov/Government-Finance/State-and-Local-Sales-Tax-Distributions-Beginning-/5g2s-tnb7>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718: New York State sales and use tax rates by jurisdiction*. <https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-A: Enactment and effective dates of sales and use tax rates*. <https://www.tax.ny.gov/pdf/publications/sales/pub718a.pdf>
+
+New York State Department of Taxation and Finance. (2025). *Publication 718-C: Sales and use tax rates on clothing and footwear*. <https://www.tax.ny.gov/pdf/publications/sales/pub718c.pdf>
+
+New York State Department of Taxation and Finance. (2026). *Publication 718-R: Local sales and use tax rates on residential energy*. <https://www.tax.ny.gov/forms/publications/st/pub718r.htm>
+
+New York State Department of Taxation and Finance. *Publication 750: A guide to sales tax in New York State*. <https://www.tax.ny.gov/pdf/publications/sales/pub750.pdf>
+
+New York State Department of Taxation and Finance. *Publication 838: A guide to sales tax for automobile dealers*. <https://www.tax.ny.gov/pdf/publications/sales/pub838.pdf>
+
+New York State Department of Taxation and Finance. (1990). *TSB-M-90(6)S: The Albany City School District imposes a 3% sales and use tax on utilities and utility services*. <https://tax.ny.gov/pdf/memos/sales/m90_6s.pdf>
+
+New York State Department of Taxation and Finance. (2014). *Tax Bulletin ST-895: Transitional provisions for sales tax rate changes*. <https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/transitional_provisions.htm>
+
+New York State Department of Motor Vehicles. (2026). *Vehicle, snowmobile, and boat registrations* [Data set]. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
+
+N.Y. Tax Law §§ 1116, 1210, 1211, 1214, 1223, 1224.
+
+Office of the New York State Comptroller. (2020). *Understanding local government sales tax in New York State: 2020 update*. <https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
+
+U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171)* [API dataset]. <https://api.census.gov/data/2020/dec/pl.html>
+
+U.S. Census Bureau. (2021). *2020 Census block assignment files*. <https://www2.census.gov/geo/docs/maps-data/data/baf2020/>
+
+U.S. Census Bureau. (2022). *North American Industry Classification System*. <https://www.census.gov/naics/>
+
+U.S. Census Bureau. (2024). *American Community Survey 5-year estimates, 2023* [API dataset]. <https://api.census.gov/data/2023/acs/acs5.html>
+
+U.S. Census Bureau. (2025). *Economic Census 2022: Summary statistics for the U.S., states, and selected geographies* [API dataset `ecnbasic`]. <https://api.census.gov/data/2022/ecnbasic.html>
+
+U.S. Census Bureau. (n.d.). *2020 relationship files: ZCTA to place, ZCTA to block*. <https://www.census.gov/geographies/reference-files/time-series/geo/relationship-files.html>
+
+U.S. Census Bureau, Longitudinal Employer-Household Dynamics. (2025). *LODES version 8: Workplace Area Characteristics, New York, 2023*. <https://lehd.ces.census.gov/data/>

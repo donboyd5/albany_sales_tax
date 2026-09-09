@@ -1,0 +1,138 @@
+# Checking the method where the answer is known {#sec-calibration}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+cv <- R$cv; loo <- R$loo; cal_pref <- R$cal_pref
+```
+
+The division of the county's sales in @sec-apportionment is a construction. It could be checked against Albany only if Albany's base were known, which it is not. But seventeen New York cities outside New York City impose their own sales tax, and for them the answer *is* known: a city's taxable base is its collections divided by its rate. Running the identical construction on those cities and comparing the result with the truth is what this chapter calls **calibration**. It does two things: it corrects Albany's raw figure by what the check reveals, and it sizes the error range from how far the method misses.
+
+## Recovering each city's true base
+
+For a city that preempts part of its county's rate, the Tax Department publishes the cash distributed to the city each year. Dividing by the city's rate gives the city's taxable sales. The rates come from Publications 718 and 718-A, and the arrangement is confirmed by an identity test: in every county, the county's collections plus what its cities preempted equal the county rate applied to the whole county base to within 0.5–2.7%. (An eighteenth taxing city, Oswego, fails that test: its county's collections behave as though no preemption occurs, and the two cannot be reconciled, so it is excluded. Appendix @sec-route-b has the details.)
+
+### One unresolved point about rates {#sec-rates}
+
+For six of the seventeen cities the published sources do not agree on the city's rate. Publication 718-A's percentage column reads 3% for Gloversville, Johnstown, New Rochelle, Norwich, Ogdensburg and Saratoga Springs; the Comptroller's 2020 table gives 2%, 2%, 2.5%, 1.5%, (absent) and 1.5%; and Publication 718-A's *own footnotes*, which state the county's rate inside each city, when subtracted from Publication 718's combined rate, reproduce the Comptroller's figures rather than the column. Ogdensburg was later verified at 3% from its city code and the Tax Department's notice ST-22-1; Saratoga Springs was confirmed at 1.5% by the county treasurer. This is not a claim that Publication 718-A is wrong; it is that its percentage column, read as the city's rate, contradicts its own footnotes and two other Tax Department-sourced documents. The rates on which three sources agree are used. @sec-sensitivity shows that the alternative reading changes the benchmark picture but barely moves Albany's estimate, because the calibration absorbs the shift.
+
+## The check, city by city
+
+@tbl-calibcities shows, for each city, the county base from the taxable-sales table, the city base inferred from its own collections, and the city base the method predicts. The last column is the test: a ratio below 1 means the method over-predicts that city.
+
+```{r}
+#| label: tbl-calibcities
+#| tbl-cap: "The method run on every taxing city, against the base implied by its own collections. County base: average of sales tax years 2022–23 to 2024–25. Collections: average of state fiscal years 2023–2025."
+calib |>
+  left_join(tibble(city = R$route_b$city, r_c = R$route_b$r_c), by = "city") |>
+  transmute(City = city, County = county, `City rate %` = r_c,
+            `County base, $ million` = B_k / 1e6,
+            `City base from collections, $ million` = B_c_obs / 1e6,
+            `City base from the method, $ million` = B_c_pred / 1e6,
+            `Collections ÷ method` = ratio,
+            `Population share` = fp(pop_share), `R (observed)` = R) |>
+  arrange(desc(`Collections ÷ method`)) |>
+  kb(digits = c(0, 0, 1, 0, 0, 0, 3, 0, 2), align = "llrrrrrrr")
+```
+
+Fitting a straight line to the logarithms of the two city-base columns, with standard errors that allow for cities in the same county to move together:
+
+```{r}
+#| label: tbl-fits
+#| tbl-cap: "Calibration fits. The slope says how the true base scales with the predicted one (1 = proportionally). σ is the typical miss, in logs. The last columns apply each fit to Albany."
+cv |> transmute(Specification, n, `Slope` = beta, `se(slope)` = se, `σ (logs)` = sigma, `R²` = R2,
+                `Albany base, $ billion` = B_c / 1e9, `Revenue, $ million` = rev / 1e6) |>
+  kb(digits = c(0, 0, 3, 3, 3, 3, 2, 1), align = "lrrrrrrr")
+```
+
+Across all seventeen cities the typical miss is σ = `r f3(fit$sigma)` in logs. Because the fit is multiplicative, a one-σ miss is **`r sd_up(fit$sigma)` on the high side and `r sd_dn(fit$sigma)` on the low side**; the two are not symmetric. That is well beyond the 0.25 the project plan set as a tripwire. Two of the seventeen misses have verifiable structural causes that do not apply to Albany, discussed below; setting those two aside brings σ to `r f3(fit_pref$sigma)`, a one-σ miss of `r sd_up(fit_pref$sigma)` / `r sd_dn(fit_pref$sigma)`, and that is the fit used. Both fits are reported throughout.
+
+The calibration pulls Albany's raw prediction of \$`r fb(B_pred)` billion down to \$`r fb(est_pref$B_c_central)` billion (a `r fp(1 - est_pref$B_c_central / B_pred, 0)` reduction), because the method over-predicts most cities: the typical observed-to-predicted ratio is `r f3(R$gm_pref)` among the fifteen and `r f3(R$gm_all)` across all seventeen.
+
+## Why the method misses
+
+The ratios in @tbl-calibcities are not noise, and understanding them is the point: the city will receive **collections**, so what matters is not the true economic base but the base that shows up in returns.
+
+### The miss is a county phenomenon
+
+Differences between counties explain **`r fp(R$cty_fe, 0)` of the variation** in the observed-to-predicted ratio. Cities in the same county miss in the same direction by similar amounts: both Fulton County cities come in above prediction, both Cattaraugus County cities far below, all four Westchester cities below 1. Whatever is going on is mostly a property of the county, not of how well the city's own sharing rules resolve. It is not, unfortunately, a predictable property: regressing the county-level ratio on the county's taxable sales per person, the obvious candidate, gives the expected sign but nowhere near significance on eleven counties.
+
+### Four mechanisms
+
+1. **Vendors code sales to the county, not the city.** A vendor selling into a taxing city must use that city's reporting code. Publication 718 warns that using ZIP codes for this "results in a high degree of inaccurate tax reporting." Errors default to the familiar county code, which understates the city's collections and overstates the county's, and the identity test *cannot detect it*, because the total still reconciles. The direct evidence is Ogdensburg, whose code was created on 1 March 2022: its implied share of the county base has climbed every year since (3.01%, 3.38%, 3.45%) while long-established Ithaca's sits flat. A new code takes time to propagate into vendors' systems. **Albany would be a new code too**, which is a first-year issue (@sec-timing).
+
+2. **Capital-intensive activity outside the city that jobs cannot see.** The business rule uses jobs, but a data centre, a factory or a resort makes very large taxable purchases with few employees. St. Lawrence County reports \$88 million in data processing and hosting, essentially none of it in Ogdensburg. Warren County's taxable sales per person are twice the typical county's, with amusement parks and hotels in Lake George and Queensbury rather than Glens Falls. The jobs rule gives the city too much of these county bases. This is the same concern raised in @sec-business-rule.
+
+3. **Economic Census receipts are gross, not taxable.** The store rule takes the city's share of *receipts*; what is being divided is *taxable* sales. Where the city's retail mix is more heavily exempt than the county's (groceries and pharmacy rather than restaurant meals and building materials), the receipts share overstates the taxable share. Auburn is the clearest case: 62% of Cayuga County's retail receipts, 35% of its population, and only 37.5% of its taxable base.
+
+4. **Exempt institutions inside cities.** Hospitals and universities are concentrated in central cities and are largely exempt purchasers, but their jobs are counted in the business rule. This is the objection that removed government from the rule, and it is not fully solved.
+
+All four push the same way, which is why the method over-predicts the typical city by about `r fp(1 - R$gm_all, 0)`.
+
+### City by city
+
+```{r}
+#| label: tbl-citywhy
+#| tbl-cap: "The main reason each city's collections differ from the method's prediction."
+tibble(City = c("Ogdensburg","Salamanca","Glens Falls","Yonkers","Auburn","Olean",
+                "New Rochelle","White Plains","Saratoga Springs","Utica","Mount Vernon",
+                "Norwich","Oneida","Ithaca","Johnstown","Rome","Gloversville"),
+  Reason = c(
+    "Jurisdiction code created 1 March 2022; implied share still rising (3.01% to 3.45%). Canadian cross-border traffic, which the city depends on, fell sharply over the same years. County base also carries about $88 million of data-centre activity in Massena, outside the city.",
+    "The whole city sits on the Seneca Nation's Allegany Territory (Census area 0080). Retail there is largely outside the state and local base under the 1842 Buffalo Creek Treaty and 20 NYCRR 529.9, while the Economic Census counts the receipts.",
+    "Warren County's base is Lake George and Queensbury, not Glens Falls. The county treasurer reports 2024 sales tax of $12.1 million in Queensbury, $6.4 million in Bolton and $4.2 million in Lake George against $5.1 million in the city: a city share of about 13%, almost exactly the 12.6% observed and well below the 19.7% predicted.",
+    "Dense residential city in a county whose retail and commerce sit in central and northern Westchester. Lowest R of any taxing city in the state.",
+    "Holds 62% of Cayuga County's retail receipts but 35% of its population and only 37.5% of the taxable base: the clearest case of gross receipts overstating the taxable share. Anomalous wholesale activity (paper products) outside the city.",
+    "Regional retail centre, but the county base includes the Ellicottville resort area and the Salamanca tribal complex, neither in Olean.",
+    "Close to the norm; Westchester county-level effect.",
+    "Close to the norm; a genuine regional commercial centre, so the rules work.",
+    "Close to the norm once the rate is right (1.5%, confirmed by the county treasurer). County base inflated by GlobalFoundries-area activity in Malta, outside the city.",
+    "Close to the norm. Oneida County's base is split between Utica and Rome.",
+    "Close to the norm.",
+    "Close to the norm. Chenango County exempts clothing under $110 outside the city of Norwich only, so city and county bases differ in composition.",
+    "Dominant commercial centre of a small rural county; the rules slightly understate that dominance.",
+    "Students concentrated in the city generate retail that neither the residence nor the jobs rule sees; Cornell and Ithaca College are exempt purchasers but their students are not.",
+    "Small city dominating a small county, as with Gloversville.",
+    "Oneida County; the method splits the county between Rome and Utica more evenly than collections do.",
+    "Fulton County is small and its two cities dominate its commerce; the suburb-weighted rules understate them.")) |>
+  kb(align = "ll")
+```
+
+## Two cities set aside, and why that is defensible
+
+Two of these reasons are verified from independent sources and demonstrably do not apply to Albany: Salamanca's tribal territory, and Ogdensburg's brand-new code combined with a border-traffic collapse. Dropping those two, and only those two, transforms the fit:
+
+```{r}
+#| label: tbl-twofits
+#| tbl-cap: "The fit with and without the two structural exclusions."
+bind_rows(
+  tibble(Calibration = "All 17 cities", n = fit$n, Slope = fit$beta, `se(slope)` = fit$se_beta,
+         `σ (logs)` = fit$sigma, `R²` = fit$r2, `Typical ratio` = R$gm_all,
+         `Albany base, $ billion` = est$B_c_central / 1e9, `Revenue, $ million` = REV_all / 1e6,
+         `68% range, $ million` = sprintf("%s – %s", fm(rev(est$lo68)), fm(rev(est$hi68)))),
+  tibble(Calibration = "Excluding Salamanca and Ogdensburg (used)", n = fit_pref$n,
+         Slope = fit_pref$beta, `se(slope)` = fit_pref$se_beta, `σ (logs)` = fit_pref$sigma,
+         `R²` = fit_pref$r2, `Typical ratio` = R$gm_pref,
+         `Albany base, $ billion` = est_pref$B_c_central / 1e9, `Revenue, $ million` = REV / 1e6,
+         `68% range, $ million` = sprintf("%s – %s", fm(rev(est_pref$lo68)), fm(rev(est_pref$hi68))))) |>
+  kb(digits = c(0, 0, 3, 3, 3, 3, 3, 2, 1, 0), align = "lrrrrrrrrr")
+```
+
+This is a judgment, and it is the one place in the book where dropping data changes the answer materially. The sequence should be stated honestly: the two cities were noticed *because* they were the largest misses, and the reasons were then investigated. What makes the exclusions defensible is not the order of discovery but that the reasons come from sources outside this analysis (the Census block files for Salamanca; the Tax Department's notice and the city code for Ogdensburg) and that neither transfers to Albany. Ogdensburg's case is the weaker of the two, because part of its evidence (the rising share) is a pattern in the same data.
+
+The check a reader can audit is to refit dropping each city in turn and see which removals actually change the typical miss:
+
+```{r}
+#| label: tbl-loo
+#| tbl-cap: "Leave-one-out: the fit with each city dropped in turn."
+loo |> mutate(`Revenue, $ million` = rev(B_c) / 1e6) |>
+  transmute(`City dropped` = dropped, n, Slope = beta, `σ (logs)` = sigma, `Revenue, $ million`) |>
+  arrange(`σ (logs)`) |>
+  kb(digits = c(0, 0, 3, 3, 1), align = "lrrrr")
+```
+
+Only the two excluded cities move σ appreciably; removing any other single city leaves it between `r f3(min(loo$sigma[!loo$dropped %in% c("(none)", names(R$CALIB_EXCLUDE))]))` and `r f3(max(loo$sigma))`. The exclusions are not one arbitrary pair among many. **Both fits are carried through everything that follows**, and a reader who rejects the exclusions should read \$`r fm(REV_all)` million with a 68% range of \$`r fm(rev(est$lo68))`–`r fm(rev(est$hi68))` million instead.
+
+## The shopping response
+
+The add-on makes the rate 8.5% inside the city against 8.0% outside, a 0.46% change in the tax-inclusive price at the city line. Vehicles are unaffected (taxed by residence). Business purchases, utilities and most services do not move. Only the over-the-counter classes, `r fp(R$store_share_of_base, 0)` of the base, are mobile at all, and only near the boundary. The central estimate assumes no loss. The research on cross-border shopping (Agrawal 2015; Baker, Johnson and Kueng 2021) establishes that responses exist and concentrate near rate boundaries, but neither study measures a half-point difference inside one county, so the lower cases in @sec-sensitivity are illustrative. Note the units: a 3% loss of base against a 6.25% rise in the tax is an elasticity of about 0.5 with respect to the *rate*, but against the tax-inclusive price, which rises only 0.46%, it is an elasticity of about 6.5, which would be a large response, not a modest one.

@@ -1,0 +1,43 @@
+# Reproducing this book {#sec-reproducing}
+
+Everything in this book is computed from cached public data by R code in the repository at <https://github.com/donboyd5/albany_sales_tax>. Nothing is typed in by hand except two lookup tables in `data/crosswalk/`, each row of which cites its source.
+
+## Steps
+
+1. Clone the repository and restore the R environment with `renv::restore()`.
+2. Obtain a free Census API key at <https://api.census.gov/data/key_signup.html> and put it in `.Renviron` as `CENSUS_API_KEY=...`. The key is read from the environment and never written anywhere.
+3. Run the data pulls, which are skipped if the cached files in `data/raw/` are present:
+
+```bash
+make pulls
+```
+
+4. Compute every result the book reports and save them to `data/processed/results.rds`:
+
+```bash
+make results
+```
+
+5. Render the book:
+
+```bash
+make render
+```
+
+## How the code is organized
+
+| File | Role |
+|---|---|
+| `R/00_setup.R` | Libraries, paths, key guard, caching and download helpers |
+| `R/01_pull_dtf.R` | Tax Department taxable sales and distributions (server-side summarized) |
+| `R/02_pull_census_ec.R` | 2022 Economic Census for economic places and counties, with suppression flags |
+| `R/03_pull_acs_lodes_dmv.R` | Population, American Community Survey, job-location data, DMV registrations, block and ZIP files |
+| `R/04_allocate.R` | Sourcing classes, sharing rules, the division of a county base for any city, customer-type tags |
+| `R/05_calibrate.R` | Recovering the seventeen cities' bases; calibration fits and diagnostics |
+| `R/06_results.R` | Computes every number in the book into one results file |
+| `R/99_check_urls.R` | Checks that every cited URL still resolves |
+| `chapters/`, `appendices/` | The book's text; each chapter reads the results file |
+| `docs/data-layouts.md` | Verified column lists and surprises for every dataset |
+| `docs/meta_notes.md` | Notes for a reviewer: process history, dead ends, what to check |
+
+Every raw pull is recorded in `data/raw/MANIFEST.csv` with its source URL, the time it was pulled and a SHA-256 fingerprint.

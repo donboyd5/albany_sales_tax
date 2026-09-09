@@ -1,46 +1,47 @@
----
-title: "Revenue from a 0.5% City of Albany add-on sales tax"
-toc: false
-number-sections: false
----
+# Summary {.unnumbered}
 
 ```{r}
 #| include: false
-library(here)
-source(here("R", "04_allocate.R"))
-ALB <- list("Albany city, New York", "3601000", "36001", "ALBANY", "ALBANY")
-appo <- do.call(apportion_city, ALB)
-cal  <- build_calibration()
-fit  <- fit_calibration(cal |> filter(!city %in% names(CALIB_EXCLUDE)))
-est  <- apply_calibration(fit, sum(appo$B_cg, na.rm = TRUE))
-phi  <- mean(albany_phi()$phi)
-rev  <- function(b) 0.005 * b * (1 - phi) / 1e6
+source(here::here("chapters", "_common.R"))
 ```
 
-A reproducible estimate of what the City of Albany, New York would raise from a
-0.5 percentage-point sales and use tax layered on the existing 8% — on the same
-base Albany County taxes at 4%, with no preemption and no change to county
-distributions.
+The City of Albany has no sales tax of its own. This book estimates what the city would collect from a **half-point (0.5%) city sales tax added on top of the existing 8%** that everyone in Albany County already pays. The county's 4% tax and its distributions to towns and cities would not change. Inside the city the combined rate would be 8.5%; elsewhere in the county it would stay 8%.
 
-::: {.callout-note}
-## Headline
-**About \$`r sprintf("%.1f", rev(est$B_c_central))` million a year**, with a
-68% range of \$`r sprintf("%.1f", rev(est$lo68))`–`r sprintf("%.1f", rev(est$hi68))` million
-and a 90% range of \$`r sprintf("%.1f", rev(est$lo90))`–`r sprintf("%.1f", rev(est$hi90))` million,
-at 2022–2025 activity levels. The memo gives a planning range built from every specification tried.
+::: {.keypoint}
+**The estimate: about \$`r fm(REV)` million a year** at `r R$years_label` levels of economic activity, with a reasonable planning range of **\$`r R$PLAN_LO`–`r R$PLAN_HI` million**. A prudent single figure for a budget is **\$`r R$BUDGET` million**, and the first full year would likely come in 10 to 20 percent below that while businesses' systems catch up with a new tax code.
 :::
 
-## Documents
+## What the question turns on {.unnumbered}
 
-| | |
+A half-point tax raises half a percent of whatever is sold taxably inside the city. So everything depends on one number that nobody publishes: **the city's taxable sales**. The State Tax Department publishes taxable sales for Albany *County* (about \$`r fb(B_k)` billion a year) but not for the city, because the city has no tax to report on.
+
+This book estimates the city's share of the county's taxable sales by:
+
+1. Sorting the county's taxable sales, industry by industry, into five groups according to *where the tax law says each kind of sale is taxed*: at the store, at the buyer's business, at the car buyer's home, at the delivery address, or where the utility is used.
+2. Measuring the city's share of each group with the public data that best matches that rule: where the stores are, where the private-sector jobs are, where car owners live, where household income is.
+3. Checking the whole procedure against the seventeen New York cities that already have their own sales tax, where the answer is known from their collections, and correcting the Albany figure by what that check reveals.
+
+The result is a city base of about **\$`r fb(est_pref$B_c_central)` billion, or `r fp(s_cal)` of the county's taxable sales**, against the city's `r fp(pop)` share of the county's population. Half a percent of that, less a small administrative wedge, is the revenue figure above.
+
+## Two things a reader should take away {.unnumbered}
+
+**The add-on beats the conventional alternative.** Seventeen New York cities tax by *preempting* part of their county's rate, which means giving up their share of the county's distributions. For Albany that trade would lose money: the city's population-based share of county collections is worth about \$`r fm(R$status_quo)` million a year, and preempting 1.5 points would raise only \$`r fm(0.015 * est_pref$B_c_central)` million. The add-on leaves the distribution untouched, which is the whole case for it (@sec-preemption).
+
+**The largest uncertainty is not a modelling choice; it is how well any method of this kind predicts a city's collections.** On the cities where it can be checked, the method misses by roughly `r sd_up(fit_pref$sigma)` on the high side or `r sd_dn(fit_pref$sigma)` on the low side in a typical case. That miss sets the range. Within the method, the choice that matters most is how sales to businesses are divided between the city and its suburbs, and @sec-apportionment is devoted to it.
+
+## How this book is organized {.unnumbered}
+
+| Chapter | What it answers |
 |---|---|
-| [**Memo: policy option, method, data, findings**](analysis/memo.html) | The write-up — goals, data, method, results with ranges, alternative methods, sensitivity analysis, recommendations. Also available as [Markdown](https://github.com/donboyd5/albany_sales_tax/blob/main/docs/albany-halfpct-memo.md). |
-| [**Technical report: the estimate**](analysis/city-halfpct-revenue.html) | Apportionment of the county base by NAICS group, calibration against the 17 New York cities whose base is observed, error band, validations, sensitivity, timing, preemption comparison. |
-| [**Route B benchmark**](analysis/route-b.html) | How concentrated the county sales tax base is inside each of New York's preempting cities — the empirical benchmark the estimate is judged against. |
+| @sec-policy | What exactly is being proposed, and how it differs from what other cities do |
+| @sec-approach | How the estimate is built, in plain terms |
+| @sec-data | Where every number comes from |
+| @sec-apportionment | How the county's taxable sales are divided between the city and the rest of the county, in detail |
+| @sec-calibration | How the method was checked against cities whose answer is known, and why it misses |
+| @sec-results | The estimate, its ranges, and a planning figure |
+| @sec-alternatives | What simpler and different methods give |
+| @sec-sensitivity | What changes when each assumption is varied |
+| @sec-checks | Validations, the preemption comparison, and first-year timing |
+| @sec-limitations | What could be wrong, and what to do next |
 
-## Reproducing it
-
-Source, cached data pulls with SHA-256 provenance, and the verified schema notes
-for every dataset are in the
-[GitHub repository](https://github.com/donboyd5/albany_sales_tax). Clone,
-`renv::restore()`, add a Census API key to `.Renviron`, and `quarto render`.
+Technical readers will find the original technical report and the benchmark study of New York's taxing cities in the appendices, along with a glossary. Every number in this book is computed from cached public data by code in the [repository](https://github.com/donboyd5/albany_sales_tax); nothing is typed in by hand except two small lookup tables, each row of which cites its source.

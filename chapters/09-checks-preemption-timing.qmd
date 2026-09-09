@@ -1,0 +1,40 @@
+# Checks, the preemption comparison, and timing {#sec-checks}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+```
+
+## Validations
+
+| # | Check | Result |
+|---|---|---|
+| 1 | 4% of the county base against the county's distributions, each year | Cash within `r fp(min(-R$phi_tab$phi))` to `r fp(max(-R$phi_tab$phi))` of 4% of base; passes |
+| 2 | Economic Census: sum of Albany County places against the county total, retail | Places cover 99.2%; residual 0.8% |
+| 3 | Utilities: the jobs rule against the directly measured school-district base | Rule `r fp(R$a_wxp)` vs measured `r fp(R$a_util)` (an upper bound; see below). Using the measured share changes revenue by \$`r fm(abs(R$REV_util_meas - REV))` million |
+| 4 | Motor vehicles: DMV resident share against household-income share | `r fp(R$a_mv)` vs `r fp(R$a_inc)`; DMV lower, consistent with lower urban vehicle ownership |
+| 5 | Calibration | Slope `r f3(fit_pref$beta)` (se `r f3(fit_pref$se_beta)`); typical miss `r f3(fit_pref$sigma)` on the preferred sample, `r f3(fit$sigma)` on all seventeen |
+| 6 | Preemption identity across the eleven calibration counties | County collections plus preempted amounts equal the county rate on the whole base to within 0.5–2.7% |
+| 7 | Albany's concentration ratio against the seventeen observed cities | `r f2(R_cal)`, within `r f2(min(route_b$R))`–`r f2(max(route_b$R))`, near the median `r f2(median(route_b$R))` |
+
+Validation 3 is the only place a sharing rule can be tested against a direct observation of an Albany city base. The measured share (`r fp(R$a_util)`) sits above the private-jobs rule (`r fp(R$a_wxp)`) and close to the all-jobs figure (`r fp(R$a_work)`). That is not evidence for counting government jobs: the State's own utility purchases are exempt and appear in neither the school-district collections nor the county's taxable sales. Nor is the comparison clean. The school district taxes residential gas and electricity at its full 3% while, per Publication 718-R, Albany County does not tax residential energy at all, so the numerator includes a residential component the denominator lacks and the measured share is an *upper bound* of the comparable figure. What it does suggest is that taxable commercial load, which concentrates where the office buildings are, is at least as city-concentrated as the jobs rule says, which is one reason the alternatives in @sec-apportionment that lower the business share are read as a range rather than as corrections.
+
+## The preemption comparison {#sec-preemption}
+
+Albany County distributes 40% of its collections to cities and towns by census population (Comptroller 2020, Appendix C). The city's receipt under the status quo is therefore 0.40 × `r fp(pop)` × county collections. Three-year averages:
+
+| Option | \$ million a year |
+|---|---:|
+| Status quo: 0.40 × population share × county collections of \$`r fm(R$C_k)` million | `r fm(R$status_quo)` |
+| Preempt 1.5 points: 1.5% × city base | `r fm(0.015 * est_pref$B_c_central)` |
+| **Add on 0.5 points (this book)** | **`r fm(REV)`** |
+
+Preempting at the standard 1.5 points would *lose* about \$`r fm(R$PREEMPT_LOSS)` million a year against the existing distribution. The reason is structural: preemption pays only if the city's share of the county base exceeds its population share by a factor of 0.40 × 4 ÷ 1.5 = 1.067, and Albany's R is `r f2(R_cal)`. A city has to be a genuine retail concentrator for preemption to work, and Albany, with its county's retail on Wolf Road and at Crossgates, is not one. The add-on sidesteps the trade-off entirely because it leaves the distribution untouched. The add-on would add \$`r fm(REV)` million on top of the \$`r fm(R$status_quo)` million the city already receives, an increase of `r fp(REV / R$status_quo, 0)`.
+
+## Timing and first-year cash {#sec-timing}
+
+Local rate changes take effect on 1 March, 1 June, 1 September or 1 December, with 90 days' notice (Tax Law §1210(d), §1211), and transitional rules apply to contracts that straddle the change (Tax Bulletin ST-895). Distributions lag liability by one to two months, with the first two months of each quarter paid as estimates.
+
+**A new jurisdiction code collects less than its base implies at first.** Ogdensburg's implied share of its county base was `r fp(R$ramp$rel_to_latest[1], 0)` of its third-year level in year one and `r fp(R$ramp$rel_to_latest[2], 0)` in year two, and year three may not yet be the end of the climb (@sec-calibration). That is one city, so it can frame a discount but not fix it: **10–20% below steady state in the first full year, tapering in the second**, is the range consistent with it. Albany would be a new code. Applied to the central estimate, the first *full* year is more like \$`r fm(REV * 0.80)`–`r fm(REV * 0.90)` million before the cash-lag effect below, and the two effects compound.
+
+On a calendar fiscal year with an average 1.5-month cash lag, a **1 March** start yields roughly \$`r fm(REV * 8.5 / 12)` million of cash in the first year (ten months' liability, about 8.5 months' cash) and the full amount from the second. A **1 December** start yields essentially nothing in the first calendar year. If revenue in a particular budget year is the objective, the start date matters as much as most of the modelling choices in @sec-sensitivity.

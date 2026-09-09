@@ -518,3 +518,28 @@ preempting city the combined rate and the **City Portion of the Local Rate**,
 sourced to DTF. This is exactly `r_c`, and it is the authority used for §3b
 above. The report also documents each county's distribution formula, which
 Phase 3 needs to verify the 0.40 factor in Albany's break-even calculation.
+
+
+---
+
+## 12. Publication 718-R — local rates on residential energy (verified 2026-09-09)
+
+<https://www.tax.ny.gov/forms/publications/st/pub718r.htm> — HTML page, HTTP 200
+(the `.pdf` path returns 404). Edition "(5/26)", effective 1 June 2026.
+
+Structure: Part 1 lists jurisdictions taxing residential gas, propane,
+electricity and steam; Part 2 lists those taxing residential coal, fuel oil and
+wood. "Localities or school districts not listed in this publication do not
+impose a local tax on residential energy sources and services."
+
+**Albany County appears in neither part.** Part 1 lists "Albany School District
+(Albany County) 3", "Cohoes School District (Albany County) 3" and "Watervliet
+School District (Albany County) 3". Consequences:
+
+- The county's published taxable sales for NAICS 22 (utilities) and 4247
+  (petroleum wholesalers, i.e. heating oil) contain no residential energy.
+- The Albany City School District's collections DO include residential
+  energy at 3%, so `ACSD / 0.03` over county NAICS 22+517 overstates the
+  comparable city share; the 48.9% measured share is an upper bound.
+- TSB-M-90(6)S's statement that the county taxed residential energy at 1%
+  described 1990 and is no longer current.

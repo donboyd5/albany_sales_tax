@@ -1,0 +1,55 @@
+# The policy option {#sec-policy}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+```
+
+## Sales tax in Albany County today
+
+Everyone buying something taxable in Albany County pays a combined **8%** sales tax: 4% goes to New York State and 4% to Albany County. The City of Albany has no sales tax of its own.
+
+The county does not keep all of its 4%. It retains 60% and distributes the other 40% to its cities and towns in proportion to their populations from the last decennial census (Office of the State Comptroller, 2020, Appendix C). The City of Albany's share of that distribution is therefore fixed by the number of people who live in it, not by the amount of shopping and business that takes place inside it.
+
+## What is proposed
+
+The option costed in this book is an **add-on**: a 0.5 percentage-point city tax layered on the existing 8%, so that the combined rate becomes **8.5% inside the city** and stays 8% everywhere else in the county. Three features define it:
+
+- **The county is untouched.** Its 4% rate and its population-based distributions stay exactly as they are. The city's existing distribution share is not given up.
+- **Same base as the county.** The city tax applies to the same goods and services the county taxes. Albany County does not exempt clothing under \$110, as some counties do (Publication 718-C), so no adjustment to the base is needed.
+- **Taxed where the sale lands.** The ordinary sourcing rules apply: a car is taxed by where the buyer lives, a delivered sofa by the delivery address, a restaurant meal by the restaurant. This matters for the estimate because it determines which sales count as the city's.
+
+## How this differs from what other cities do
+
+Seventeen New York cities outside New York City have their own sales tax today, and every one of them does it by **preemption**: the city imposes a rate and the county's rate falls by the same amount inside the city. The combined rate does not rise. In exchange, the city forfeits its share of the county's distribution. That trade pays off only for a city whose taxable sales are unusually concentrated inside its borders. @sec-preemption shows that for Albany, whose shopping has largely moved to Wolf Road in Colonie and to Crossgates in Guilderland, it would lose money.
+
+### Yonkers: the one place with a half-point step at a city line
+
+One New York city already has a combined rate half a point above its county's. Publication 718 gives 8⅜% for Westchester County and for its cities of Mount Vernon, New Rochelle and White Plains, but 8⅞% for Yonkers:
+
+| | State | Transit district surcharge | County | City | Combined |
+|---|---:|---:|---:|---:|---:|
+| Westchester outside Yonkers | 4% | ⅜% | 4% | — | 8⅜% |
+| Inside Yonkers | 4% | ⅜% | 0% | 4½% | 8⅞% |
+
+The ⅜% is the Metropolitan Commuter Transportation District surcharge, which applies throughout Westchester and is not what makes Yonkers different. Yonkers fully preempts the county's 4% and imposes 4½%; the extra half point is the city's rate exceeding the county's. Yonkers is the only published case of a half-point rate difference at a city boundary in the state, and it is used in this book for what such a difference looks like in practice: it has been administered by the Tax Department for years, and any shopping that crosses the line has already happened there.
+
+**Yonkers is an economic analogy, not a legal precedent.** Its 4½% is a 3% preempting rate plus 1½ points of "additional" and "special" rates granted by specific state legislation, all layered on top of full preemption. Westchester collects nothing inside Yonkers and, per the Comptroller's Appendix C, distributes shared revenue only to its towns, villages and its two non-preempting cities, Rye and Peekskill. Every city-specific rate in Publication 718-A that sits above the standard structure (Yonkers, Mount Vernon, New Rochelle, White Plains) has that shape. What Albany would be asking for, keeping the full population-based share of the county's distribution *and* levying a standalone rate on the general base, has no example among New York's general sales taxes that this analysis could find.
+
+The nearest precedents are narrow-base city taxes that coexist with an unpreempted county rate: Niagara Falls, Lockport and Long Beach tax admissions, restaurant meals, hotel occupancy or utilities; Newburgh and Port Jervis tax consumer utilities; and the Albany City School District's own 3% utility tax is exactly such a layered tax inside Albany. Those show that layering without preemption exists, but on selected services, not on the general base.
+
+### Why not simply preempt?
+
+A legislator's first question will be why the city does not exercise the preemption right it already holds under Tax Law §1224. @sec-preemption is the answer: with Albany's share of the county's taxable sales below its share of the population, preempting 1½ points would forfeit more in county distributions than it raises, about \$`r fm(R$PREEMPT_LOSS)` million a year on these estimates. The add-on is not a way around preemption. It is the only structure under which a city in Albany's position gains anything at all.
+
+## What this book does not do
+
+It does not address the legal route to authorization beyond the observation that a special act of the Legislature would be needed, as it was for every existing add-on; whether the Legislature would grant one to a non-preempting city is a political question. And it does not model who ultimately bears the tax or its broader economic effects beyond a simple allowance for shoppers crossing the city line.
+
+## Goals of the analysis
+
+1. Estimate the annual revenue from the add-on, with an honest range.
+2. Estimate the city's taxable sales, the quantity everything depends on, with a range, since no one publishes it.
+3. Establish where Albany sits relative to the New York cities that already tax, so the estimate can be judged against real cases rather than only against its own logic.
+4. Compare the add-on with what the city receives today from its population-based share of the county tax, and with the conventional alternative of preemption, using the same numbers.
+5. Make every figure reproducible from public data.

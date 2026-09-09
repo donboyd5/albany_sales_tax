@@ -98,7 +98,12 @@ build_naics_crosswalk <- function(path = file.path(PATHS$crosswalk, "naics_sourc
   out <- groups |>
     mutate(sourcing_class = naics_class(naics_industry_group),
            rationale      = CLASS_RATIONALE[sourcing_class],
-           source         = CLASS_SOURCE[sourcing_class])
+           source         = CLASS_SOURCE[sourcing_class],
+           customer_type  = ifelse(sourcing_class == "business",
+                                   business_customer_type(naics_industry_group), NA),
+           customer_rationale = ifelse(sourcing_class == "business",
+                                   CUSTOMER_RATIONALE[business_customer_family(naics_industry_group)], NA),
+           customer_source = ifelse(sourcing_class == "business", CUSTOMER_SOURCE, NA))
   write_csv(out, path)
   out
 }
@@ -225,7 +230,8 @@ albany_measured_utility_share <- function(fys = ANALYSIS_FYS) {
 ##   county_fips5   e.g. "36001"
 ##   dtf_juris      e.g. "ALBANY"
 ##   dmv_county     e.g. "ALBANY"
-BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll", "lodes_ex_exempt")
+BUSINESS_ALLOCATORS <- c("lodes_ex_pubadmin", "lodes", "ec_payroll", "lodes_ex_exempt",
+                         "ec_estab", "residence")
 
 apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
                            dmv_county, fys = ANALYSIS_FYS,
@@ -248,7 +254,9 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
     lodes_ex_pubadmin = work_share_ex_pubadmin(place_fips, county_fips5),
     lodes_ex_exempt   = work_share_ex_exempt(place_fips, county_fips5),
     lodes             = work_share(place_fips, county_fips5),
-    ec_payroll        = ec_payroll_share(ec_place_name, county_fips3))
+    ec_payroll        = ec_payroll_share(ec_place_name, county_fips3),
+    ec_estab          = ec_estab_share(ec_place_name, county_fips3),
+    residence         = resid_share(place_fips5, county_fips3, resid_var))
   a_resid <- resid_share(place_fips5, county_fips3, resid_var)
   a_mv    <- mv_share(place_fips, dmv_county)
 
@@ -282,7 +290,9 @@ apportion_city <- function(ec_place_name, place_fips, county_fips5, dtf_juris,
           lodes_ex_pubadmin = "LODES employment excl. public admin",
           lodes = "LODES total employment",
           ec_payroll = "EC payroll",
-          lodes_ex_exempt = "LODES employment excl. govt, education, health")[business_allocator],
+          lodes_ex_exempt = "LODES employment excl. govt, education, health",
+          ec_estab = "EC establishments",
+          residence = "ACS household income (residence)")[business_allocator],
         sourcing_class == "motor_vehicle"              ~ "DMV resident registrations",
         sourcing_class == "delivered_split"            ~ paste0("50% ", store_method,
                                                                 " / 50% ACS ", resid_var),
@@ -357,7 +367,8 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
                               business_allocator = BUSINESS_ALLOCATORS,
                               ecommerce_frac = 0,
                               mv_include_4413 = FALSE,
-                              mv_allocator = c("dmv", "acs_vehicles")) {
+                              mv_allocator = c("dmv", "acs_vehicles"),
+                              business_by_customer = FALSE) {
   business_allocator <- match.arg(business_allocator)
   mv_allocator <- match.arg(mv_allocator)
   d <- apportion_city(ec_place_name, place_fips, county_fips5, dtf_juris, dmv_county,
@@ -379,5 +390,156 @@ apportion_variant <- function(ec_place_name, place_fips, county_fips5, dtf_juris
     d <- d |> mutate(a_g = ifelse(naics_industry_group %in% ECOMMERCE_PRONE,
                                   (1 - ecommerce_frac) * a_g + ecommerce_frac * a_resid, a_g))
   }
+  if (business_by_customer) {
+    ## groups whose customers are mostly households follow residence; mixed
+    ## groups are split evenly; mostly-business groups keep the employment share
+    d <- d |> mutate(ct = ifelse(sourcing_class == "business",
+                                 business_customer_type(naics_industry_group), NA),
+                     a_g = case_when(ct == "household" ~ a_resid,
+                                     ct == "mixed"     ~ 0.5 * a_g + 0.5 * a_resid,
+                                     TRUE              ~ a_g))
+  }
   sum(d$B_kg * d$a_g, na.rm = TRUE)
+}
+
+
+## =========================================================================
+## 6. Inside the business class: who is the customer?
+## =========================================================================
+## The DTF table classifies taxable sales by the VENDOR's industry. The
+## "business" class is every vendor industry that is not a store, a vehicle
+## dealer, a utility or a delivered-goods retailer -- it is a residual, and its
+## customers are not all businesses. This section tags each group by who its
+## taxable customers mostly are, so that the chapter on apportionment can show
+## the composition and so that a variant can allocate the household-facing part
+## by residence instead of by employment. The tags are a reading of the NAICS
+## definitions together with what New York actually taxes (Publication 750;
+## sales for resale exempt; capital improvements exempt but repair and
+## maintenance taxable; residential energy exempt in Albany County per
+## Publication 718-R). They are judgments and are presented as such.
+
+## 3-digit "family" used for the rationale text and the chapter's tables.
+business_customer_family <- function(g) {
+  s2 <- substr(g, 1, 2); s3 <- substr(g, 1, 3)
+  dplyr::case_when(
+    s2 == "42"                               ~ "wholesale",
+    g == "3341"                              ~ "mfg_computers",
+    g %in% c("3121", "3399", "3118", "3115") ~ "mfg_consumer",
+    s2 %in% c("31", "32", "33")              ~ "mfg_other",
+    g == "2361"                              ~ "constr_residential",
+    s3 == "238"                              ~ "constr_specialty",
+    s2 == "23"                               ~ "constr_other",
+    g == "5415" | g == "5182" | g == "5199"  ~ "it_business",
+    g %in% c("5132", "5192", "5131", "5122") ~ "info_mixed",
+    g %in% c("5121", "5161", "5162")         ~ "info_consumer",
+    s2 == "51"                               ~ "info_mixed",
+    s2 == "52"                               ~ "finance",
+    g == "5311"                              ~ "real_estate_lessors",
+    s2 == "53"                               ~ "real_estate_other",
+    g %in% c("5414", "5419")                 ~ "prof_mixed",
+    s2 == "54"                               ~ "prof_business",
+    s2 == "55"                               ~ "management",
+    g %in% c("5616", "5617", "5621", "5622", "5629") ~ "admin_mixed",
+    g == "5615"                              ~ "admin_consumer",
+    s2 == "56"                               ~ "admin_business",
+    s2 %in% c("61", "62")                    ~ "edu_health",
+    s2 == "81"                               ~ "orgs_households",
+    g %in% c("4853", "4859", "4871", "4872", "4879", "4884", "4885") ~ "transport_consumer",
+    s2 %in% c("48", "49")                    ~ "transport_business",
+    s2 == "11"                               ~ "agriculture",
+    s2 == "21"                               ~ "mining",
+    s2 == "92"                               ~ "government",
+    TRUE                                     ~ "unclassified"
+  )
+}
+
+CUSTOMER_TYPE_OF_FAMILY <- c(
+  wholesale = "business", mfg_computers = "mixed", mfg_consumer = "mixed", mfg_other = "business",
+  constr_residential = "household", constr_specialty = "mixed", constr_other = "business",
+  it_business = "business", info_mixed = "mixed", info_consumer = "household",
+  finance = "mixed", real_estate_lessors = "mixed", real_estate_other = "business",
+  prof_mixed = "mixed", prof_business = "business", management = "business",
+  admin_mixed = "mixed", admin_consumer = "household", admin_business = "business",
+  edu_health = "household", orgs_households = "household",
+  transport_consumer = "household", transport_business = "business",
+  agriculture = "mixed", mining = "business", government = "household", unclassified = "mixed")
+
+business_customer_type <- function(g) unname(CUSTOMER_TYPE_OF_FAMILY[business_customer_family(g)])
+
+CUSTOMER_FAMILY_LABEL <- c(
+  wholesale = "Wholesale trade (42)",
+  mfg_computers = "Computer and peripheral manufacturing (3341)",
+  mfg_consumer = "Consumer-facing manufacturing (beverages, bakeries, miscellaneous goods)",
+  mfg_other = "Other manufacturing (31-33)",
+  constr_residential = "Residential building construction (2361)",
+  constr_specialty = "Specialty trade contractors (238)",
+  constr_other = "Nonresidential and heavy construction (2362, 237)",
+  it_business = "IT services, data processing and hosting (5415, 5182, 5199)",
+  info_mixed = "Software and other publishers, web portals (5131, 5132, 5192, other 51)",
+  info_consumer = "Movies, broadcasting and streaming (5121, 516)",
+  finance = "Finance and insurance (52)",
+  real_estate_lessors = "Lessors of real estate, incl. self-storage (5311)",
+  real_estate_other = "Real estate agents and managers (5312, 5313)",
+  prof_mixed = "Design and other professional services, incl. veterinary and photography (5414, 5419)",
+  prof_business = "Legal, accounting, engineering, IT consulting, advertising, other professional (54)",
+  management = "Management of companies (55)",
+  admin_mixed = "Building services, security, waste (5616, 5617, 562)",
+  admin_consumer = "Travel arrangement (5615)",
+  admin_business = "Office, facilities, employment and business support services (561)",
+  edu_health = "Education and health care (61, 62)",
+  orgs_households = "Membership organizations, private households (813, 814)",
+  transport_consumer = "Passenger transport, sightseeing, towing (485, 487, 4884)",
+  transport_business = "Freight, rail, air, couriers, warehousing (48-49)",
+  agriculture = "Agriculture (11)",
+  mining = "Mining and quarrying (21)",
+  government = "Government other than 9261 (92)",
+  unclassified = "Unclassified (99)")
+
+CUSTOMER_RATIONALE <- c(
+  wholesale = "Sales for resale are exempt, so a wholesaler's taxable sales go to end users: contractors, offices, restaurants, institutions and fleets. Residential heating oil (4247) is exempt in Albany County (Pub 718-R), so that group's taxable sales are commercial too.",
+  mfg_computers = "Computer makers sell direct to businesses and, through online stores, to households.",
+  mfg_consumer = "Breweries, bakeries and makers of miscellaneous goods sell at the factory door and online to households as well as to businesses.",
+  mfg_other = "Manufacturers' direct taxable sales are of equipment, materials and printed matter to other businesses; sales to resellers are exempt.",
+  constr_residential = "Home builders' taxable sales are repair and remodeling work for homeowners (capital improvements are exempt).",
+  constr_specialty = "Electrical, plumbing, heating and finishing contractors do taxable repair and maintenance work for homeowners and for commercial buildings alike.",
+  constr_other = "Nonresidential builders and heavy contractors serve businesses and governments; whatever is taxable is commercial.",
+  it_business = "Custom programming, systems integration, hosting and data processing are sold almost entirely to organizations.",
+  info_mixed = "Prewritten software, books, directories and portal services are sold to businesses and to households.",
+  info_consumer = "Theatre admissions, subscription programming and streaming are household purchases.",
+  finance = "Banks and finance companies have little taxable activity; what there is (equipment leases, safe deposit boxes, repossessed vehicles) is mixed.",
+  real_estate_lessors = "Lessors' taxable receipts are largely self-storage and parking, used by households and businesses.",
+  real_estate_other = "Property managers and agents buy and sell services on behalf of owners; commercial.",
+  prof_mixed = "Interior design, photography, veterinary boarding and grooming serve households; the rest of the family serves businesses.",
+  prof_business = "Legal, accounting, engineering, consulting and advertising firms' taxable sales (signs, promotional goods, taxable information services) go to businesses.",
+  management = "Corporate headquarters transact with their own affiliates.",
+  admin_mixed = "Cleaning, landscaping, pest control, alarm monitoring and trash collection are bought by homeowners and by commercial buildings.",
+  admin_consumer = "Travel agents and room remarketers sell to travellers.",
+  admin_business = "Staffing, facilities support, document and call-centre services are sold to organizations.",
+  edu_health = "Tuition and medical care are exempt; the taxable remainder (bookstores, cafeterias, optical goods, gift shops) is bought by students, patients and visitors.",
+  orgs_households = "Membership organizations' taxable sales (bar and restaurant receipts, merchandise) go to members and the public.",
+  transport_consumer = "Limousine, sightseeing and towing services are taxable and mostly bought by individuals.",
+  transport_business = "Freight, rail, air cargo, courier and warehousing customers are shippers, i.e. businesses.",
+  agriculture = "Nurseries and farm stands sell to households; farm services to farms.",
+  mining = "Sand, gravel and stone go to contractors.",
+  government = "Government units' own taxable sales (park fees, municipal parking and golf) are bought by the public.",
+  unclassified = "Vendors with no NAICS code on file.")
+
+CUSTOMER_SOURCE <- "https://www.census.gov/naics/ ; https://www.tax.ny.gov/pdf/publications/sales/pub750.pdf ; https://www.tax.ny.gov/forms/publications/st/pub718r.htm"
+
+## Economic Census establishment counts, matched sectors, as a business
+## allocator: the city's share of the county's business *locations* rather than
+## of its jobs. A location buys supplies, services and equipment whether it has
+## five employees or five thousand, so this weights small businesses more and
+## hospitals and headquarters less than employment does.
+ec_estab_share <- function(ec_place_name, county_fips3) {
+  is_sector <- function(x) grepl("^[0-9]{2}$|^[0-9]{2}-[0-9]{2}$", x)
+  p <- ec_place_sector |>
+    filter(NAME == ec_place_name, is_sector(NAICS2022), !is.na(ESTAB)) |>
+    select(NAICS2022, p = ESTAB)
+  k <- ec_county_sector |>
+    filter(county == county_fips3, is_sector(NAICS2022), !is.na(ESTAB)) |>
+    select(NAICS2022, k = ESTAB)
+  j <- inner_join(p, k, by = "NAICS2022")
+  if (nrow(j) == 0 || sum(j$k) == 0) return(NA_real_)
+  sum(j$p) / sum(j$k)
 }

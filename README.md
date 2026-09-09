@@ -1,7 +1,14 @@
 # Albany City 0.5% add-on sales tax — revenue estimate
 
-**Published site:** <https://donboyd5.github.io/albany_sales_tax/> ·
-**Memo:** [`docs/albany-halfpct-memo.md`](docs/albany-halfpct-memo.md)
+**Published book:** <https://donboyd5.github.io/albany_sales_tax/>
+
+The write-up is a Quarto book with separate chapters (policy option, approach,
+data, the division of the county base with a full treatment of sales to
+businesses, calibration, results, alternatives, sensitivity, checks and
+timing, limitations) plus appendices (glossary, the benchmark study of New
+York's taxing cities, the original technical report, reproduction notes).
+It is written for a policy analyst; the technical vocabulary is confined to
+the appendices and the glossary.
 
 A reproducible estimate, with an error band, of the annual revenue the City of
 Albany, NY would raise from a hypothetical **0.5 percentage-point add-on sales
@@ -54,7 +61,14 @@ cd albany_sales_tax
    source("R/05_calibrate.R")
    ```
 
-4. **Render**
+4. **Compute the results the book reports** (about three minutes; writes
+   `data/processed/results.rds`, which every chapter reads)
+
+   ```bash
+   Rscript R/06_results.R                          # or: make results
+   ```
+
+5. **Render the book**
 
    ```bash
    quarto render                                   # or: make render

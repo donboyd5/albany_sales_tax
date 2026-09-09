@@ -303,3 +303,29 @@ phi (3-yr mean)                                                 -0.72%
 Allocators: store 0.288, business 0.428, motor vehicle 0.206,
             measured utilities 0.489, population 0.315
 ```
+
+
+## Book conversion (2026-09-09)
+
+The write-up became a Quarto book (`_quarto.yml`, `chapters/`, `appendices/`).
+`R/06_results.R` computes everything into `data/processed/results.rds`;
+chapters read it through `chapters/_common.R`, so no chapter recomputes
+anything and all chapters agree. Freeze is off; `make render` clears `_freeze`.
+
+New in this pass, prompted by the reviewer's doubt about the business class:
+
+- `business_customer_family()` / `business_customer_type()` in `R/04` tag each
+  business-class group as mostly business / mixed / household, with a
+  rationale per family; the crosswalk CSV carries the tags. Judgment, not data.
+- `ec_estab_share()` (business locations) and a `residence` option as business
+  allocators; `business_by_customer = TRUE` in `apportion_variant()`.
+- `alloc_fits` now covers seven business rules, calibration re-fitted each time.
+- Cross-city diagnostic: log(obs/pred) on (private-job share − population
+  share) across the 15 preferred cities. No relationship.
+- Pub 718-R checked: Albany County does not tax residential energy. Validation
+  3's measured share is therefore an upper bound; the old "closer to total
+  employment" reading is retracted in the book.
+
+The planning range now excludes the two rules judged implausible (all jobs
+including government; residence for the whole class) when forming the
+envelope; it is still $8–15 M because the σ-upper-CI band dominates.

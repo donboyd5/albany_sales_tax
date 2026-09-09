@@ -1,0 +1,41 @@
+# Glossary {#sec-glossary}
+
+**Add-on.** A city sales tax imposed on top of the county's rate, so the combined rate inside the city rises. Contrast *preemption*.
+
+**Administrative wedge (φ, phi).** The gap between the tax due on the published taxable sales and the cash a locality actually receives. Measured for Albany County from its own distributions; slightly negative.
+
+**Calibration.** Running the whole estimating method on the seventeen New York cities whose true taxable base is known from their collections, then using what that comparison shows to correct Albany's estimate and to size its error range.
+
+**Calibration cities.** The seventeen cities outside New York City with their own sales tax whose base can be recovered from published distributions. Fifteen are used in the preferred fit; Salamanca and Ogdensburg are set aside for documented reasons.
+
+**Concentration ratio (R).** The city's share of the county's taxable sales divided by its share of the county's population. R = 1 means a per-person share.
+
+**Distribution.** The cash the Tax Department sends to a county, city or school district for the tax it imposes.
+
+**Economic Census.** The Census Bureau's five-yearly census of businesses, giving establishments, receipts, employment and payroll by industry and place. Used for the store sharing rule and for alternative business rules.
+
+**Establishment.** A single business location. The Economic Census counts them.
+
+**Exempt purchaser.** A buyer that pays no sales tax on its purchases: governments (Tax Law §1116(a)(1)), and most hospitals, universities and other nonprofits.
+
+**LODES.** The Census Bureau's job-location data (LEHD Origin-Destination Employment Statistics), which count jobs at the workplace by census block and industry sector. Used for the business sharing rule.
+
+**NAICS.** The North American Industry Classification System, the industry code used in every dataset here. The Tax Department reports taxable sales by the *vendor's* four-digit code.
+
+**Preemption.** The arrangement under which a city imposes a sales tax rate and the county's rate falls by the same amount inside the city. The combined rate is unchanged and the city forfeits its share of the county's distribution. All seventeen taxing cities do this.
+
+**Sales tax year.** The Tax Department's reporting year for taxable sales: March through February.
+
+**Sharing rule** (technically *allocator*). The measure used to say what fraction of a class of county sales belongs to the city: the city's share of retail receipts, of private-sector jobs, of registered vehicles, or of household income.
+
+**Shopping response (β, beta).** The fraction of the base that stays put when the rate inside the city is half a point above the rate outside. Taken as 1 (no loss) centrally.
+
+**Sourcing.** The tax-law rules that say which jurisdiction a sale is taxed in: at the store for over-the-counter sales, at the delivery address for delivered goods, at the buyer's residence for vehicles, where performed for services.
+
+**State fiscal year.** April through March. The distributions data use it.
+
+**Taxable sales and purchases (the base).** What vendors report as subject to sales tax, plus purchases on which the buyer owes use tax. The Tax Department publishes it by county and by vendor industry.
+
+**Typical miss (σ, sigma).** The standard deviation of the calibration's residuals, in logarithms. A one-σ miss of 0.19 means about +21% on the high side or −17% on the low side.
+
+**Use tax.** Tax owed by the buyer on taxable purchases on which no sales tax was collected, typically from out-of-state vendors. Reported by the buyer and included in the base.

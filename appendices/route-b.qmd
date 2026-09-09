@@ -1,9 +1,12 @@
 ---
-title: "Route B: the city share of the county sales tax base in New York's preempting cities"
-subtitle: "A reduced-form benchmark for a City of Albany sales tax"
-date: today
-number-sections: false
+execute:
+  freeze: auto
 ---
+
+# Benchmark: the city share of the county base in New York's taxing cities {#sec-route-b}
+
+This appendix is the original technical document, retained in full for readers who want the detail behind the chapters. It uses the technical vocabulary (allocator, apportionment, NAICS, σ) that the chapters translate; see the glossary.
+
 
 ```{r setup}
 #| include: false

@@ -32,7 +32,8 @@ distributions.
 | `R/02_pull_census_ec.R` | 2022 Economic Census `ecnbasic` (RCPTOT/ESTAB/EMP/PAYANN) for economic places + counties; CBP/ZBP fallback |
 | `R/03_pull_acs_lodes_dmv.R` | ACS B19025/B11001, decennial PL population, LODES WAC + crosswalk, DMV registrations (aggregated) |
 | `R/04_allocate.R`       | NAICS -> sourcing class mapping, allocator shares `a_g`, assemble `B_c` |
-| `R/05_calibrate.R`      | section A: Route B reduced form; section B: observed vs predicted base, log-log fit, residual SD, band |
+| `R/05_calibrate.R`      | section A: Route B reduced form; section B: observed vs predicted base, log-log fit, residual SD, band; section C: diagnostics |
+| `R/06_results.R`        | computes every number the book reports into `data/processed/results.rds`; every chapter reads that file via `chapters/_common.R`. Re-run after any data or code change, then `make render` |
 | `R/99_check_urls.R`     | verifies every cited URL still resolves |
 
 ## Standing rules (do not relax without asking)
@@ -113,7 +114,8 @@ Every NAICS group in the DTF county table maps to exactly one class, recorded in
 ## Phase 3 headline
 
 Revenue approximately **$11.1 M/year**, 68% band $9.2-13.5 M, 90% $8.1-15.3 M;
-planning range $9-14 M, budget figure $11 M. B_c calibrated = $2.21 B, R = 0.77.
+planning range $8-15 M (computed envelope), budget figure $11 M. B_c calibrated
+= $2.21 B, R = 0.77.
 
 Calibration: the preferred fit drops Salamanca (100% on Seneca Nation Allegany
 Territory, Census AIANNH 0080) and Ogdensburg (jurisdiction code created 1 Mar
@@ -134,4 +136,28 @@ imposes 3% under s.1210(a), preempting the county's base 3%, with St. Lawrence
 retaining only its non-preemptable additional 1% (s.1224). Saratoga Springs
 confirmed at 1.5% by the Saratoga County Treasurer.
 
-See docs/albany-halfpct-memo.md.
+## The write-up is a Quarto book (2026-09-09)
+
+`_quarto.yml` is `type: book`. Chapters live in `chapters/` (01 policy option,
+02 approach, 03 data, 04 apportionment -- the deep dive on classes, the
+business class by customer type, and what is inside the employment allocator
+-- 05 calibration, 06 results, 07 alternatives, 08 sensitivity, 09 checks /
+preemption / timing, 10 limitations and recommendations, references) and
+appendices in `appendices/` (glossary, the Route B benchmark, the original
+technical report, reproducing). `analysis/` and the memo markdown are gone;
+their content is in the chapters. Chapters use plain language for a policy
+analyst: "sharing rule" for allocator, "division of the county base" for
+apportionment, "typical miss" for sigma. Keep that register.
+
+Business-class facts established 2026-09-09: the class is 26% of the county
+base; by a customer-type reading (business_customer_type() in R/04), 58% is
+mostly sold to businesses, 38% mixed, 5% mostly households. The city's 42.8%
+share of private jobs is driven by health care (28% of city private jobs),
+education (15%), professional services and finance; the city has only 21% of
+manufacturing, 28% of wholesale and 29% of transportation jobs. Alternatives
+(business locations 35.6%, ex-exempt 35.6%, customer split 38.5%) give
+$10.5-10.9 M with the calibration re-fitted; payroll 47.9% gives $11.8 M. Across
+the 15 calibration cities, the job-minus-population gap does not predict
+over-prediction (slope -0.42, p 0.52). Pub 718-R: Albany County does NOT tax
+residential energy (only the three school districts do, at 3%), so the ACSD
+utility measurement (48.9%) is an upper bound of the comparable share.

@@ -1,25 +1,53 @@
 project:
-  type: default
+  type: book
   output-dir: _output
-  render:
+
+book:
+  title: "A Half-Point City Sales Tax for Albany"
+  subtitle: "What a 0.5% City of Albany add-on sales tax would raise, and how the estimate was built"
+  author: "Prepared with reproducible code; see the repository"
+  date: today
+  repo-url: https://github.com/donboyd5/albany_sales_tax
+  site-url: https://donboyd5.github.io/albany_sales_tax/
+  search: true
+  page-navigation: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+  chapters:
     - index.qmd
-    - analysis/route-b.qmd
-    - analysis/city-halfpct-revenue.qmd
-    - analysis/memo.qmd
+    - chapters/01-policy-option.qmd
+    - chapters/02-approach.qmd
+    - chapters/03-data.qmd
+    - chapters/04-apportionment.qmd
+    - chapters/05-calibration.qmd
+    - chapters/06-results.qmd
+    - chapters/07-alternatives.qmd
+    - chapters/08-sensitivity.qmd
+    - chapters/09-checks-preemption-timing.qmd
+    - chapters/10-limitations-recommendations.qmd
+    - chapters/references.qmd
+  appendices:
+    - appendices/glossary.qmd
+    - appendices/route-b.qmd
+    - appendices/technical-report.qmd
+    - appendices/reproducing.qmd
 
 format:
   html:
+    theme: cosmo
     toc: true
     toc-depth: 3
     number-sections: true
-    embed-resources: true
-    df-print: paged
-    theme: cosmo
+    number-depth: 2
+    df-print: kable
     fig-width: 8
     fig-height: 5
+    code-tools: false
+    css: styles.css
 
 execute:
   echo: false
   warning: false
   message: false
-  freeze: auto
+  freeze: false
