@@ -1,0 +1,48 @@
+# What it would take to authorize the tax {#sec-authorization}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+```
+
+This page describes the statutory framework as it stands and what a bill authorizing the add-on would have to do. It is a description for a policy analyst, not legal advice, and the reading of the statute offered here should be confirmed with counsel and with the Tax Department.
+
+## Where the power sits today
+
+Local sales taxes outside New York City are governed by Article 29 of the Tax Law. Four sections matter here.
+
+**Section 1210 is the grant of power.** Any city or county may, by local law, impose the sales tax "at the rate of one-half, one, one and one-half, two, two and one-half or three percent." Rates above 3% exist only where the Legislature has added a jurisdiction-specific clause. Albany County's 4% rests on one such clause: the county "is hereby further authorized and empowered ... imposing such taxes at a rate which is one percent additional to the three percent rate," for a period that currently ends 30 November 2027 (§1210(a)(1)(i)(10)). Every county and city with a rate above 3% has a clause of this kind, and the Comptroller notes that they are reauthorized "usually every two years" and "regularly."
+
+**Section 1223 caps the combined local rate.** No transaction may be taxed by a county and a city together "at an aggregate rate in excess of ... three percent," except for the counties and cities the section lists as having higher authorized rates. Albany County is on that list; the City of Albany is not. The section also provides that in Yonkers, Mount Vernon, New Rochelle, Fulton, Oswego and White Plains "the rate may not be in excess of four percent."
+
+**Section 1224 is the preemption rule.** In a county with cities, the county has the "prior right" to impose the tax up to half the 3% maximum and each city the prior right to the other half. When a city exercises its half, the county's rate falls by that amount inside the city. That is the mechanism the seventeen preempting cities use. The same section then carves out, jurisdiction by jurisdiction, the additional rates that are *not* part of that arrangement. The Yonkers clause reads: the city "shall have the sole right to impose the additional one percent and one-half of one percent rates ... such additional rates of tax shall be in addition to any other tax which such city may impose ... and such additional rates of tax shall not be subject to pre-emption. The maximum three percent rate referred to in this section shall be calculated without reference to" those additional rates (§1224(d)). Mount Vernon, White Plains, New Rochelle and Rome have clauses in the same words for their additional rates, and so does Albany County for its additional 1% (§1224(j)).
+
+**Section 1262 governs what the county does with the money.** It permits a county to set aside net collections for county purposes and to allocate the rest to cities and towns; Albany County's arrangement, 60% retained and 40% distributed to cities and towns by census population, is described in the Comptroller's Appendix C. A companion section, §1262-d, deals with Albany County's villages.
+
+## What an add-on would require
+
+Under this framework the City of Albany could impose a sales tax tomorrow, but only by preemption: a rate of up to 1½% under §1210(a), which would reduce the county's rate inside the city by the same amount under §1224 and end the city's share of the county's distribution. @sec-preemption shows why that would lose money.
+
+An add-on that leaves the county's rate and distribution untouched is not available under the general grant. It would need a special act with three parts, each of which has a drafting template in the current statute:
+
+1. **An additional-rate clause in §1210(a)(1)(ii)** authorizing the City of Albany to impose "one-half of one percent in addition to the other rates authorized in this paragraph for such city," with a start date and, following every other such clause, an end date requiring periodic reauthorization.
+2. **A "sole right" clause in §1224**, in the words used for Yonkers and Mount Vernon: the additional rate "shall be in addition to any other tax which such city may impose ... and shall not be subject to pre-emption," with the 3% maximum "calculated without reference to" it. This is the provision that keeps the county's 4% whole inside the city.
+3. **An exception in §1223** so that the aggregate county-plus-city rate inside the city may exceed the cap that would otherwise bind.
+
+A fourth element would be prudent rather than necessary: a sentence confirming that the city's tax has no effect on allocations under §1262, so that the county's distribution formula is not reopened.
+
+## How it differs from the existing cases
+
+Every existing "additional" city rate sits on top of a base city rate that preempts the county. Yonkers' half point (in force since 1 September 2015, and the reason its combined rate is half a point above the rest of Westchester) is an additional rate of exactly this kind, layered on a 3% base rate that displaces the county's tax entirely. White Plains has an additional half point and a further quarter point on the same structure. What Albany would be asking for is the additional rate *without* a base rate: a city that exercises none of its §1224 prior right and imposes only the non-preemptable add-on. The drafting is the same; the configuration is new. On a plain reading, a city that imposes no base rate triggers no preemption, so the county's 4% would continue to apply throughout the county and the county's §1262 distribution would be unaffected. That reading is the premise of this site's estimate, and it is the first thing to confirm.
+
+Two other existing arrangements are worth knowing about. Cities may impose taxes on selected services (utilities, restaurant meals, hotel occupancy, admissions) under §1210(b) without preempting the county, and Niagara Falls, Lockport, Long Beach, Newburgh and Port Jervis do; these show layering without preemption, but on a narrow base. And Oswego's tax behaves in the Tax Department's own data as if it were collected on top of the county's rather than in place of it (@sec-policy); §1223 caps Oswego's rate at 4% and §1210 gives it an additional 1%, but no "sole right" clause for Oswego appears in §1224, and the published facts cannot be reconciled from outside. If Oswego's tax really is additive, it is the closest existing precedent, and the question belongs in the same letter to the Tax Department as the tabulation request.
+
+## Process and timing
+
+Bills of this kind are ordinarily introduced with a home rule request from the municipality's governing body and carried by the local delegation; whether a home rule request is constitutionally required for a tax authorization is a question for counsel. The additional-rate clauses are typically enacted for a fixed period and folded into the biennial reauthorization of local rates thereafter.
+
+Once authorized, the city would impose the tax by local law and the Tax Department would administer it. A local rate change takes effect only on 1 March, 1 June, 1 September or 1 December, and the Department requires 90 days' notice (§1210(d); Tax Bulletin ST-895), so the earliest effective date is roughly a quarter after enactment of the local law. @sec-timing sets out what that means for first-year cash and why a 1 March start suits a calendar-year budget.
+
+## Sources
+
+The statutory text quoted above is from the consolidated laws as published at New York Public Law (<https://newyork.public.law/laws/n.y._tax_law_section_1210>, <https://newyork.public.law/laws/n.y._tax_law_section_1223>, <https://newyork.public.law/laws/n.y._tax_law_section_1224>, <https://newyork.public.law/laws/n.y._tax_law_section_1262>), checked on 9 September 2026 against the 2026 text; the official text is at the New York State Senate's site, which does not admit automated readers. The description of the general framework and of the eighteen cities is from the Office of the State Comptroller (2020), pages 3–4 and Appendix C.

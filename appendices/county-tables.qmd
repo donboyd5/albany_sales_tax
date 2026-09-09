@@ -1,0 +1,32 @@
+# County tables {#sec-county-tables}
+
+```{r}
+#| include: false
+source(here::here("chapters", "_common.R"))
+```
+
+Two county-by-county tables referred to in the chapters.
+
+## Collections divided by rate against reported taxable sales
+
+```{r}
+#| label: tbl-county-test-full
+#| tbl-cap: "For each county outside New York City: reported taxable sales, collections (plus amounts preempted by its cities) divided by the county rate, and the ratio; three-year means and the range across state fiscal years 2023–2025. County rates from Publication 718."
+R$county_test_by_county |>
+  transmute(County = county, `County rate %` = r_k_pub718, `Taxing cities` = n_cities,
+            `Reported base, $ million` = B_k / 1e6, `Collections ÷ rate, $ million` = inferred / 1e6,
+            `Ratio` = ratio, `Lowest year` = ratio_min, `Highest year` = ratio_max) |>
+  kb(digits = c(0, 3, 0, 0, 0, 3, 3, 3), align = "lrrrrrrr", format.args = list(big.mark = ","))
+```
+
+## Residential energy and the utilities base
+
+```{r}
+#| label: tbl-resid-counties
+#| tbl-cap: "Taxable sales per person by county, three-year mean, with residential-energy tax status from Publication 718-R."
+R$re_test |> arrange(status, desc(util_pc)) |>
+  transmute(County = county, `Residential energy tax` = status, Population = P,
+            `Electric 2211, $/person` = elec_pc, `Utilities 22, $/person` = util_pc,
+            `Petroleum 4247, $/person` = petrol_pc, `Whole base, $/person` = total_pc) |>
+  kb(digits = 0, align = "llrrrrr", format.args = list(big.mark = ","))
+```

@@ -26,11 +26,12 @@ book:
     - chapters/08-sensitivity.qmd
     - chapters/09-checks-preemption-timing.qmd
     - chapters/10-limitations-recommendations.qmd
+    - chapters/11-authorization.qmd
     - chapters/references.qmd
   appendices:
     - appendices/glossary.qmd
     - appendices/route-b.qmd
-    - appendices/technical-report.qmd
+    - appendices/county-tables.qmd
     - appendices/reproducing.qmd
 
 format:

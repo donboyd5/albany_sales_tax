@@ -13,7 +13,7 @@ The City of Albany has no sales tax of its own. This site estimates what the cit
 
 ## What the estimate depends on {.unnumbered}
 
-A half-point tax raises half a percent of whatever is sold taxably inside the city. So everything depends on one number that nobody publishes: **the city's taxable sales**. The State Tax Department publishes taxable sales for Albany *County* (about \$`r fb(B_k)` billion a year) but not for the city, because the city has no tax to report on.
+A half-point tax raises half a percent of whatever is sold taxably and sourced inside the city. So everything depends on one number that nobody publishes: **the city's taxable sales**. The State Tax Department publishes taxable sales for Albany *County* (about \$`r fb(B_k)` billion a year) but not for the city, because the city has no tax to report on.
 
 This site estimates the city's share of the county's taxable sales by:
 
@@ -43,5 +43,6 @@ The result is a city base of about **\$`r fb(est_pref$B_c_central)` billion, or 
 | @sec-sensitivity | What changes when each assumption is varied |
 | @sec-checks | Validations, the preemption comparison, and first-year timing |
 | @sec-limitations | What could be wrong, and what to do next |
+| @sec-authorization | What it would take to authorize the tax |
 
-The original technical report, the benchmark study of New York's taxing cities and a glossary are in the appendices. Every number in this site is computed from cached public data by code in the [repository](https://github.com/donboyd5/albany_sales_tax); nothing is typed in by hand except two small lookup tables, each row of which cites its source.
+The benchmark study of New York's taxing cities, the county tables and a glossary are in the appendices. Every number in this site is computed from cached public data by code in the [repository](https://github.com/donboyd5/albany_sales_tax); nothing is typed in by hand except two small lookup tables, each row of which cites its source.

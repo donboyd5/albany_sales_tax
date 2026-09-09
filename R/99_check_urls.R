@@ -27,7 +27,7 @@ check <- function(u) {
   if (inherits(r, "try-error")) NA_integer_ else resp_status(r)
 }
 
-BOT_BLOCKED <- "doi\\.org|findlaw|justia|nysenate|ecode360|census\\.gov/naics"
+BOT_BLOCKED <- "doi\\.org|findlaw|justia|nysenate|ecode360|census\\.gov/naics|newyork\\.public\\.law"
 res <- tibble(url = urls) |> mutate(status = map_int(url, check),
                                     blocked = grepl(BOT_BLOCKED, url))
 bad <- res |> filter(!blocked, is.na(status) | status >= 400)

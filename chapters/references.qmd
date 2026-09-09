@@ -30,7 +30,7 @@ New York State Department of Taxation and Finance. (2014). *Tax Bulletin ST-895:
 
 New York State Department of Motor Vehicles. (2026). *Vehicle, snowmobile, and boat registrations* [Data set]. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
 
-N.Y. Tax Law §§ 1116, 1210, 1211, 1214, 1223, 1224.
+N.Y. Tax Law §§ 1116, 1210, 1211, 1214, 1223, 1224, 1262. Consolidated text as published at New York Public Law: <https://newyork.public.law/laws/n.y._tax_law_section_1210>, <https://newyork.public.law/laws/n.y._tax_law_section_1223>, <https://newyork.public.law/laws/n.y._tax_law_section_1224>, <https://newyork.public.law/laws/n.y._tax_law_section_1262>.
 
 Office of the New York State Comptroller. (2020). *Understanding local government sales tax in New York State: 2020 update*. <https://www.osc.ny.gov/files/local-government/publications/pdf/understanding-local-government-sales-tax-in-nys-2020-update.pdf>
 

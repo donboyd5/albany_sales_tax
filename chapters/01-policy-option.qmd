@@ -44,7 +44,7 @@ A legislator's first question will be why the city does not exercise the preempt
 
 ## What this site does not do
 
-It does not address the legal route to authorization beyond the observation that a special act of the Legislature would be needed, as it was for every existing add-on; whether the Legislature would grant one to a non-preempting city is a political question. And it does not model who ultimately bears the tax or its broader economic effects beyond a simple allowance for shoppers crossing the city line.
+It does not offer legal advice. @sec-authorization describes the statutory framework and what a special act would have to contain, since one would be needed, as it was for every existing add-on; whether the Legislature would grant one to a non-preempting city is a political question. And it does not model who ultimately bears the tax or its broader economic effects beyond a simple allowance for shoppers crossing the city line.
 
 ## Goals of the analysis
 

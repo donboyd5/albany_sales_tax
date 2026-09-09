@@ -6,7 +6,7 @@ The write-up is a Quarto book with separate chapters (policy option, approach,
 data, the division of the county base with a full treatment of sales to
 businesses, calibration, results, alternatives, sensitivity, checks and
 timing, limitations) plus appendices (glossary, the benchmark study of New
-York's taxing cities, the original technical report, reproduction notes).
+York's taxing cities, county tables, reproduction notes).
 It is written for a policy analyst; the technical vocabulary is confined to
 the appendices and the glossary.
 

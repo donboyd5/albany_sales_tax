@@ -211,3 +211,17 @@ city tax; phi relabelled a reconciliation residual. Site is published
 ENCRYPTED with StatiCrypt: password in .site_password (git-ignored), salt in
 .staticrypt.json (committed); `scripts/publish_gh_pages.sh --public` publishes
 in the clear. Quarto search is off so the index does not leak page text.
+
+## Authorization page (chapters/11-authorization.qmd, 2026-09-09)
+
+Statutory reading verified from public.law copies of Tax Law 1210, 1223,
+1224, 1262: general grant at 0.5-3% (1210(a)); Albany County's additional 1%
+(1210(a)(1)(i)(10), to 30 Nov 2027; sole right, not subject to preemption,
+1224(j)); Yonkers' additional 1% + 0.5% (1210(a)(1)(ii)(1); 1224(d));
+aggregate 3% cap with listed exceptions (1223; Yonkers, Mount Vernon, New
+Rochelle, Fulton, Oswego, White Plains capped at 4%). An Albany add-on needs
+three clauses: additional rate in 1210, sole-right/no-preemption in 1224,
+exception in 1223. No existing city has an additional rate without a base
+rate. Technical appendix removed; county tables moved to
+appendices/county-tables.qmd. Chapter 2 now separates potential revenue
+(0.005 x B_c x beta) from anticipated cash (x (1 - phi)).
