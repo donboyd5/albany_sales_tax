@@ -134,7 +134,7 @@ $50.0 M budget, consistent with the $46.2 M status-quo figure.
 
 Calibration: the preferred fit drops Salamanca (100% on Seneca Nation Allegany
 Territory, Census AIANNH 0080) and Ogdensburg (jurisdiction code created 1 Mar
-2022, implied share still ramping 3.01->3.45%; border-traffic collapse) --
+2022, implied share still ramping 3.01->3.45%; NOT a border-traffic collapse: BTS crossings were recovering 2022-24, see R$ogdensburg_border) --
 CALIB_EXCLUDE in R/05_calibrate.R. Both have verified reasons that do not
 transfer to Albany. n=15, beta 0.881 (se 0.033), sigma 0.192, R2 0.954. All-17
 fit gives $12.5 M with sigma 0.453 and is reported alongside.
@@ -247,3 +247,17 @@ jobs rule (42.8%) is the "nosplit" alternative. Headline now $12.8 M central
 $10 M. Chapter 5 is a short summary; the city-comparison detail and the
 sensitivity tables are appendices (user finds the city inference
 unconvincing and wants it out of the main text).
+
+## Self-audit of from-memory claims (2026-09-09)
+
+Checked against sources: Pub 838 quotes (p. 23 and p. 16) OK; DTF-802 quote
+OK; TSB-M-90(6)S 1% county rate on residential energy in 1990 OK; Tax Law
+1116(a)(4) OK; 1210(d) 90-day notice OK (quarterly dates come from ST-895,
+not the statute); OSC 2020 distribution timing corrected (early/final each
+month, not "first two months estimated"); Saratoga treasurer page OK (URL
+now in crosswalk); NAICS index places government motor-vehicle licensing
+offices in 926120. WRONG and corrected: "Canadian cross-border traffic
+collapsed" at Ogdensburg (BTS shows recovery 2022-24; cached pull
+bts_border_ogdensburg_personal_vehicles.csv); "data centre in Massena"
+(unverified; replaced by the base-size argument). Rule: any claim about the
+world that is not in a cached file or a sourced crosswalk is suspect.

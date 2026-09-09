@@ -299,3 +299,21 @@ acs_workplace <- cache_pull(
       select(level, geo, NAME, workers = B08604_001E)
   }) |>
   mutate(workers = as.numeric(workers))
+
+
+## --- Border crossings at Ogdensburg (Bureau of Transportation Statistics,
+## Border Crossing Entry Data, data.bts.gov keg4-3bc2): personal vehicles
+## entering the US at the Ogdensburg port, by year. Used to check the claim
+## about cross-border traffic in the Ogdensburg diagnosis.
+BTS_URL <- "https://data.bts.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2"
+ogdensburg_border <- cache_pull(
+  "bts_border_ogdensburg_personal_vehicles.csv", BTS_URL,
+  function() {
+    req <- httr2::request("https://data.bts.gov/resource/keg4-3bc2.json") |>
+      httr2::req_url_query(`$select` = "date_extract_y(date) as year, sum(value) as vehicles",
+                           `$where` = "port_name like 'Ogdensburg%' and measure='Personal Vehicles' and date>='2016-01-01'",
+                           `$group` = "year", `$order` = "year", `$limit` = 100) |>
+      httr2::req_user_agent("albany-sales-tax research (R/httr2)") |> httr2::req_retry(max_tries = 4)
+    httr2::req_perform(req) |> httr2::resp_body_string() |> jsonlite::fromJSON()
+  }) |>
+  mutate(year = as.integer(year), vehicles = as.numeric(vehicles))

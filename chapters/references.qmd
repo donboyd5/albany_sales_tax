@@ -30,6 +30,8 @@ New York State Department of Taxation and Finance. (2014). *Tax Bulletin ST-895:
 
 New York State Department of Taxation and Finance, Office of Real Property Tax Services. (2026). *Property assessment data from local assessment rolls* [Data set]. <https://data.ny.gov/Government-Finance/Property-Assessment-Data-from-Local-Assessment-Rol/7vem-aaz7>
 
+U.S. Bureau of Transportation Statistics. (2026). *Border crossing entry data* [Data set]. <https://data.bts.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2>
+
 New York State Department of Motor Vehicles. (2026). *Vehicle, snowmobile, and boat registrations* [Data set]. <https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt>
 
 N.Y. Tax Law §§ 1116, 1210, 1211, 1214, 1223, 1224, 1262. Consolidated text as published at New York Public Law: <https://newyork.public.law/laws/n.y._tax_law_section_1210>, <https://newyork.public.law/laws/n.y._tax_law_section_1223>, <https://newyork.public.law/laws/n.y._tax_law_section_1224>, <https://newyork.public.law/laws/n.y._tax_law_section_1262>.
@@ -40,7 +42,7 @@ U.S. Census Bureau. (2021). *2020 Census redistricting data (P.L. 94-171)* [API 
 
 U.S. Census Bureau. (2021). *2020 Census block assignment files*. <https://www2.census.gov/geo/docs/maps-data/data/baf2020/>
 
-U.S. Census Bureau. (2022). *North American Industry Classification System*. <https://www.census.gov/naics/>
+U.S. Census Bureau. (2022). *North American Industry Classification System*, 2022 index file. <https://www.census.gov/naics/2022NAICS/2022_NAICS_Index_File.xlsx>
 
 U.S. Census Bureau. (2024). *American Community Survey 5-year estimates, 2023* [API dataset]. <https://api.census.gov/data/2023/acs/acs5.html>
 

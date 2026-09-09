@@ -42,7 +42,7 @@ reported; the planning range is the envelope.
 **a′ (original).** The two excluded calibration cities. The headline \$11.1 M uses 15 of 17
 cities; all 17 gives \$12.5 M with a much wider band (σ 0.19 vs 0.45). Salamanca
 and Ogdensburg are dropped for documented reasons (Seneca Nation territory;
-brand-new jurisdiction code plus a border-traffic collapse). The reasons are
+brand-new jurisdiction code; the border-traffic collapse cited at the time was WRONG, see the self-audit note below). The reasons are
 verified from independent sources and were fixed before the effect on the answer
 was known — but this is still the single judgment that moves the number most,
 and a reviewer is entitled to reject it. Both fits are carried everywhere.
@@ -408,3 +408,12 @@ hospitals, state property). Response: pulled the 2025 ORPTS assessment rolls
 by type and the city's share, and adds `business_allocator = "assessed"` (city
 share of county taxable commercial + industrial FMV), calibrated on the
 non-Westchester cities because Westchester FMV is unusable in the dataset.
+
+## Self-audit (2026-09-09)
+
+Prompted by the user's question whether other claims were careless. Audited
+every from-memory claim in the prose; two were wrong (Ogdensburg border
+traffic "collapsed": BTS data show recovery; "data centre in Massena":
+unverified) and one was misdescribed (distribution timing). All fixed with
+sources; see CLAUDE.md. The Ogdensburg exclusion now rests on the new code
+alone, and the first-year ramp is described as generous rather than cautious.

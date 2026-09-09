@@ -41,7 +41,7 @@ Two other existing arrangements are worth knowing about. Cities may impose taxes
 
 Bills of this kind are ordinarily introduced with a home rule request from the municipality's governing body and carried by the local delegation; whether a home rule request is constitutionally required for a tax authorization is a question for counsel. The additional-rate clauses are typically enacted for a fixed period and folded into the biennial reauthorization of local rates thereafter.
 
-Once authorized, the city would impose the tax by local law and the Tax Department would administer it. A local rate change takes effect only on 1 March, 1 June, 1 September or 1 December, and the Department requires 90 days' notice (§1210(d); Tax Bulletin ST-895), so the earliest effective date is roughly a quarter after enactment of the local law. @sec-timing sets out what that means for first-year cash and why a 1 March start suits a calendar-year budget.
+Once authorized, the city would impose the tax by local law and the Tax Department would administer it. A local rate change takes effect only on 1 March, 1 June, 1 September or 1 December (Tax Bulletin ST-895), and the local law must reach the Department at least 90 days before that date (§1210(d), which lets the commissioner shorten the period to 30 days), so the earliest effective date is roughly a quarter after enactment of the local law. @sec-timing sets out what that means for first-year cash and why a 1 March start suits a calendar-year budget.
 
 ## Sources
 

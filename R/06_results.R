@@ -565,6 +565,7 @@ R$acs_work_city   <- acs_workplace$workers[acs_workplace$level == "place" & acs_
 R$acs_work_county <- acs_workplace$workers[acs_workplace$level == "county" & acs_workplace$geo == "001"]
 R$acs_work_share  <- R$acs_work_city / R$acs_work_county
 
+R$ogdensburg_border <- ogdensburg_border |> filter(year >= 2018, year <= 2025)
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)
 saveRDS(R, file.path(PATHS$processed, "results.rds"))

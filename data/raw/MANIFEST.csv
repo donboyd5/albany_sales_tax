@@ -1,4 +1,5 @@
 file,source_url,pulled_at,sha256
+data/raw/bts_border_ogdensburg_personal_vehicles.csv,https://data.bts.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2,2026-09-09T15:45:01-0400,e55579c59ec0ba5b00063bb906b926f4073a4f4063e2636e00ab1f50a5f232bc
 data/raw/cbp_zip_estab_retail_food_2021_2023.csv,https://api.census.gov/data/2023/cbp,2026-09-09T12:53:41-0400,631ce9710cd7754cd40e44423396c44de8e20db3eb0cc0d9240514473c74b1a1
 data/raw/census_acs5_2023_county_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:23-0400,783f150021ea49bd2aca87ce4915e1f4620368a8be394644d2a0dd5298647866
 data/raw/census_acs5_2023_place_ny.csv,https://api.census.gov/data/2023/acs/acs5,2026-09-07T15:18:22-0400,5ab9efc878fdccf900b59d4f8208cc221af1965e036f472401fb42c385534ea8
