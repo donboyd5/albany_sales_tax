@@ -447,6 +447,72 @@ R$BUDGET  <- floor(min(REV, R$REV_level) / 1e6)
 R$B_9261 <- B_9261 <- appo$B_kg[appo$naics_industry_group == "9261"]
 R$rev_9261_as_business <- rev(apply_calibration(fit_pref, B_pred + B_9261 * (a_wxp - a_mv), B_k)$B_c_central)
 
+
+## --- items from the third review ---------------------------------------------------------------
+## (a) numbers that were typed into prose, now computed
+stl <- read_county_base() |> filter(fy %in% ANALYSIS_FYS)
+R$stl_5182 <- stl |> filter(jurisdiction == "ST LAWRENCE", naics_industry_group == "5182") |> summarise(B = sum(B, na.rm = TRUE) / length(ANALYSIS_FYS)) |> pull(B)
+n9261 <- stl |> filter(naics_industry_group == "9261") |> group_by(jurisdiction) |> summarise(B = sum(B, na.rm = TRUE) / length(ANALYSIS_FYS), .groups = "drop")
+R$B_9261_state <- n9261$B[n9261$jurisdiction == "NY STATE"]
+R$share_9261_albany <- n9261$B[n9261$jurisdiction == "ALBANY"] / R$B_9261_state
+au_p <- ec_place_sector |> filter(NAME == "Auburn city, New York", NAICS2022 == "44-45") |> pull(RCPTOT)
+au_k <- ec_county_sector |> filter(county == "011", NAICS2022 == "44-45") |> pull(RCPTOT)
+R$auburn_retail_share <- au_p / au_k
+R$warren <- read_csv(file.path(PATHS$crosswalk, "warren_county_sales_tax_by_town_2024.csv"), col_types = cols(.default = "c")) |>
+  mutate(sales_tax_2024_dollars = as.numeric(sales_tax_2024_dollars))
+R$warren_city_share <- R$warren$sales_tax_2024_dollars[R$warren$municipality == "City of Glens Falls"] /
+  R$warren$sales_tax_2024_dollars[R$warren$municipality == "Warren County total"]
+R$glens_falls_obs_share <- calib$B_c_obs[calib$city == "Glens Falls"] / calib$B_k[calib$city == "Glens Falls"]
+R$glens_falls_pred_share <- calib$B_c_pred[calib$city == "Glens Falls"] / calib$B_k[calib$city == "Glens Falls"]
+
+## (b) adoption cohort: does the year a city's tax took effect relate to its ratio?
+dates <- read_csv(file.path(PATHS$crosswalk, "city_tax_effective_dates.csv"), col_types = cols(.default = "c")) |>
+  transmute(city, effective = as.Date(effective_current_tax), first_ever = as.Date(first_ever_effective),
+            year_effective = as.integer(format(effective, "%Y")), date_note = note)
+R$cohort <- calib |> left_join(dates, by = "city") |>
+  mutate(excluded = city %in% names(CALIB_EXCLUDE)) |>
+  select(city, county, year_effective, first_ever, ratio, excluded, date_note) |> arrange(year_effective)
+coh <- R$cohort |> filter(!excluded)
+m_coh <- lm(log(ratio) ~ year_effective, coh)
+R$cohort_fit <- list(slope_per_decade = 10 * unname(coef(m_coh)[2]), se_per_decade = 10 * summary(m_coh)$coefficients[2, 2],
+                     p = summary(m_coh)$coefficients[2, 4], n = nrow(coh),
+                     gm_pre1980 = exp(mean(log(coh$ratio[coh$year_effective < 1980]))),
+                     gm_post1980 = exp(mean(log(coh$ratio[coh$year_effective >= 1980]))),
+                     n_pre1980 = sum(coh$year_effective < 1980))
+
+## (c) cluster bootstrap over counties for the central fit
+R$boot <- cluster_bootstrap(cal_pref, B_pred, B_k, "share")
+R$boot_all <- cluster_bootstrap(calib, B_pred, B_k, "share")
+
+## (d) how coarse are the calibration cities' store predictions compared with Albany's?
+R$store_detail_by_city <- purrr::map_dfr(seq_len(nrow(cw_c)), function(i) {
+  nm <- paste0(cw_c$city[i], " city, New York"); pf <- substr(cw_c$place_fips[i], 1, 7)
+  c5 <- paste0("36", substr(cw_c$county_fips[i], 3, 5)); dj <- cw_c$dtf_jurisdiction[i]
+  d <- apportion_city(nm, pf, c5, dj, dj) |> filter(sourcing_class %in% c("store", "delivered_split"))
+  tibble(city = cw_c$city[i], groups = nrow(d), n_4digit = sum(grepl("4-digit", d$store_method)),
+         n_3digit = sum(grepl("3-digit", d$store_method)), n_sector = sum(grepl("sector", d$store_method)),
+         n_default = sum(grepl("default", d$store_method)),
+         base_share_sector_or_default = sum(d$B_kg[grepl("sector|default", d$store_method)]) / sum(d$B_kg))
+}) |> bind_rows(tibble(city = "Albany", groups = R$n_store_groups, n_4digit = R$n_store_4digit, n_3digit = R$n_store_3digit,
+                       n_sector = R$n_store_sector, n_default = sum(grepl("default", st_only$store_method)),
+                       base_share_sector_or_default = sum(st_only$B_kg[grepl("sector|default", st_only$store_method)]) / sum(st_only$B_kg))) |>
+  arrange(desc(base_share_sector_or_default))
+
+## (e) second-order effect of a shopping response on the city's county distribution:
+## if a 3% loss of the store classes all left the county, county collections
+## fall by 4% of that, and the city's 40% x population share of it with them.
+lost_base <- 0.03 * store_share_of_base * est_pref$B_c_central
+R$beta_second_order <- 0.40 * pop * 0.04 * lost_base
+
+## (f) post-2022 drift in the city's share of retail and food-service establishments (CBP, ZIP level)
+alb_zips <- zip_place_weights |> filter(place_fips == "3601000") |> select(zcta, w)
+cty_zips <- block_zcta |> filter(substr(block, 1, 5) == "36001") |> distinct(zcta) |> pull(zcta)
+R$cbp_drift <- cbp_zip_estab |> filter(zip %in% cty_zips) |>
+  left_join(alb_zips, by = c("zip" = "zcta")) |> mutate(w = coalesce(w, 0)) |>
+  group_by(year, sector = NAICS2017) |>
+  summarise(county_estab = sum(ESTAB), city_estab = sum(ESTAB * w), .groups = "drop") |>
+  mutate(city_share = city_estab / county_estab)
+
 R$generated <- Sys.time()
 dir.create(PATHS$processed, recursive = TRUE, showWarnings = FALSE)
 saveRDS(R, file.path(PATHS$processed, "results.rds"))

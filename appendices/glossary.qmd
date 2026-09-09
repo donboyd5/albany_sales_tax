@@ -2,7 +2,7 @@
 
 **Add-on.** A city sales tax imposed on top of the county's rate, so the combined rate inside the city rises. Contrast *preemption*.
 
-**Administrative wedge (φ, phi).** The gap between the tax due on the published taxable sales and the cash a locality actually receives. Measured for Albany County from its own distributions; slightly negative.
+**Reconciliation residual (φ, phi).** The gap between 4% of the published taxable sales and the cash a locality actually receives (refunds, filing credits, DMV-collected tax, audit, timing, withheld cells). Measured for Albany County from its own distributions; slightly negative. Applied to the apportioned base to get cash; already inside the calibrated readings, which are fitted to other cities' cash.
 
 **Calibration.** Running the whole estimating method on the seventeen New York cities whose taxable base can be inferred from their collections, then using what that comparison shows to correct Albany's estimate and to size its error range. The inferred base is itself an estimate; see the calibration chapter.
 

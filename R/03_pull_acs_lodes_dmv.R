@@ -235,3 +235,22 @@ zip_place_weights <- block_zcta |>
 
 message("03: block_pop ", nrow(block_pop), "; block_place ", nrow(block_place),
         "; block_zcta ", nrow(block_zcta), "; zip-place weights ", nrow(zip_place_weights))
+
+
+## --- County Business Patterns, ZIP level: establishments in retail and food
+## service, 2021-2023, for a post-Economic-Census drift check on the city's
+## store share. CBP has no place geography, so ZIPs are split to the city with
+## the same block-population weights as the DMV allocator. Employment is
+## suppressed at ZIP level for these sectors; establishment counts are not.
+CBP_YEARS <- 2021:2023
+cbp_zip_estab <- cache_pull(
+  "cbp_zip_estab_retail_food_2021_2023.csv", "https://api.census.gov/data/2023/cbp",
+  function() {
+    purrr::map_dfr(CBP_YEARS, function(y) purrr::map_dfr(c("44-45", "72"), function(n) {
+      census_get(sprintf("%d/cbp", y), list(get = "ESTAB", "for" = "zip code:*", NAICS2017 = n)) |>
+        mutate(year = y)
+    })) |>
+      rename(zip = `zip code`) |>
+      filter(substr(zip, 1, 3) %in% c("120", "121", "122", "123"))
+  }) |>
+  mutate(ESTAB = as.numeric(ESTAB), year = as.integer(year))

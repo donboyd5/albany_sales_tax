@@ -9,7 +9,7 @@ book:
   date: today
   repo-url: https://github.com/donboyd5/albany_sales_tax
   site-url: https://donboyd5.github.io/albany_sales_tax/
-  search: true
+  search: false   # off: the search index would expose the page text outside the password
   page-navigation: true
   sidebar:
     style: docked

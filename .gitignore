@@ -31,3 +31,7 @@ data/raw/*.pdf
 data/raw/large/
 
 **/*.quarto_ipynb
+
+# --- site password for StatiCrypt (never commit) ---
+.site_password
+_output_enc/

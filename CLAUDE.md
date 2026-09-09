@@ -161,8 +161,10 @@ cities (`R$TRUST_CITIES`: rate agreed by every source, swing < 10%) is
 reported alongside the preferred fit, and the planning range includes the
 uncalibrated apportionment ($14.5 M) and that fit. Do not describe the
 collections-based base as "observed" or "the truth"; say "inferred from
-collections". Yonkers preempts the county's full 4% AND adds 1.5 points, so
-never say every taxing city's combined rate equals its county's.
+collections". Yonkers' 4.5% = 3% preempting rate (displaces the county's 4%) + 1.5 points of
+special rates, so its combined rate is 0.5 above the rest of Westchester; never
+say every taxing city's combined rate equals its county's, and never say Yonkers
+"adds 1.5 points on top of full preemption" as if the differential were 1.5.
 
 ## The write-up is a Quarto website built with Quarto's book type (2026-09-09)
 
@@ -196,3 +198,16 @@ and utilities per person roughly double in counties that tax it (crosswalk
 data/crosswalk/pub718r_residential_energy.csv; R$re_summary). So Albany's
 utilities and 4247 figures exclude residential energy and the ACSD
 measurement (48.9%) is an upper bound of the comparable share.
+
+## Third review (2026-09-09): additions
+
+Cluster bootstrap over counties (cluster_bootstrap in R/05; R$boot); adoption-
+cohort check from Pub 718-A dates (data/crosswalk/city_tax_effective_dates.csv;
+R$cohort); Warren treasurer by-town figures now a sourced crosswalk; typed prose
+numbers ($88M, 62%, 1.6%) computed; store-rule detail by city
+(R$store_detail_by_city); CBP ZIP establishment drift check 2021-23
+(cbp_zip_estab in R/03; R$cbp_drift); Oswego flagged as a possible additive
+city tax; phi relabelled a reconciliation residual. Site is published
+ENCRYPTED with StatiCrypt: password in .site_password (git-ignored), salt in
+.staticrypt.json (committed); `scripts/publish_gh_pages.sh --public` publishes
+in the clear. Quarto search is off so the index does not leak page text.

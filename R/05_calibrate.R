@@ -435,3 +435,29 @@ new_code_ramp <- function() {
   d |> inner_join(b, by = "fy") |> mutate(share = (amt / r_c) / B_k) |>
     arrange(fy) |> mutate(rel_to_latest = share / last(share)) |> select(fy, share, rel_to_latest)
 }
+
+
+## Cluster bootstrap over counties. Cities in the same county miss together,
+## so resample COUNTIES with replacement, refit, apply to Albany, and add a
+## residual drawn from the resampled fit's residuals. Percentiles give a
+## prediction interval that respects the clustering; percentiles of the
+## central alone give a confidence interval for the fitted line.
+cluster_bootstrap <- function(calib, B_pred, B_k, form = "share", reps = 4000, seed = 20260909) {
+  set.seed(seed)
+  counties <- unique(calib$county)
+  out <- purrr::map_dfr(seq_len(reps), function(b) {
+    cs <- sample(counties, length(counties), replace = TRUE)
+    d  <- purrr::map_dfr(cs, function(cc) calib[calib$county == cc, ])
+    if (dplyr::n_distinct(d$city) < 4) return(NULL)
+    f  <- fit_calibration(d, form = form)
+    ctr <- apply_calibration(f, B_pred, B_k)$B_c_central
+    e  <- sample(residuals(f$model), 1)
+    tibble(central = ctr, predicted = ctr * exp(e))
+  })
+  list(reps = nrow(out),
+       central_ci68 = unname(quantile(out$central, c(0.16, 0.84))),
+       central_ci90 = unname(quantile(out$central, c(0.05, 0.95))),
+       pred_pi68 = unname(quantile(out$predicted, c(0.16, 0.84))),
+       pred_pi90 = unname(quantile(out$predicted, c(0.05, 0.95))),
+       central_median = median(out$central))
+}

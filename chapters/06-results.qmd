@@ -58,6 +58,22 @@ The **planning range of \$`r R$PLAN_LO`–`r R$PLAN_HI` million** is computed ra
 2. The form of the comparison is worth \$`r fm(REV - REV_level)` million on the same fifteen cities, and the plausible business sharing rules span \$`r fm(min(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))`–`r fm(max(af$rev[af$class == "business" & !af$key %in% c("lodes", "residence")]))` million. These discrete choices sit outside the prediction interval entirely, which is why the planning range is built from them as well.
 3. Albany's sharing rules resolve at fine industry detail, its Economic Census coverage is near-complete, and its one measurable component lies between the two jobs rules. These are conditions under which the method should do better than its average, though nothing in the data proves it.
 
+```{r}
+#| label: tbl-ranges
+#| tbl-cap: "The ranges reported on this site, side by side. All in $ million a year."
+tibble(Range = c("68% prediction interval", "90% prediction interval", "68% range, counties resampled", "90% range, counties resampled",
+                 "90% range, all 17 cities, counties resampled", "Planning range"),
+       Low = c(rev(est_pref$lo68), rev(est_pref$lo90), rev(R$boot$pred_pi68[1]), rev(R$boot$pred_pi90[1]), rev(R$boot_all$pred_pi90[1]), R$PLAN_LO * 1e6) / 1e6,
+       High = c(rev(est_pref$hi68), rev(est_pref$hi90), rev(R$boot$pred_pi68[2]), rev(R$boot$pred_pi90[2]), rev(R$boot_all$pred_pi90[2]), R$PLAN_HI * 1e6) / 1e6,
+       `What it includes` = c("Scatter of the 15 calibration cities plus uncertainty in the fitted line; one specification",
+                              "Same, at 90%",
+                              "Same, but treating the 11 counties rather than the 15 cities as the independent units",
+                              "Same, at 90%",
+                              "Same, at 90%, keeping Salamanca and Ogdensburg",
+                              "Envelope of the 68% interval and of the central figure under every plausible specification (form, sample, sharing rules, no adjustment)")) |>
+  kb(digits = c(0, 1, 1, 0), align = "lrrl")
+```
+
 ::: {.keypoint}
-If a single figure is needed for budgeting, **\$`r R$BUDGET` million** is the prudent choice at steady state and current activity levels: the lower of the two calibrated readings, rounded down, and inside every plausible specification tried. The City's own experience argues for prudence: its 2025 sales tax receipts came in \$`r fm((R$city_report$budget_thousands - R$city_report$actual_thousands) * 1e3)` million below budget (City of Albany, Interim Financial Report, 4th Quarter 2025). The first year of a new tax will be lower still for reasons that have nothing to do with the base (@sec-timing).
+If a single figure is needed for budgeting, **\$`r R$BUDGET` million** is the prudent choice at steady state and current activity levels: the lower of the two calibrated readings, rounded down, and inside every plausible specification tried. The City's own experience argues for prudence: its 2025 sales tax receipts came in \$`r fm((R$city_report$budget_thousands - R$city_report$actual_thousands) * 1e3)` million below budget (City of Albany, Interim Financial Report, 4th Quarter 2025). So does the logic of the decision: if the city adopts the tax partly on the strength of this estimate, the case in which its collections turn out unusually low relative to the method is exactly the case in which it would have adopted anyway and been disappointed (@sec-selection). The first year of a new tax will be lower still for reasons that have nothing to do with the base (@sec-timing).
 :::

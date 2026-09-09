@@ -18,6 +18,18 @@ source(here::here("chapters", "_common.R"))
 | 6 | Preemption identity across the eleven calibration counties | County collections plus preempted amounts equal the county rate on the whole base to within 0.5–2.7% |
 | 7 | Albany's concentration ratio against the seventeen observed cities | `r f2(R_cal)`, within `r f2(min(route_b$R))`–`r f2(max(route_b$R))`, near the median `r f2(median(route_b$R))` |
 
+**Has the city's store share drifted since the 2022 Economic Census?** County Business Patterns counts establishments by ZIP code every year; splitting the ZIPs to the city with the same block-population weights used for vehicles gives a rough annual series for the city's share of the county's retail and food-service establishments:
+
+```{r}
+#| label: tbl-drift
+#| tbl-cap: "City of Albany's share of Albany County retail (NAICS 44-45) and food-service (72) establishments, from County Business Patterns ZIP-code counts split to the city by block population."
+R$cbp_drift |> transmute(Year = year, Sector = ifelse(sector == "44-45", "Retail trade", "Accommodation and food services"),
+                         `County establishments` = county_estab, `City share` = fp(city_share)) |>
+  arrange(Sector, Year) |> kb(digits = 0, align = "rlrr")
+```
+
+Employment is withheld at ZIP level for these sectors, so only establishment counts can be followed, and the ZIP split is approximate; but a marked post-2022 fall in the city's share would show here, and it does not.
+
 Validation 3 is the only place a sharing rule can be tested against a direct observation of an Albany city base. The measured share (`r fp(R$a_util)`) sits above the private-jobs rule (`r fp(R$a_wxp)`) and close to the all-jobs figure (`r fp(R$a_work)`). That is not evidence for counting government jobs: the State's own utility purchases are exempt and appear in neither the school-district collections nor the county's taxable sales. Nor is the comparison clean. The school district taxes residential gas and electricity at its full 3%, while Albany County does not tax residential energy at all and, as @sec-resid-energy shows from the data, the county's utilities figure does not contain it. The numerator therefore includes a residential component the denominator lacks, and the measured share is an *upper bound* of the comparable figure; the cross-county comparison suggests residential energy is on the order of half of a taxing county's utilities base, so the bound may be loose. What it does suggest is that taxable commercial load, which concentrates where the office buildings are, is at least as city-concentrated as the jobs rule says, which is one reason the alternatives in @sec-apportionment that lower the business share are read as a range rather than as corrections.
 
 ## The preemption comparison {#sec-preemption}

@@ -376,3 +376,26 @@ commit than the one reviewed); site and repo are in sync at each publish
 The user's own view: little credence in the 17-city regression. The site
 now leads with the apportioned reading and presents the adjustment as a
 single typical gap, examined and given limited weight.
+
+## Third external review (2026-09-09, fifth pass)
+
+Accepted: selection of the taxing cities (adoption-cohort check added from
+Pub 718-A effective dates; no relation between adoption year and ratio on
+15 cities; winner's-curse logic added to the budget keypoint); clustered PI
+(county cluster bootstrap, 4000 reps, agrees closely with the t-based PI;
+all-17 bootstrap range reported for readers who reject the exclusions);
+re-fit logic absorbs common error so alternatives understate Albany-specific
+uncertainty (stated); store detail is finer for Albany than for any
+calibration city (table added); encompassing form and share-form robustness
+to dropping Westchester given prominence; 90% PI conditional on exclusions
+(all-17 range reported beside it); phi relabelled a reconciliation residual;
+second-order county-distribution effect of a shopping response quantified;
+delivered-split immateriality flagged as local; Warren treasurer figures
+moved to a sourced crosswalk; typed prose numbers computed inline; CBP ZIP
+establishment drift check 2021-23 added; Yonkers decomposition sentence
+corrected (3% preempting + 1.5 special = 4.5, differential 0.5); Oswego
+flagged as a possible additive city tax and a question for DTF; ranges
+summary table added.
+Not done: hierarchical model (bootstrap judged sufficient at 11 clusters);
+assessed-value allocator (still a recommendation, needs the assessment rolls).
+Site is now published encrypted (StatiCrypt); see CLAUDE.md.
